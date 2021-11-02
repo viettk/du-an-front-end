@@ -1,11 +1,11 @@
 import logo from './logo.svg';
 import './App.css';
-import RouterDemo from './router/RouterDemo';
+import ListCategory from './component/Category/ListCategory';
 
 function App() {
   return (
     <div className="App">
-      <RouterDemo/>
+      <ListCategory />
     </div>
   );
 }
