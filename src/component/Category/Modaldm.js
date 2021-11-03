@@ -136,8 +136,8 @@ function Modaldm({ show, setShow, ma, setMa }) {
                         <div className="form-group">
                             <label>Tên Danh mục</label>
                             <input className="form-control" type="text" onChange={(e) => updateName(e)} value={detail.name} />
-                            {/* <span style={{ color: "red", fontSize: "13px" }}>{loi.name}</span> */}
-                            {/* <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span> */}
+                            <span style={{ color: "red", fontSize: "13px" }}>{loi.name}</span> 
+                            <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span>
                         </div>
                         <div className="form-group">
                             <label>Danh mục cha</label>
@@ -149,8 +149,8 @@ function Modaldm({ show, setShow, ma, setMa }) {
                                     ))
                                 }
                             </select>
-                            {/* <span style={{ color: "red", fontSize: "13px" }}>{loi.parent_name}</span>
-                            <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span> */}
+                            <span style={{ color: "red", fontSize: "13px" }}>{loi.parent_name}</span>
+                            <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span>
                         </div>
                     </form>
                 </Modal.Body>

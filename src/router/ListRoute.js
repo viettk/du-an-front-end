@@ -1,6 +1,8 @@
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import App from "../App";
 import ListCategory from "../component/Category/ListCategory";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import PageNotFound from "../component/PageError/PageNotFound";
 
 function ListRoute(){
     return(
@@ -12,7 +14,7 @@ function ListRoute(){
 
         {/* <PrivateRoutes component={ListDanhmuc} authed={false} path='/admin'  /> */}
         {/* component PageNotFound phải để cuối cùng */}
-        {/* <Route exact path="*" component={PageNotFound} /> */}
+        <Route path="*" component={PageNotFound} />
       </Switch>
       </BrowserRouter>
     );

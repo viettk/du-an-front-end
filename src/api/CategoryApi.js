@@ -1,8 +1,8 @@
 import axiosClient from "./axiosClient";
 
 const CategoryApi = {
-    getAll : (params) => {
-        const url = "/danh-muc";
+    getAll : (params, name, parent_name) => {
+        const url = "/danh-muc?name=" + name+ "&parent_name="+parent_name;
         return axiosClient.get(url, { params });
     },
 

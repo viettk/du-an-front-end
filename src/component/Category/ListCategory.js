@@ -13,6 +13,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './Category.css';
 import { useParams, useLocation, useHistory } from "react-router-dom";
 import Modaldm from "./Modaldm";
+import { height } from "@mui/system";
 
 function ListCategory() {
     const {xpage}= useParams();
@@ -22,14 +23,16 @@ function ListCategory() {
     const initParams= {
         _limit : '5',
         _page : (xpage-1),
-        _field : 'id',
-        _known : 'up',
     };
 
     const [ params, setParams] = useState(initParams);
     const [ result, setResult] = useState(initValues);
-    const [ page, setPage] = useState(0);
+    const [ page, setPage] = useState(initParams._page + 1);
     const [ count, setCount] = useState(0);
+    const [search, setSearch] = useState({
+        name: '',
+        parent_name: ''
+    });
 
     // lấy id danh mục
     const [ma, setMa] = useState(0);
@@ -41,7 +44,7 @@ function ListCategory() {
     useEffect(() => {
         const fetchList = async () =>{
           try{
-            const response = await CategoryApi.getAll(params);
+            const response = await CategoryApi.getAll(params, search.name, search.parent_name);
             setResult(response.content);      
             setCount(response.totalPages);
           }catch (error){
@@ -58,8 +61,6 @@ function ListCategory() {
             {
                 _limit : '5',
                 _page : value-1,
-                _field : 'id',
-                _known : 'up',
             }
         );       
       };
@@ -74,24 +75,47 @@ function ListCategory() {
           setMa(0);
       }
 
+      const getSearchName = (e) => {
+        const newvalue = e.target.value;
+        setSearch({
+            ...search,
+            name: newvalue,
+        });
+    }
+
+    const getSearchParent_name = (e) => {
+        const newvalue = e.target.value;
+        setSearch({
+            ...search,
+            parent_name: newvalue,
+        });
+
+    }
     return(
         <React.Fragment>
              <Modaldm show={show} setShow={setShow} ma={ma} setMa={setMa}  />
-        <h3>Demo phan trang</h3>
+        <h3 style={{marginTop: 10}}>Danh sách Danh mục Sản phẩm</h3>
         <TableContainer component={Paper}>
         <button className="btn btn-primary" onClick={() => getMa()} >Thêm mới</button>
         <table className="table table-striped">
-                <thead>
+            <thead>
+                <tr>
+                    <td></td>
+                    <td><input onChange={(e) => getSearchName(e)} type='text' /></td>
+                    <td><input onChange={(e) => getSearchParent_name(e)} type='text' /></td>
+                </tr>
+            </thead>
+                <tbody>
                     <tr>
                         <td scope="col">STT</td>
                         <td scope="col">Tên Danh mục</td>
                         <td scope="col">Danh mục cha</td>
                         <td scope="col">Sửa</td>
                     </tr>
-                </thead>
-                <tbody>
+                </tbody>
+                <tfoot style={{height: "10px"}}>
                     {
-                        xpage > 0 || xpage <= page ? result.map(
+                        xpage > 0 && xpage <= count ? result.map(
                             (result) =>
                                 <tr key={result.id}>
                                     <td>{result.id}</td>
@@ -100,9 +124,12 @@ function ListCategory() {
                                     <td><button type="button" class="btn btn-primary" onClick={() => getMa(result.id)}>Sửa</button></td>    
                                 </tr>
 
-                        ) : <div>Không có dữ liệu</div>                  
+                        ) : (
+                        
+                            <div style={{textAlign:"center" ,position: 'absolute' ,left: "50%",  transform: `translate(${-50}%, ${0}px)` }}>Không có dữ liệu</div>
+                        )                
                     }
-                </tbody>
+                </tfoot>
             </table>
             </TableContainer>
             <Stack spacing={2}>
