@@ -26,15 +26,13 @@ function ListCategory() {
         _known : 'up',
     };
 
-    if(xpage <= 0 ){
-        initParams._page = 1;   
-    }
-
-
     const [ params, setParams] = useState(initParams);
     const [ result, setResult] = useState(initValues);
     const [ page, setPage] = useState(0);
     const [ count, setCount] = useState(0);
+
+    // lấy id danh mục
+    const [ma, setMa] = useState(0);
 
 
     // Mở modal
@@ -51,7 +49,7 @@ function ListCategory() {
           }
         }
         fetchList();
-      }, [params]);
+      }, [params, result]);
 
       const handleChange = (event, value) => {
         history.push("/danh-muc/" + value);
@@ -68,14 +66,17 @@ function ListCategory() {
       
       const getMa = (id) =>{
         setShow(true);
+        setMa(id);
       }
 
       const closeModal = () => {
           setShow(false);
+          setMa(0);
       }
+
     return(
         <React.Fragment>
-             <Modaldm show={show,setShow} />
+             <Modaldm show={show} setShow={setShow} ma={ma} setMa={setMa}  />
         <h3>Demo phan trang</h3>
         <TableContainer component={Paper}>
         <button className="btn btn-primary" onClick={() => getMa()} >Thêm mới</button>
@@ -90,16 +91,16 @@ function ListCategory() {
                 </thead>
                 <tbody>
                     {
-                        xpage > 0 &&  (xpage - 1) <= Math.ceil(result.length / params._limit) ? result.map(
+                        xpage > 0 || xpage <= page ? result.map(
                             (result) =>
                                 <tr key={result.id}>
                                     <td>{result.id}</td>
                                     <td>{result.name}</td>
                                     <td>{result.parent_name}</td>
-                                    <td><button type="button" class="btn btn-primary">Sửa</button></td>    
+                                    <td><button type="button" class="btn btn-primary" onClick={() => getMa(result.id)}>Sửa</button></td>    
                                 </tr>
 
-                        ): <div className="unknow">Không có dữ liệu</div>
+                        ) : <div>Không có dữ liệu</div>                  
                     }
                 </tbody>
             </table>
