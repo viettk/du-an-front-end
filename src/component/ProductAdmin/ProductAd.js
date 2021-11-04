@@ -11,28 +11,32 @@ import Stack from '@mui/material/Stack';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ProductApi from "../../api/ProductApi";
 import { useParams, useLocation, useHistory } from "react-router-dom";
+import CategoryApi from "../../api/ProductApi";
+import ProductModal from "./ProductModal";
 
-function ProductAd(){
-    const {xpage}= useParams();
+function ProductAd() {
+    const { xpage } = useParams();
     let history = useHistory();
-    
+
     const initValues = [];
-    const initParams= {
-        _limit : '5',
-        _page : (xpage-1),
+    const initParams = {
+        _limit: '5',
+        _page: (xpage - 1),
         _field: 'id',
         _known: 'up'
     };
 
-    const [ params, setParams] = useState(initParams);
-    const [ result, setResult] = useState(initValues);
-    const [ page, setPage] = useState(initParams._page + 1);
-    const [ count, setCount] = useState(0);
+    const [params, setParams] = useState(initParams);
+    const [result, setResult] = useState(initValues);
+    const [page, setPage] = useState(initParams._page + 1);
+    const [count, setCount] = useState(0);
+
+    //lấy danh sách danh mục
+    const [ parent, setParent ] = useState([]);
     const [search, setSearch] = useState({
-        categoryId: '',
-        name:'',
-        price:'',
-        create_date:''
+        categoryId: 'a',
+        name: '',
+        create_date: ''
     });
 
     // lấy id sản phẩm
@@ -43,40 +47,43 @@ function ProductAd(){
     const [show, setShow] = useState(false);
 
     useEffect(() => {
-        const fetchList = async () =>{
-          try{
-            const response = await ProductApi.getAll(params, search.name, search.price, search.categoryId, search.create_date);
-            setResult(response.content);      
-            setCount(response.totalPages);
-          }catch (error){
-            console.log(error);
-          }
+        const fetchList = async () => {
+            try {
+                const response = await ProductApi.getAll(params, search.name, search.price, search.categoryId, search.create_date);
+                setResult(response.content);
+                setCount(response.totalPages);
+
+                const resp = await CategoryApi.getParent();
+                setParent(resp);  
+            } catch (error) {
+                console.log(error);
+            }
         }
         fetchList();
-      }, [params, result]);
+    }, [params, result]);
 
-      const handleChange = (event, value) => {
-        history.push("/admin/san-pham" + value);
+    const handleChange = (event, value) => {
+        history.push("/admin/san-pham/" + value);
         setPage(value);
         setParams(
             {
-                _limit : '5',
-                _page : value-1,
+                _limit: '5',
+                _page: value - 1,
             }
-        );       
-      };
-      
-      const getMa = (id) =>{
+        );
+    };
+
+    const getMa = (id) => {
         setShow(true);
         setMa(id);
-      }
+    }
 
-      const closeModal = () => {
-          setShow(false);
-          setMa(0);
-      }
+    const closeModal = () => {
+        setShow(false);
+        setMa(0);
+    }
 
-      const getSearchName = (e) => {
+    const getSearchName = (e) => {
         const newvalue = e.target.value;
         setSearch({
             ...search,
@@ -84,73 +91,80 @@ function ProductAd(){
         });
     }
 
-    const getSearchParent_name = (e) => {
+    const getCategory = (e) => {
         const newvalue = e.target.value;
         setSearch({
             ...search,
-            parent_name: newvalue,
+            categoryId: newvalue,
         });
-
     }
-    return(
-        <React.Fragment>
-             {/* <Modaldm show={show} setShow={setShow} ma={ma} setMa={setMa}  /> */}
-        <h3 style={{marginTop: 10}}>Danh sách Danh mục Sản phẩm</h3>
-        <TableContainer component={Paper}>
-        <button className="btn btn-primary" onClick={() => getMa()} >Thêm mới</button>
-        <table className="table table-striped">
-            <thead>
-                <tr>
-                    <td></td>
-                    <td><input onChange={(e) => getSearchName(e)} type='text' /></td>
-                    <td><input onChange={(e) => getSearchParent_name(e)} type='text' /></td>
-                </tr>
-            </thead>
-                <tbody>
-                    <tr>
-                        <td scope="col">STT</td>
-                        <td scope="col">Tên Sản phẩm</td>
-                        <td scope="col">Danh mục</td>
-                        <td scope="col">Giá</td>
-                        <td scope="col">Ngày tạo</td>
-                        <td scope="col">Số lượng</td>
-                        <td scope="col">Ảnh</td>
-                        <td scope="col">Trạng thái</td>
-                        <td scope="col">Sửa</td>
-                    </tr>
-                </tbody>
-                <tfoot style={{height: "10px"}}>
-                    {
-                        xpage > 0 && xpage <= count ? result.map(
-                            (result) =>
-                                <tr key={result.id}>
-                                    <td>{result.id}</td>                                  
-                                    <td>{result.name}</td>
-                                    <td>{result.category.name}</td>
-                                    <td>{result.price}</td>
-                                    <td>{result.create_date}</td>
-                                    <td>{result.number}</td>
-                                    <td><img src="" /></td>
-                                    <td>
-                                        {
-                                            result.status == true ? <span class="dang-ban">Đang bán</span> : <span class="dung-ban">Dừng bán</span>
-                                        }
-                                    </td>
-                                    <td><button type="button" class="btn btn-primary" onClick={() => getMa(result.id)}>Sửa</button></td>    
-                                </tr>
 
-                        ) : (
-                        
-                            <div style={{textAlign:"center" ,position: 'absolute' ,left: "50%",  transform: `translate(${-50}%, ${0}px)` }}>Không có dữ liệu</div>
-                        )                
-                    }
-                </tfoot>
-            </table>
+    const xemChitiet =(id) =>{
+        setShow(true);
+        setMa(id);
+    }
+
+    return (
+        <React.Fragment>
+            {/* <Modaldm show={show} setShow={setShow} ma={ma} setMa={setMa}  /> */}
+            <ProductModal show={show} setShow={setShow} ma={ma} setMa={setMa} />
+            <h3 style={{ marginTop: 10 }}>Danh sách Danh mục Sản phẩm</h3>
+            <TableContainer component={Paper}>
+                <button className="btn btn-primary" onClick={() => getMa()} >Thêm mới</button>
+                <table className="table table-striped">
+                    <thead>
+                        <tr>
+                            <td></td>
+                            <td><input onChange={(e) => getSearchName(e)} type='text' /></td>
+                            <td>
+                                <select class="form-select form-select-sm" aria-label=".form-select-sm example" onClick={(e) => getCategory(e)} >
+                                    <option value='a'>Chọn</option>
+                                    {
+                                        parent.map(parent => (
+                                            <option key={parent} >{parent}</option>
+                                        ))
+                                    }
+                                </select>
+                            </td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td scope="col">STT</td>
+                            <td scope="col">Tên Sản phẩm</td>
+                            <td scope="col">Danh mục</td>
+                            <td scope="col">Giá</td>
+                            <td scope="col">Ngày tạo</td>
+                            <td scope="col">Số lượng</td>
+                            <td scope="col">Ảnh</td>
+                        </tr>
+                    </tbody>
+                    <tfoot style={{ height: "10px" }}>
+                        {
+                            xpage > 0 && xpage <= count ? result.map(
+                                (result) =>
+                                    <tr className="sp" key={result.id} onClick={()=>xemChitiet(result.id)}>
+                                        <td>{result.id}</td>
+                                        <td>{result.name}</td>
+                                        <td>{result.category.name}</td>
+                                        <td>{result.price}</td>
+                                        <td>{result.createDate}</td>
+                                        <td>{result.number}</td>
+                                        <td><img src="" /></td>
+                                    </tr>
+
+                            ) : (
+
+                                <div style={{ textAlign: "center", position: 'absolute', left: "50%", transform: `translate(${-50}%, ${0}px)` }}>Không có dữ liệu</div>
+                            )
+                        }
+                    </tfoot>
+                </table>
             </TableContainer>
             <Stack spacing={2}>
-                <Pagination className="pagination" count={count}  page={page} onChange={handleChange}  color="secondary"/>
+                <Pagination className="pagination" count={count} page={page} onChange={handleChange} color="secondary" />
             </Stack>
-    </React.Fragment>
+        </React.Fragment>
     );
 }
 export default ProductAd;

@@ -1,13 +1,13 @@
 import axiosClient from "./axiosClient";
 
 const CategoryApi = {
-    getAll : (params, name,price, categoryId, create_date) => {
-        const url = "/admin/san-pham?name=" + name+ "&categoryName="+categoryId;
-        return axiosClient.get(url, { params });
+    getCart: (params) =>{
+        const url = "/cart/";
+        return axiosClient.get(url, {params});
     },
 
-    getIdProduct: (id) =>{
-        const url = "/admin/san-pham/" + id;
+    getCartDetail:(id) =>{
+        const url = "/cart-detail" +id;
         return axiosClient.get(url, {id});
     },
 
