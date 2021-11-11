@@ -4,10 +4,16 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import ListRoute from './router/ListRoute';
+import 'font-awesome/css/font-awesome.min.css';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import rootReducer from './redux_user/root-reducer';
 
 ReactDOM.render(
   <React.StrictMode>
+     <Provider store= {createStore(rootReducer)}>
     <ListRoute />
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

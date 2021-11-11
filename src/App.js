@@ -1,11 +1,15 @@
 import logo from './logo.svg';
 import './App.css';
-import ListCategory from './component/Category/ListCategory';
+import Head from './Layout/Head';
+import Home from './component/Home/Home';
+import Footer from './Layout/Footer';
 
 function App() {
   return (
-    <div className="App">
-      <ListCategory />
+    <div>
+      <Head/>
+      <Home/>
+      <Footer/>
     </div>
   );
 }

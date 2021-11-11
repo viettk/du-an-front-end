@@ -1,6 +1,6 @@
 import axiosClient from "./axiosClient";
 
-const CategoryApi = {
+const ProductApi = {
     getAll : (params, name,price, categoryId, create_date) => {
         const url = "/admin/san-pham?name=" + name+ "&categoryName="+categoryId;
         return axiosClient.get(url, { params });
@@ -24,6 +24,11 @@ const CategoryApi = {
     putDm: (id, params) =>{
         const url = `/danh-muc/${id}`;
         return axiosClient.put(url, {params});
+    },
+
+    getFavorite: (id, params) =>{
+        const url =  `http://localhost:8080/yeu-thich/1?known=up&field=id`;
+        return axiosClient.get(url, {params});
     }
 }
-export default CategoryApi;
+export default ProductApi;

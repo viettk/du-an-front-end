@@ -52,7 +52,7 @@ function ListCategory() {
           }
         }
         fetchList();
-      }, [params, result]);
+      }, [params, result, search.name, page]);
 
       const handleChange = (event, value) => {
         history.push("/danh-muc/" + value);
@@ -63,6 +63,7 @@ function ListCategory() {
                 _page : value-1,
             }
         );       
+        console.log(page);
       };
       
       const getMa = (id) =>{
@@ -81,15 +82,22 @@ function ListCategory() {
             ...search,
             name: newvalue,
         });
+        history.push("/danh-muc/" + 1);
+        if(page != 1){
+            setPage(1);
+            setParams(
+                ...params
+            );
+        }             
     }
 
-    const getSearchParent_name = (e) => {
+    const getSearchParent_name = (e) => {      
         const newvalue = e.target.value;
         setSearch({
             ...search,
             parent_name: newvalue,
         });
-
+        
     }
     return(
         <React.Fragment>
@@ -124,8 +132,7 @@ function ListCategory() {
                                     <td><button type="button" class="btn btn-primary" onClick={() => getMa(result.id)}>Sửa</button></td>    
                                 </tr>
 
-                        ) : (
-                        
+                        ) : (         
                             <div style={{textAlign:"center" ,position: 'absolute' ,left: "50%",  transform: `translate(${-50}%, ${0}px)` }}>Không có dữ liệu</div>
                         )                
                     }

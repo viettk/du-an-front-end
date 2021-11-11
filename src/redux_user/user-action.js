@@ -1,0 +1,1 @@
+export const addUser = (user) => ({type:'LOGIN USER',payload: user})

@@ -6,6 +6,11 @@ const CategoryApi = {
         return axiosClient.get(url, { params });
     },
 
+    getAllCate:()=>{
+        const url = "/danh-muc/all";
+        return axiosClient.get(url);
+    },
+
     getIdCategory: (id) =>{
         const url = "/danh-muc/" + id;
         return axiosClient.get(url, {id});
@@ -13,6 +18,11 @@ const CategoryApi = {
 
     getParent: () => {
         const url = "/danh-muc/cha";
+        return axiosClient.get(url);
+    },
+
+    getkit: () => {
+        const url = "/danh-muc/kit";
         return axiosClient.get(url);
     },
 
@@ -25,5 +35,6 @@ const CategoryApi = {
         const url = `/danh-muc/${id}`;
         return axiosClient.put(url, {params});
     }
+
 }
 export default CategoryApi;

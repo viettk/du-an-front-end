@@ -1,28 +1,16 @@
 
 @import url('https://fonts.googleapis.com/css?family=Abril+Fatface|Lato');
 
-
-body {
-  background: #D3DEEA;
-}
-
 .top {
   margin-top: 30px;
   margin-bottom: 20px;
 }
 
-.container {
-  margin: 0 auto;
-  position: relative;
-  width: 250px;
-  height: 250px;
-  margin-top: -40px;
-}
 
 .ghost {
-  width: 50%;
+  width: 15%;
   height: 53%;
-  left: 25%;
+  left: 43%;
   top: 10%;
   position: absolute;
   border-radius: 50% 50% 0 0;
@@ -33,9 +21,9 @@ body {
 }
 
 .ghost-copy {
-  width: 50%;
+  width: 15%;
   height: 53%;
-  left: 25%;
+  left: 43%;
   top: 10%;
   position: absolute;
   border-radius: 50% 50% 0 0;
@@ -113,10 +101,10 @@ body {
 
 .shadow {
   position: absolute;
-  width: 30%;
+  width: 10%;
   height: 7%;
   background: #BFC0C0;
-  left: 35%;
+  left: 46%;
   top: 80%;
   border-radius: 50%;
   animation: scale 2s infinite;

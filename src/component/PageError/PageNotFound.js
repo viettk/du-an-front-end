@@ -1,9 +1,8 @@
 import React from 'react';
-import './errorpage.css';
 
 function PageNotFound() {
     return (
-        <div>
+        <div style={{backgroundColor: "#D3DEEA"}}>
         <div id="background" />
         <div className="top">
           <h1>404</h1>
@@ -25,7 +24,7 @@ function PageNotFound() {
           </div>
           <div className="shadow" />
         </div>
-        <a href="" style={{position: 'absolute',left: "50%",  transform: `translate(${-50}%, ${0}px)` }}> ← Quay lại Trang chủ</a>
+        <a href="/" style={{position: 'absolute',left: "50%",  transform: `translate(${-50}%, ${0}px)` }}> ← Quay lại Trang chủ</a>
       </div>
 
     );
