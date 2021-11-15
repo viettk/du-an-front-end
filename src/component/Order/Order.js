@@ -2,9 +2,13 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import './order.css';
 import CartApi from "../../api/CartApi";
+import queryString from 'query-string';
 
 function Order() {
 
+  const [cartId, setCartId] = useState({
+    cart: ''
+  });
   const [bill, setBill] = useState({
     email: '',
     name: '',
@@ -19,10 +23,11 @@ function Order() {
     thema: '',
     themb: '',
     themc: '',
-    discountName: 'a'
+    discountName: ''
   });
 
-  const [thanhTien, SetThanhTien] = useState(0);
+  
+  const [tongtien, setTongtien] = useState(0);
   const [cart, setCart] = useState([]);
   const [tinh, setTinh] = useState([]);
   const [quan, setQuan] = useState([]);
@@ -37,6 +42,10 @@ function Order() {
     code: ''
   });
 
+  const [discountName, setDiscountName] = useState({
+    name: ''
+  });
+
   const [selectQuan, setSelectQuan] = useState({
     quan: '',
     code: ''
@@ -49,24 +58,62 @@ function Order() {
   });
 
   const [diachi, setDiachi] = useState([]);
+  const [phiship, setPhiship] = useState(0);
+  let getStorage = localStorage.getItem('cart');
+  const [demo, setDemo] = useState(JSON.parse(getStorage));
+  const [thanhTien, setThanhTien] = useState(0);
 
   useEffect(() => {
     const fetchList = async () => {
       try {
-        const response = await CartApi.getCartDetail(2);
-        setCart(response);
-        const resp = await CartApi.getCart(1);
-        SetThanhTien(resp.total);
-        const respo = await CartApi.getAddress(1);
-        setDiachi(respo);
+        if (cartId.cart != '') {
+          const response = await CartApi.getCartDetail(cartId.cart);
+          setCart(response);
+          const resp = await CartApi.getCart(1);
+          const respo = await CartApi.getAddress(1);
+          setDiachi(respo);
+          const ship = await CartApi.getShip(2);
+          if (ship >= 2.99) {
+            setPhiship(15000);
+          }
+          else if (ship >= 3) {
+            setPhiship(30000);
+          } else if (ship >= 5.99) {
+            setPhiship(90000);
+          } else if (ship >= 7.99) {
+            setPhiship(12000);
+          } else {
+            setThanhTien(-1);
+          }
+          setTongtien(resp.total);
+          setThanhTien(resp.total + phiship)
+        } else {
+          let storage = localStorage.getItem('cart');
+          setCart(JSON.parse(storage));            
+          let ship = (demo.reduce((a,v) =>  a = a + v.weight , 0 ));
+          if (ship >= 2.99) {
+            setPhiship(15000);
+          }
+          else if (ship >= 3) {
+            setPhiship(30000);
+          } else if (ship >= 5.99) {
+            setPhiship(90000);
+          } else if (ship >= 7.99) {
+            setPhiship(12000);
+          } else {
+            setThanhTien(-1);
+          }
+          setTongtien(demo.reduce((a,v) =>  a = a + v.total , 0 ));
+          setThanhTien(demo.reduce((a,v) =>  a = a + v.total + phiship , 0 ));     
+        }
         tt();
       } catch (error) {
         console.log(error);
       }
     }
+    
     fetchList();
-  }, []);
-
+  }, [demo.reduce((a,v) =>  a = a + v.total + phiship , 0 )]);
   const tt = () => {
     axios({
       url: 'https://provinces.open-api.vn/api/p?depth=2',
@@ -122,40 +169,76 @@ function Order() {
   }
 
   const getInputValue = (e) => {
-    const {name, value} = e.target;
+    const { name, value } = e.target;
     setBill({
       ...bill,
-      [name] : value
+      [name]: value
     })
+    console.log(bill)
   }
-  const datHang =()=>{
+  const datHang = () => {
     const result = {
-      cartId: 2,
+      cartId: '',
       input: bill,
-      discountName: 'a'
+      discountName: ''
     }
+  if(result.cartId == ''){
     axios({
-      url: 'http://localhost:8080/order/dat/'+2,
+      url: 'http://localhost:8080/order/dat',
       method: 'post',
       data: result.input,
       type: 'application/json'
     }).catch((error) => {
       if (error.response) {
-          console.log(error.response);
+        console.log(error.response);
       } else if (error.request) {
-          console.log(error.request);
+        console.log(error.request);
       } else {
-          console.log('Error', error.message);
+        console.log('Error', error.message);
       }
-  })
+    }).then(resp =>{
+      axios({
+        url: 'http://localhost:8080/order/detail/date/' + resp.data.id ,
+        method: 'post',
+        data: demo,
+        type: 'application/json'
+      }).catch((error) => {
+        if (error.response) {
+          console.log(error.response);
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          console.log('Error', error.message);
+        }
+      })
+    })
+  } else {
+    axios({
+      url: 'http://localhost:8080/order/dat/' + 2 ,
+      method: 'post',
+      data: result.input,
+      type: 'application/json'
+    }).catch((error) => {
+      if (error.response) {
+        console.log(error.response);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log('Error', error.message);
+      }
+    }).then(resp =>{
+      // localStorage.removeItem('cart');
+    })
   }
-  const uploadDc = (e)=>{
+    
+  }
+  const uploadDc = (e) => {
     var index = e.target.value;
     axios({
-      url: 'http://localhost:8080/dia-chi/'+index,
+      url: 'http://localhost:8080/dia-chi/' + index,
       method: 'get',
       type: 'application/json'
-    }).then(resp=>{
+    }).then(resp => {
       setBill({
         ...bill,
         name: resp.data.name,
@@ -164,6 +247,35 @@ function Order() {
       });
     })
   }
+  const getDiscount = (e) => {
+    setDiscountName({
+      ...discountName,
+      name: e.target.value
+    })
+  }
+
+  const laymagiam = () => {
+    axios({
+      url: 'http://localhost:8080/admin/discount/apdung?discountName=' + discountName.name,
+      method: 'get',
+      type: 'application/json'
+    }).then(resp => {
+      setThanhTien(thanhTien - resp.data)
+      setBill({
+        ...bill,
+        discountName: discountName.name
+      })
+    }).catch((error) => {
+      if (error.response) {
+        console.log(error.response);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        console.log('Error', error.message);
+      }
+    })
+  }
+
   return (
     <section>
       <div className="container">
@@ -172,12 +284,12 @@ function Order() {
             <div className="row">
               <div className="col-sm-3">
 
-              <select onChange={(e) => uploadDc(e)}>
-                <option >Địa chỉ khác</option>
+                <select onChange={(e) => uploadDc(e)}>
+                  <option >Địa chỉ khác</option>
                   {
                     diachi.map(dc =>
                       <option key={dc.id} data-id={dc.name} value={dc.id} > {dc.name}, {dc.address}</option>
-                      )
+                    )
                   }
                 </select>
 
@@ -228,7 +340,7 @@ function Order() {
                   </select>
 
                 </div>
-                
+
                 <div className="user-box">
                   <input type="text" name="phone" defaultValue={bill.address} required onChange={getInputValue} />
                   <label>Địa chỉ</label>
@@ -266,8 +378,9 @@ function Order() {
                                 </div>
                               </td>
                               <td>
-                                <p style={{ fontSize: '16px' }}><b>{cart.product.name}</b></p>
-                                <p>{cart.product.price} VND</p>
+                                <p style={{ fontSize: '16px' }}><b>Tên SP:{cart.name}</b></p>
+                                <p>Giá tiền: {cart.price} VND</p>
+                                <p>Số lượng: {cart.number}</p>
                               </td>
                               <td>
                                 <p style={{ fontSize: '16px' }}>
@@ -285,21 +398,26 @@ function Order() {
                 </div>
                 <span className="total-amount">
                   <h2>Tồng tiền hàng :</h2>
-                  <p>{thanhTien} VND</p>
+                  <p>{tongtien} VND</p>
                 </span>
                 <span className="fee">
                   <h2>Phí vận chuyển :</h2>
-                  <p>7.500.000 VND</p>
+                  <p>{phiship}</p>
                 </span>
                 <div className="discount">
                   <h2>Mã giảm giá :</h2>
                   <div className="discount-inp">
                     <div className="dis-box">
-                      <input type="text" name required />
+                      <input type="text" defaultValue={discountName.name} onChange={getDiscount} required />
                       <label>Mã</label>
+                      <button onClick={laymagiam}>Áp dụng</button>
                     </div>
                   </div>
                 </div>
+                <span className="total-amount">
+                  <h2>Thành tiền :</h2>
+                  <p>{thanhTien} VND</p>
+                </span>
               </div>
             </div>
             <button type="button" className="btn btn-light" id="btn-order" onClick={datHang} >

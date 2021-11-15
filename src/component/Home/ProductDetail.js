@@ -57,13 +57,39 @@ const history = useHistory();
       num: e.target.value
     })
   }
-
-  const muaNgay = (idsp) =>{
+  // localStorage.clear();
+  const muaNgay = (idsp, price, photo, name, weight) =>{
     const detail ={
-      cartId: 2,
+      cartId: '',
       productId: idsp,
       number: count.num
     }
+
+    const localDetail = {
+      product_id: idsp,
+      price: price,
+      photo: photo,
+      name: name,
+      weight: weight,
+      total: price * count.num,
+      number: count.num,
+    }
+    
+    if(detail.cartId == ''){
+      let storage = localStorage.getItem('cart');
+      if(storage){
+        cart = JSON.parse(storage);
+      }
+      let item = cart.find(c => c.product_id == idsp )
+      if(item){
+        item.number += count.num;
+        item.total = price * item.number
+      } else{
+        cart.push(localDetail);
+      }
+      localStorage.setItem('cart', JSON.stringify(cart))
+        history.push('/cart_none')
+    } else{
     axios({
       url: 'http://localhost:8080/cart-detail',
       method: 'post',
@@ -85,6 +111,7 @@ const history = useHistory();
   history.push('/cart')
 )  
   }
+}
 
   const [initParams, setInitParams]= useState(
     {
@@ -98,33 +125,39 @@ const history = useHistory();
   const loadLocal =()=>{
     
   }
-  const localUser = JSON.parse(localStorage.getItem('data'));
-  const [userData, setUserData] = useState( localUser );
-  // localStorage.removeItem('data');
-  const addToCart = (idsp) =>{
+  // localStorage.removeItem('cart');
+
+  let cart =[];
+  const addToCart = (idsp, price, photo, name, weight) =>{
     const detail ={
-      cartId: 2,
+      cartId: '',
       productId: idsp,
-      number: count.num
+      number: count.num,
+    }
+
+    const localDetail = {
+      product_id: idsp,
+      price: price,
+      photo: photo,
+      name: name,
+      weight: weight,
+      total: price * count.num,
+      number: count.num,
     }
     
     if(detail.cartId == ''){
-      if(localStorage.getItem('data') == null ){
-        localStorage.setItem('data', '[]');
-      }
-      const data = JSON.parse(localStorage.getItem('data'));
-      for(var i = 0; i< data.length ; i ++){
-        if(data[i].productId == detail.productId){
-          data[i].number = data[i].number + count.num;
-          localStorage.setItem('data', JSON.stringify(data));
-        
+        let storage = localStorage.getItem('cart');
+        if(storage){
+          cart = JSON.parse(storage);
         }
-
-      }
- 
-      // data.push(detail);  
-      //     localStorage.setItem('data', JSON.stringify(data));
-      // setLocal(localStorage.getItem('data', JSON.stringify(data)));
+        let item = cart.find(c => c.product_id == idsp )
+        if(item){
+          item.number += count.num;
+          item.total = price * item.number
+        } else{
+          cart.push(localDetail);
+        }
+        localStorage.setItem('cart', JSON.stringify(cart))
     } else{
       axios({
         url: 'http://localhost:8080/cart-detail',
@@ -260,8 +293,8 @@ const history = useHistory();
                     <button type="button" onClick={()=>yeuThich(result.id)}><i class="fa fa-heart"></i></button>
                   </div>
                   <div className="button-pro-detai">
-                    <button onClick={()=>addToCart(result.id)} type="button" className="btn btn-outline-primary" style={{fontSize: '18px',width: '200px', fontWeight: '500', padding: '10px 0'}}><i className="fa fa-shopping-basket" /> Thêm vào giỏ hàng</button>
-                    <button onClick={() => muaNgay(result.id)} type="button" className="btn btn-outline-danger" style={{fontSize: '18px',width: '200px', fontWeight: '500', padding: '10px 0', marginLeft: '15px'}}>Mua ngay </button>
+                    <button onClick={()=>addToCart(result.id, result.price, result.photo, result.name, result.weight)} type="button" className="btn btn-outline-primary" style={{fontSize: '18px',width: '200px', fontWeight: '500', padding: '10px 0'}}><i className="fa fa-shopping-basket" /> Thêm vào giỏ hàng</button>
+                    <button onClick={() => muaNgay(result.id,result.price, result.photo, result.name, result.weight )} type="button" className="btn btn-outline-danger" style={{fontSize: '18px',width: '200px', fontWeight: '500', padding: '10px 0', marginLeft: '15px'}}>Mua ngay </button>
                   </div>
                 </div>
               </div>

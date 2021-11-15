@@ -15,6 +15,7 @@ import Favorite from "../component/Favorite/Favorite";
 import Receipt from "../component/PhieuNhap/Receipt/Receipt";
 import FormRegister from "../component/Login/FormRegister";
 import FormLogin from "../component/Login/FormLogin";
+import ListCartNone from "../component/Cart/ListCartNone";
 
 function ListRoute(){
     return(
@@ -45,6 +46,8 @@ function ListRoute(){
         <Route path="/yeu-thich" component={Favorite} />
 
         <Route path="/api/receipt" component={Receipt} />
+
+        <Route path="/cart_none" component={ListCartNone} />
 
         {/* <PrivateRoutes component={ListDanhmuc} authed={false} path='/admin'  /> */}
         {/* component PageNotFound phải để cuối cùng */}

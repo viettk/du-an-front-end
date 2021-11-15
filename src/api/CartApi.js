@@ -34,6 +34,11 @@ const CategoryApi = {
     getOnAddress: (id) =>{
         const url = `/dia-chi/${id}`;
         return axiosClient.get(url);
+    },
+
+    getShip: (id) =>{
+        const url= `/cart-detail/get-weight?cartId=`+id;
+        return axiosClient.get(url);
     }
 }
 export default CategoryApi;

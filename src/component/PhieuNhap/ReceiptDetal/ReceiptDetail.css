@@ -1,0 +1,29 @@
+.receipt-hiddent-show{
+    position: absolute;
+    overflow: hidden;
+    height: 0;
+}
+
+.receipt-hiddent-show.active{
+    height: 250px;
+    z-index: 99;
+    border: 1px solid gray;
+    margin-top: -20px;
+    width: 100%;
+    background-color: white;
+    overflow-y: auto;
+}
+.receipt-product-name{
+    list-style: none;
+    margin: 0;
+    padding: 5px 0 5px 0;
+}
+.receipt-product-name li{
+    padding: 3px 0 0 10px;
+    margin: 0;
+    cursor: pointer;
+    height: 28px;
+}
+.receipt-product-name li:hover{
+    background-color: gray;
+}

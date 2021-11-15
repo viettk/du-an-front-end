@@ -82,14 +82,16 @@ function Modaldm({ show, setShow, ma, setMa }) {
             }).then(resp => {
                 setDetail(resp);
                 dong();
+                console.log(resp)
             }).catch((error) => {
+                console.log(error.response.data)
                 if (error.response) {
                     setLoi(error.response.data);
                     setMess(error.response.data);
                 } else if (error.request) {
-                    console.log(error.request);
+                    console.log(error.request );
                 } else {
-                    console.log('Error', error.message);
+                    console.log('Error', error.message.data);
                 }
             });
         }

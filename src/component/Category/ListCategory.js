@@ -3,6 +3,7 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
@@ -29,6 +30,7 @@ function ListCategory() {
     const [ result, setResult] = useState(initValues);
     const [ page, setPage] = useState(initParams._page + 1);
     const [ count, setCount] = useState(0);
+
     const [search, setSearch] = useState({
         name: '',
         parent_name: ''
@@ -63,7 +65,6 @@ function ListCategory() {
                 _page : value-1,
             }
         );       
-        console.log(page);
       };
       
       const getMa = (id) =>{
@@ -121,6 +122,7 @@ function ListCategory() {
                         <td scope="col">Sửa</td>
                     </tr>
                 </tbody>
+                
                 <tfoot style={{height: "10px"}}>
                     {
                         xpage > 0 && xpage <= count ? result.map(
