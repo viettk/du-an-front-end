@@ -7,12 +7,12 @@ const CategoryApi = {
     },
 
     getAllCate:()=>{
-        const url = "/danh-muc/all";
+        const url = "/danh-muc/cha";
         return axiosClient.get(url);
     },
 
     getIdCategory: (id) =>{
-        const url = "/danh-muc/" + id;
+        const url = `/danh-muc/${id}`;
         return axiosClient.get(url, {id});
     },
 
@@ -34,6 +34,16 @@ const CategoryApi = {
     putDm: (id, params) =>{
         const url = `/danh-muc/${id}`;
         return axiosClient.put(url, {params});
+    },
+
+    getCatebyParent: (name)=>{
+        const url = `/danh-muc/timtheocha?parentName=`+ name;
+        return axiosClient.get(url);
+    },
+
+    getListAll :(param)=>{
+        const url = `/danh-muc/all/search`;
+        return axiosClient.get(url, {param});
     }
 
 }

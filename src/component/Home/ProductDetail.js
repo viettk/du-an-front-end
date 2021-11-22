@@ -60,7 +60,7 @@ const history = useHistory();
   // localStorage.clear();
   const muaNgay = (idsp, price, photo, name, weight) =>{
     const detail ={
-      cartId: '',
+      cartId: 2,
       productId: idsp,
       number: count.num
     }
@@ -90,6 +90,19 @@ const history = useHistory();
       localStorage.setItem('cart', JSON.stringify(cart))
         history.push('/cart_none')
     } else{
+      let storage = localStorage.getItem('cart');
+        if(storage){
+          cart = JSON.parse(storage);
+        }
+        let item = cart.find(c => c.product_id == idsp )
+        if(item){
+          item.number += count.num;
+          item.total = price * item.number
+        } else{
+          cart.push(localDetail);
+        }
+        localStorage.setItem('cart', JSON.stringify(cart));
+
     axios({
       url: 'http://localhost:8080/cart-detail',
       method: 'post',
@@ -130,7 +143,7 @@ const history = useHistory();
   let cart =[];
   const addToCart = (idsp, price, photo, name, weight) =>{
     const detail ={
-      cartId: '',
+      cartId: 2,
       productId: idsp,
       number: count.num,
     }
@@ -159,8 +172,8 @@ const history = useHistory();
         }
         localStorage.setItem('cart', JSON.stringify(cart))
     } else{
-      axios({
-        url: 'http://localhost:8080/cart-detail',
+     axios({
+        url: 'http://localhost:8080/cart-detail/',
         method: 'post',
         type: 'application/json',
         data: detail,
@@ -176,7 +189,20 @@ const history = useHistory();
       } else {
           console.log('Error', error.message);
       }
-  })  
+  }).then(resp =>{
+    let storage = localStorage.getItem('cart');
+        if(storage){
+          cart = JSON.parse(storage);
+        }
+        let item = cart.find(c => c.product_id == idsp )
+        if(item){
+          item.number += count.num;
+          item.total = price * item.number
+        } else{
+          cart.push(localDetail);
+        }
+        localStorage.setItem('cart', JSON.stringify(cart));
+  })
     }
     
   }

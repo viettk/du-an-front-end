@@ -38,7 +38,7 @@ function Favorite(){
           }
         }
         fetchList();
-      }, [params, result]);
+      }, [params]);
 
       const handleChange = (event, value) => {
         history.push("/danh-muc/" + value);

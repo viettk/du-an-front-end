@@ -8,10 +8,10 @@ import ReceiptApi from "../../../api/ReceiptApi";
 import { create } from "@mui/material/styles/createTransitions";
 import axios from "axios";
 import ReceiptDetail from "../ReceiptDetal/ReceiptDetail";
-
+import './receipt.css';
 
 function Receipt() {
-
+    const history = useHistory();
     const initValues = [];
     const initParams = {
         _limit: '5',
@@ -31,9 +31,16 @@ function Receipt() {
     //     name: '',
     //     parent_name: ''
     // });
-
+    const [reload, setReload] = useState(true);
     const [ma, setMa] = useState(0);
     const [show, setShow] = useState(false);
+    const onReload = () =>{
+        if(reload){
+            setReload(false);
+        } else {
+            setReload(true);
+        }
+    }
     useEffect(() => {
         const fetchList = async () => {
             try {
@@ -42,10 +49,11 @@ function Receipt() {
                 setCount(response.totalPages);
             } catch (error) {
                 console.log(error);
+                // history.push('/404');
             }
         }
         fetchList();
-    }, [params, result, page, month, year]);
+    }, [params, page, month, year, reload]);
 
     const handleChange = (event, value) => {
         setPage(value);
@@ -72,7 +80,8 @@ function Receipt() {
             headers: {
                 'Content-Type': 'application/json',
             }
-        })
+        });
+        onReload();
     }
 
     const [describe, setDescribe] = useState({
@@ -82,7 +91,8 @@ function Receipt() {
         setDescribe({
             ...describe,
             mota: e.target.value
-        })
+        });
+        onReload();
     }
 
     const updateDescripbe = (e, id) => {
@@ -107,7 +117,8 @@ function Receipt() {
                     'Content-Type': 'application/json',
                 }
             })
-        })
+        });
+        onReload();
     }
 
     const getMa = (id) => {
@@ -126,16 +137,15 @@ function Receipt() {
     return (
         <React.Fragment>
             <h3 style={{ marginTop: 10 }}>Danh sách Phiếu nhập</h3>
-            <ReceiptDetail show={show} setShow={setShow} ma={ma} setMa={setMa} />
+            <ReceiptDetail show={show} setShow={setShow} ma={ma} setMa={setMa} reload={reload} setReload={setReload} />
             <TableContainer component={Paper}>
-                <div>
-                    <div>
-                        <label>Tạo phiếu nhập mới</label>
-                        <textarea name="describecreate" onChange={update}>Ghi chú</textarea>
-                        <button onClick={() => create()}>Tạo</button>
-                    </div>
-                    <div>
-                    <select value={month} onChange={(e) => changeMonth(e)} >
+                <div style={{position: "relative"}}>
+                    <div className="receipt-create">
+                        <textarea  name="describecreate" onChange={update} placeholder="Ghi chú phiếu nhập"></textarea>
+                        <div className="receipt-create-filter">
+                            <button className="ghi-chu-phieu-nhap" onClick={() => create()}>Tạo</button>
+                            <div className="receipt-date">
+                        <select value={month} onChange={(e) => changeMonth(e)} >
                             <option value="1" >Tháng 1</option>
                             <option value="2" >Tháng 2</option>
                             <option value="3" >Tháng 3</option>
@@ -157,6 +167,9 @@ function Receipt() {
                             <option value="2025">2025</option>
                         </select>
                     </div>
+                        </div>
+                    </div>
+                    
                 </div>
                 <table className="table table-striped">
                     <tbody>
@@ -178,7 +191,7 @@ function Receipt() {
                                         <td><input name="describe" defaultValue={result.describe} onChange={(e) => updateDescripbe(e, result.id)} /></td>
                                         <td>{result.total}</td>
                                         <td>
-                                            <button type="button" class="btn btn-primary" onClick={() => getMa(result.id)} >Chỉnh sửa</button>
+                                            <button type="button" className="btn btn-primary" onClick={() => getMa(result.id)} ><i className="fa fa-eye"></i></button>
                                         </td>
                                     </tr>
 

@@ -1,4 +1,5 @@
 import { Pagination } from "@mui/material";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import HomeApi from "../../api/HomeApi";
@@ -54,7 +55,7 @@ function HomeCate() {
           }
         }
         fetchList();
-      }, [params, result, search.name, page]);
+      }, [params, search.name, page]);
 
     return (
         <section>
@@ -62,26 +63,18 @@ function HomeCate() {
                 {
                     result.map(result =>
                         <div className="productinfo text-center">
-                    <img src="images/demo.png" alt="" className="pr-img" />
-                    <p className="fix-line-css">{result.name}</p>
-                    <p style={{fontSize: '14px', fontWeight: '500', margin: "0 0 10px 0"}}>SKU: {result.sku}</p>
-                    <span className="pr-category-body">
-                        <h5 style={{fontSize: '16px', fontWeight: '550'}}>{result.price} VND</h5>
-                        <a id="right">
-                            <i className="fa fa-heart" style={{ color: 'red' }} />
-                            <p>10 lượt thích</p>
-                        </a>
-                    </span>
-                    <div className="when-hover">
-                        <button className="btn btn-dark add-to-cart">
-                            <i className="fa fa-shopping-cart" />Mua ngay
-                        </button>
-                        <button className="btn btn-dark add-to-cart">
-                            <i className="fa fa-eye" />
-                        </button>
-                    </div>
-                </div>
-                        )
+                            <img src="images/demo.png" alt="" className="pr-img" />
+                            <p className="fix-line-css">{result.name}</p>
+                            <p style={{ fontSize: '14px', fontWeight: '500', margin: "0 0 10px 0" }}>SKU: {result.sku}</p>
+                            <span className="pr-category-body">
+                                <h5 style={{ fontSize: '16px', fontWeight: '550' }}>{result.price} VND</h5>
+                                <a id="right">
+                                    <i className="fa fa-heart" style={{ color: 'red' }} />
+                                    <p>10 lượt thích</p>
+                                </a>
+                            </span>
+                        </div>
+                    )
                 }
             </div>
             <Pagination className="pagination" count={count}  page={page} onChange={handleChange}  color="secondary"/>

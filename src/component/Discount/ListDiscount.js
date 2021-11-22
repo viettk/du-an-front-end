@@ -3,55 +3,54 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-import CategoryApi from "../../api/CategoryApi";
+import DiscountApi from "../../api/DiscountApi";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './Category.css';
+import './discount.css';
 import { useParams, useLocation, useHistory } from "react-router-dom";
-import Modaldm from "./Modaldm";
 import { height } from "@mui/system";
+import Discountdm from "./Discountdm";
 
-function ListCategory() {
+function ListDiscount() {
+    
     const initValues = [];
     const initParams= {
         _limit : '5',
         _page : 0,
+        name: '',
+        valueDiscount: 0
     };
 
     const [ params, setParams] = useState(initParams);
     const [ result, setResult] = useState(initValues);
     const [ page, setPage] = useState(initParams._page + 1);
     const [ count, setCount] = useState(0);
-
-    const [search, setSearch] = useState({
-        name: '',
-        parent_name: ''
-    });
+    const [reload, setReload] = useState(true);
 
     // lấy id danh mục
     const [ma, setMa] = useState(0);
-    const [reload, setReload] = useState(true);
+
 
     // Mở modal
     const [show, setShow] = useState(false);
+    
 
     useEffect(() => {
         const fetchList = async () =>{
           try{
-            const response = await CategoryApi.getAll(params, search.name, search.parent_name);
-            setResult(response.content); 
+            const response = await DiscountApi.getAllDiscount(params);
+            setResult(response.content);      
             setCount(response.totalPages);
           }catch (error){
             console.log(error);
           }
         }
         fetchList();
-      }, [params,search.name, page, reload]);
+      }, [params, reload, page]);
 
       const handleChange = (event, value) => {
         setPage(value);
@@ -62,68 +61,60 @@ function ListCategory() {
             }
         );       
       };
-
-    
       
       const getMa = (id) =>{
         setShow(true);
         setMa(id);
       }
-
-      const getSearchName = (e) => {
-        const newvalue = e.target.value;
-        setSearch({
-            ...search,
-            name: newvalue,
-        });          
+    
+    const getSearch = (e) =>{
+        const { name, value } = e.target;
+        setParams({
+            ...params,
+            [name]: value
+        })
     }
-
-    const getSearchParent_name = (e) => {      
-        const newvalue = e.target.value;
-        setSearch({
-            ...search,
-            parent_name: newvalue,
-        });
-        
+    const changeValue = (e) =>{
+        setParams({
+            ...params,
+            valueDiscount: e.target.value
+        })
     }
-    const them = () =>{
-        setShow(true);
-    }
+console.log(params)
     return(
         <React.Fragment>
-             <Modaldm show={show} setShow={setShow} ma={ma} setMa={setMa} reload={reload} setReload={setReload} />
-        <h3 style={{marginTop: 10}}>Danh sách Danh mục Sản phẩm</h3>
+             <Discountdm show={show} setShow={setShow} ma={ma} setMa={setMa} reload={reload} setReload={setReload} />
+        <h3 style={{marginTop: 10}}>Danh sách phiếu giảm giá</h3>
         <TableContainer component={Paper}>
-        <button className="btn btn-primary" onClick={() => them()} >Thêm mới</button>
-        <table className="table table-striped dm">
+<button className="btn btn-primary" onClick={() => getMa()} >Thêm mới</button>
+        <table className="table table-striped">
             <thead>
                 <tr>
-                    <td></td>
-                    <td><input placeholder="Tên danh mục..." onChange={(e) => getSearchName(e)} type='text' /></td>
-                    <td><input placeholder="Danh mục cha..." onChange={(e) => getSearchParent_name(e)} type='text' /></td>
-                    <td></td>
+                    <td scope="col"><input onChange={getSearch} name="name" placeholder="Lọc theo Tên" /> </td>
+                    <td scope="col"><input onChange={changeValue} namee="valueDiscount" placeholder="Lọc theo Giá giảm" /> </td>
                 </tr>
             </thead>
                 <tbody>
                     <tr>
-                        <td scope="col">STT</td>
-                        <td scope="col">Tên Danh mục</td>
-                        <td scope="col">Danh mục cha</td>
-                        <td scope="col">Sửa</td>
+                        <td scope="col">Name</td>
+                        <td scope="col">Giá giảm</td>
+                        <td scope="col">Số lượng</td>
+                        <td scope="col">Ngày bắt đầu</td>
+                        <td scope="col">Ngày kết thúc</td>
+                        <td scope="col"></td>
                     </tr>
                 </tbody>
-                
                 <tfoot style={{height: "10px"}}>
                     {
                         result.length > 0 ? result.map(
                             (result, index) =>
-                                <tr key={index+1}>
-                                    <td>{index+1}</td>
+                                <tr key={index + 1}>
                                     <td>{result.name}</td>
-                                    <td>{result.parent_name}</td>
-                                    <td>                                     
-                                        <i onClick={() => getMa(result.id)} className="fa fa-edit"></i> 
-                                    </td>    
+                                    <td>{result.valueDiscount}</td>
+                                    <td>{result.number}</td>
+                                    <td>{result.open_day}</td>
+                                    <td>{result.end_day}</td>
+                                    <td><button type="button" class="btn btn-primary" onClick={() => getMa(result.id)}>Sửa</button></td>    
                                 </tr>
 
                         ) : (         
@@ -139,4 +130,4 @@ function ListCategory() {
     </React.Fragment>
     );
 }
-export default ListCategory;
+export default ListDiscount;

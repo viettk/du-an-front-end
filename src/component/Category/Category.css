@@ -4,10 +4,31 @@
     bottom: -50px;
     transform: translateX(-50%);
 }
-td{
+.dm tbody{
+    border: unset;
+}
+.dm tbody tr{
+    border: none;
+    background-color: white;
+}
+.dm tfoot tr:nth-child(even){background-color: #f2f2f2;}
+.dm tfoot tr td:not(:first-child){
+    font-size: 17px;
+}
+.dm tfoot tr:hover {background-color: #ddd;}
+.dm thead tr td{
     text-align: center;
+    margin: 0;
+    padding: 7px 0 7px 0;
+}
+.dm thead tr td input{
+    width: 40%;
 }
 .unkown{
     text-align: center;
     background-color: red;
+}
+.fa-edit{
+    cursor: pointer;
+    padding: 0 10px 0 10px;
 }

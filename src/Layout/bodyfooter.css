@@ -1,0 +1,15 @@
+.body-footer-home{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    background-color: #ebebeb;
+    padding: 10px 0 0 0;
+}
+.vmo-item{
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    justify-self: center;
+}
+.vmo-p{
+    font-size: 16px;
+    font-weight: 500;
+}

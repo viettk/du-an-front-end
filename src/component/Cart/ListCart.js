@@ -10,9 +10,10 @@ import CartApi from "../../api/CartApi";
 import { useParams, useLocation, useHistory } from "react-router-dom";
 import { height } from "@mui/system";
 import axios from "axios";
+import {connect} from 'react-redux';
 
-function ListCart() {
-
+function ListCart(props) {
+    console.log(props.user)
     const initValues = [];
     const [initParams, setInitParams]= useState(
         {
@@ -55,7 +56,7 @@ function ListCart() {
           }
         }
         fetchList();
-      }, [params, result]);
+      }, [params]);
 
       const tangSL=(e, idp,sl)=>{
         
@@ -120,7 +121,17 @@ function ListCart() {
             headers: {
                 'Content-Type': 'application/json',
             }
-        })
+        });
+        let cart =[];
+        let storage = localStorage.getItem('cart');
+        if(storage){
+          cart = JSON.parse(storage);
+        }
+        cart = cart.filter(c => c.product_id != idp);
+        cart.total = cart.price * cart.number;
+        localStorage.setItem('cart', JSON.stringify(cart));
+        let reload = localStorage.getItem('cart');
+        setResult(JSON.parse(reload));
       }
 
       const dathang = ()=>{
@@ -209,4 +220,6 @@ function ListCart() {
     </React.Fragment>
     );
 }
-export default ListCart;
+
+const mapStateToProps = (state) => ({user : state.userReducer});
+export default connect(mapStateToProps,null) (ListCart);

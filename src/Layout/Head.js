@@ -4,35 +4,70 @@ import Carousel from 'react-elastic-carousel';
 import { useEffect, useState } from 'react';
 import CategoryApi from '../api/CategoryApi';
 import {connect} from 'react-redux';
+import {removeUser} from '../redux_user/user-action'
+import axios from 'axios';
 
 function Head(props) {
-  const [result, setResult] = useState([]);
-  const [kit, setKit] = useState([]);
-  useEffect(() => {
-    const fetchList = async () =>{
+  const [result, setResult] = useState([]); 
+  const [cate, setCate] = useState([]);
+  const username = localStorage.getItem('name');
+  const [number, setNumber] = useState(0);
+  const [active, setActive] = useState(false);
+  useEffect(() => { 
+    const fetchList = async () =>{    
       try{
+        
         const response = await CategoryApi.getAllCate();
         setResult(response); 
-        const respKit = await CategoryApi.getkit();
-        setKit(respKit);
       }catch (error){
         console.log(error);
       }
-    }
+    } 
     fetchList();
-  }, [result]);
+  }, [username]);
+  const logout = (event) => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('name')
+    props.removeUser('')
+  }
 
+  const getValue = (e)=>{
+    axios({
+      url: 'http://localhost:8080/danh-muc/timtheocha?parentName=' + e.currentTarget.textContent,
+      method: 'get',
+      type: 'application/json',
+      headers: {
+          'Content-Type': 'application/json',
+      }
+  }).then(reps =>{
+    setCate(reps.data)
+    setActive(true);
+  })
+  }
+
+  const changeValue = () =>{
+    setCate([])
+  }
+
+  const changeActivate = () =>{
+    setActive(false);
+  }
   return (
     <header id="header">
       {/*header*/}
       <div className="header_top">
         {/*header_top*/}
         <h6 style={{ margin: "5px 0 0 125px", fontSize: "13px", fontWeight: "400" }}> Mở cửa: 8h30 - 22h00, thứ 2 - CN hàng tuần</h6>
-        <span>
-          <a>Đăng nhập</a>
+        {username ?(<span>
+          <a >{username}</a>
           <b>|</b>
-          <a>Đăng ký</a>
-        </span>
+          {/* <a onClick={logout}  >Đăng xuất</a> */}
+          <a href="/cart"  >Đăng xuất</a>
+        </span>):(<span>
+          <a href="http://localhost:3000/login">Đăng nhập</a>
+          <b>|</b>
+          <a href="http://localhost:3000/register">Đăng ký</a>
+        </span>)}
       </div>
       <div className="header-middle" style={{ margin: 0, backgroundColor: "black" }}>
         <div className="container">
@@ -46,23 +81,23 @@ function Head(props) {
             <div className="col-md-5">
               <div className="input-group rounded" style={{ width: "100%" }}>
                 <input type="search" className="form-control rounded" style={{ fontSize: '15px', padding: " 10px 0 10px 10px" }} placeholder="Bạn đang tìm sản phẩm nào ..." aria-label="Search" aria-describedby="search-addon" />
-                <button className="btn btn-outline-secondary" type="button" id="button-addon2">
+                <button className="btn btn-outline-secondary" type="button" id="button-addon2" style={{margin: "-1px 0 0 -2px", backgroundColor: "#ffba00"}} >
                   <i className="fa fa-search" />
                 </button>
               </div>
             </div>
             <div className="col-md-4 fix">
               <div className="hotline">
-                <button type="button" className="border-one">
+                <button type="button" className="border-one" style={{backgroundColor: "white"}}>
                   <i className="icon-one fa fa-phone" />
                 </button>
-                <a className="phone" style={{ padding: " 7px 0 0 5px", color: "white", fontSize: "15px" }}>0123456789 </a>
+                <a className="phone" style={{ padding: " 5px 0 0 5px", color: "white", fontSize: "15px"}}>0123456789 </a>
               </div>
               <div className="shopping">
-                <button type="button" className="border-one">
+                <button type="button" className="border-one" style={{backgroundColor: "white"}}>
                   <i className="icon-tow fa fa-shopping-cart" />
                 </button>
-                <a className="carta" href="cart.html" style={{ padding: "7px 0 0 5px", color: "white", fontSize: "15px" }}> (0) Sản phẩm</a>
+                <a className="carta" href="cart.html" style={{ padding: "5px 0 0 5px", color: "white", fontSize: "15px" }}> ({number}) Sản phẩm</a>
               </div>
             </div>
           </div>
@@ -76,61 +111,46 @@ function Head(props) {
             <div className="mainmenu pull-left ">
               <ul className="nav navbar-nav collapse navbar-collapse menu-drop">
                 <li className="dropdown">
-                  <a href="#">
-                    <i className="fa fa-align-justify" style={{ margin: "0 5px 0 5px" }} />
+                  <a href="#" onMouseOver={changeActivate} >
+                    <i className="fa fa-align-justify" style={{ margin: "0 5px 0 5px" }}  />
                     Danh mục sản phẩm
                   </a>
-                  <ul role="menu" className="sub-menu all-cate">
-                   {
-                     result.map(result =>
-                      <li><a href={'/'+ result.name +'/'+result.id+'/1'}>{result.name}</a></li>
-                      )
-                   }
-                  </ul>
-                </li>
-                <li><a href="index.html" className="active">Home</a></li>
-                <li className="dropdown">
-                  <a href="#">Shf</a>
-                  <ul role="menu" className="sub-menu">
-                    <li><a href="category-product.html">Marvel</a></li>
-                    <li>
-                      <a href="category-product.html">Dragon ball</a>
-                    </li>
-                    <li><a href="category-product.html">Naruto</a></li>
-                  </ul>
-                </li>
-                <li className="dropdown">
-                  <a href="#">Model kit</a>
-                  <ul role="menu" className="sub-menu">
+                  <ul role="menu" className="sub-menu all-cate headmenu-cate" >
+                    <div style={{position: "relative"}} >
                     {
-                      kit.map(kit =>
-                        <li><a href={'/'+ kit.name +'/'+kit.id+'/1'}>{kit.name}</a></li>
-                        )
+                      result.map((result) =>
+                        <li key={result} value={result} onMouseOver={(e) => getValue(e)}>
+                          <a>{result}</a>
+                        </li>
+                        
+                      )
                     }
+                    </div>
+                    <div className={ active == false ? "head-menu-cate-child" : "head-menu-cate-child active"} >
+                        {
+                           cate.map(result =>
+                            <a key={result.id} href={'/'+ result.name +'/'+result.id+'/1'}>{result.name}</a>
+                            )
+                        }
+                    </div>
                   </ul>
                 </li>
-                <li><a href>Mô hình tĩnh</a></li>
+                <li><a href="index.html" className="active">Trang chủ</a></li>
                 <li><a href>Khuyến Mại</a></li>
                 <li><a href>Giới thiệu</a></li>
+                <li><a href>Hướng dẫn</a></li>
+                <li><a href>Kiểm tra đơn hàng</a></li>
               </ul>
             </div>
           </nav>
         </div>
       </div>
-      {/*/header-botton */}
-      <div id="carouselExampleIndicators" className="carousel slide" data-bs-ride="carousel">
-        <div className="carousel-inner">
-          <Carousel>
-            <img src="https://bizweb.dktcdn.net/100/342/840/themes/708938/assets/slider_1.jpg?1600682111037" className="d-block w-100" alt="..." />
-            <img src="https://bizweb.dktcdn.net/100/342/840/themes/708938/assets/slider_4.jpg?1600682111037" className="d-block w-100" alt="..." />
-            <img src="https://bizweb.dktcdn.net/100/342/840/themes/708938/assets/slider_1.jpg?1600682111037" className="d-block w-100" alt="..." />
-          </Carousel>
-        </div>
-
-      </div>
     </header>
 
   );
 }
+const mapDispatchToProps = dispatch => ({
+  removeUser: userInfo => dispatch(removeUser(userInfo))
+})
 const mapStateToProps = (state) => ({user : state.userReducer});
-export default connect(mapStateToProps) (Head);
+export default connect(mapStateToProps,mapDispatchToProps) (Head);

@@ -181,6 +181,7 @@
     .mainmenu ul li a.active {
       background: none;
       color: #000000;
+      width: 100%;
     }
     
     /*  Dropdown menu*/
@@ -208,6 +209,7 @@
       margin: 0;
       width: 220px;     
       z-index: 999;
+      border: 1px solid lightblue;
     }
     
     .dropdown ul.sub-menu li .active {
@@ -220,16 +222,31 @@
     .navbar-nav li ul.sub-menu li {
       padding: 10px 0 10px 10px ;
       border-top: 1px solid blanchedalmond;
-    }
-    
+    }    
+
+    .navbar-nav li ul.sub-menu li a{
+      font-size: 17px;
+    }    
+
 
     .navbar-nav li ul.sub-menu li:last-child {
       padding-bottom: 20px;
     }
-    
+    .navbar-nav li ul.sub-menu li:hover{
+      cursor: pointer;
+      background-color: rgb(0, 0, 0);
+    }
+
+    .navbar-nav li ul.sub-menu li:hover .head-menu-cate-child{
+      background-color: red;
+    }
+
+    .navbar-nav li ul.sub-menu li:hover a{
+      color: white;
+      font-size: 15px;
+    }
     .navbar-nav li ul.sub-menu li a {
       color: rgb(0, 0, 0);
-      padding-right: 180px;
     }
     
     @-webkit-keyframes fadeInUp {

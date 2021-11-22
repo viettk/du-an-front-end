@@ -1,0 +1,13 @@
+.pagination{
+    position: absolute;
+    left: 50%;
+    bottom: -50px;
+    transform: translateX(-50%);
+}
+td{
+    text-align: center;
+}
+.unkown{
+    text-align: center;
+    background-color: red;
+}

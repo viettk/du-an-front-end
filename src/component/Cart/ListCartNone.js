@@ -10,6 +10,7 @@ import CartApi from "../../api/CartApi";
 import { useParams, useLocation, useHistory } from "react-router-dom";
 import { height } from "@mui/system";
 import axios from "axios";
+import './cart.css';
 
 function ListCartNone(){
     let storage = localStorage.getItem('cart');
@@ -88,26 +89,26 @@ function ListCartNone(){
                                     <td>{result.name}</td>
                                     <td>{result.price}</td>
                                     <td key={result.number}>
-                                        <button onClick={e=> tangSl(e, result.product_id)}>+</button>
-                                        <input className="num" type="number" defaultValue={result.number} onBlur={(e)=>checkNumber(e,result.product_id)} />
+                                        <button className="button-sl" onClick={e=> tangSl(e, result.product_id)}>+</button>
+                                        <input style={{border: "1px solid #ddd", height: "30px", width: "60px", textAlign: "center", padding: "10px 0"}} type="number" defaultValue={result.number} onBlur={(e)=>checkNumber(e,result.product_id)} />
                                             {/* {result.number} */}
-                                        <button onClick={e=> giamSl(e, result.product_id)} >-</button>
+                                        <button className="button-sl" onClick={e=> giamSl(e, result.product_id)} >-</button>
                                     </td>
-                                    <td>{result.total}</td>
+                                    <td>{result.total.toFixed(3)}</td>
                                     <td>
-                                        <button onClick={(e) => xoa(e, result.product_id) } >X</button>
+                                        <button onClick={(e) => xoa(e, result.product_id) } ><i class="fa fa-trash"></i></button>
                                     </td>
                                 </tr>
                         )              
                     }
                 </tfoot>
             </table>
-            <span>{totalf} VNĐ</span>
-
-            <div>
-                <a >Đặt hàng</a>
-            </div>
+            <span style={{float: "right", margin: "0 65px 20px 0"}}>Tổng tiền: <span style={{fontWeight: " 500"}}>{totalf}</span> VNĐ</span>
             </TableContainer>
+            <div id="select-cart">
+            <a style={{backgroundColor: "#3d4356"}}>Tiếp tục mua hàng</a>
+            <a >Thực hiện thanh toán</a>
+            </div>
     </React.Fragment>
     );
 }

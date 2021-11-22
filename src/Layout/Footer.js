@@ -77,7 +77,7 @@ function Footer(){
         <div className="container">
           <div className="row">
             <div className="text-center">
-              <p>Copyright © 2021 Designed by <a className="text-dark text-decoration-none" href="#">Worriors IT</a> | <a className="text-dark text-decoration-none" href="#">Powered by Worriors IT</a>	</p>
+              <p style={{textAlign: "center", paddingTop: "20px"}}>Copyright © 2021 Designed by <a className="text-dark text-decoration-none" href="#">Worriors IT</a> | <a className="text-dark text-decoration-none" href="#">Powered by Worriors IT</a>	</p>
             </div>
           </div>
         </div>

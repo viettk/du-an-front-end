@@ -9,7 +9,23 @@ import './ReceiptDetail.css';
 import { confirmAlert } from 'react-confirm-alert';
 import { Pagination } from '@mui/material';
 
-function ReceiptDetail({ show, setShow, ma, setMa }) {
+
+function ReceiptDetail({ show, setShow, ma, setMa, reload, setReload }) {
+    const onReload = () =>{
+        if(reload == true){
+            setReload(false);
+        } else{
+            setReload(true);
+        }
+    }
+    const [load, setLoad] = useState(true);
+    const onLoad = () =>{
+        if(load == false){
+            setLoad(true);
+        } else{
+            setLoad(false);
+        }
+    }
     const [input, setInput] = useState({
         productId:'',
         receiptId: '',
@@ -35,6 +51,7 @@ function ReceiptDetail({ show, setShow, ma, setMa }) {
     const [params, setParams] = useState(initParams);
     const dong = () => {
         setShow(false);
+        onReload();
         // setDetail({});
         // setLoi({});
         // setMa(0);
@@ -71,7 +88,7 @@ function ReceiptDetail({ show, setShow, ma, setMa }) {
           }
         }
         fetchList();
-      }, [result, input, search.sku]);
+      }, [ input, search.sku, ma, load]);
 
     const [click, setClick] = useState(false);
     const addToReceiptDetail = (id) => {
@@ -216,7 +233,8 @@ function ReceiptDetail({ show, setShow, ma, setMa }) {
             headers: {
                 'Content-Type': 'application/json',
             }
-        })
+        });
+         onLoad();
     }
     const handleChange = (event, value) => {
         setPage(value);
@@ -232,7 +250,7 @@ function ReceiptDetail({ show, setShow, ma, setMa }) {
             
             <Modal show={show} onHide={() => dong()} fullscreen={true} >
                 <Modal.Header>
-                    Phiếu nhập chi tiết
+                    <span className="titele-name">Phiếu nhập chi tiết</span>
                     <button type="button" class="btn-close" aria-label="Close" onClick={() => dong()}></button>
                 </Modal.Header>
 
@@ -240,7 +258,7 @@ function ReceiptDetail({ show, setShow, ma, setMa }) {
                     <div className ="form-receipt">
                     <form id="form-receipt-submit">
                         <div class="information">
-                            <div className="form-group col-3" style={{position: "relative"}}>
+                            <div className="form-group" style={{position: "relative"}}>
                                 <div className="user-box">
                                     <input id="namesp" type="text" name="productId" autoComplete = "off" onChange={getInputname} required />
                                     <label>Sản phẩm</label>
@@ -255,11 +273,10 @@ function ReceiptDetail({ show, setShow, ma, setMa }) {
                                     }
                                     </ul>
                                 </div>
-                                <input type="text" defaultValue={imgpro.img} />
                                 <span style={{ color: "red", fontSize: "13px" }}>{loi.productId}</span> 
                                 <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span> 
                             </div>
-                            <div className="form-group col-3">
+                            <div className="form-group">
                                 <div className="user-box">
                                     <input type="text" name="number" defaultValue={input.number} onBlur={getInputValue} onChange={getInputValue} required />
                                     <label>Số lượng</label>
@@ -268,7 +285,7 @@ function ReceiptDetail({ show, setShow, ma, setMa }) {
                                 <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span> 
                             </div>
 
-                            <div className="form-group col-3">
+                            <div className="form-group">
                                 <div className="user-box">
                                     <input type="text" name="price" value={input.price} onBlur={getInputValue} onChange={getInputValue} required />
                                     <label>Giá nhập</label>
@@ -277,7 +294,7 @@ function ReceiptDetail({ show, setShow, ma, setMa }) {
                                 <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span> 
                             </div>
                         </div>
-                        <button type="button" onClick={() => addToReceiptDetail()} onBlur={moveClick} >Thêm</button>
+                        <button type="button" className="button-them" onClick={() => addToReceiptDetail()} onBlur={moveClick} >Thêm</button>
                     </form>
                     </div>
                     <div className="table-receipt">

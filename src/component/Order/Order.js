@@ -13,12 +13,12 @@ function Order() {
     email: '',
     name: '',
     phone: '',
-    status_pay: 0,
+    status_pay: 'Thanh toán khi nhận nhà',
     address: '',
     city: '',
     district: '',
     wards: '',
-    status_order: 0,
+    status_order: '',
     describe: '',
     thema: '',
     themb: '',
@@ -62,13 +62,22 @@ function Order() {
   let getStorage = localStorage.getItem('cart');
   const [demo, setDemo] = useState(JSON.parse(getStorage));
   const [thanhTien, setThanhTien] = useState(0);
+  const [statusadress, setStatusadress] = useState();
 
   useEffect(() => {
     const fetchList = async () => {
       try {
         if (cartId.cart != '') {
-          const response = await CartApi.getCartDetail(cartId.cart);
+          const response = await CartApi.getCartDetail(2);
           setCart(response);
+          const respAdress = await CartApi.getAddressStatus(1);
+          setStatusadress(respAdress.id);
+          setBill({
+            ...bill,
+            name: respAdress.name,
+            phone: respAdress.phone,
+            address: respAdress.address
+          });
           const resp = await CartApi.getCart(1);
           const respo = await CartApi.getAddress(1);
           setDiachi(respo);
@@ -234,18 +243,30 @@ function Order() {
   }
   const uploadDc = (e) => {
     var index = e.target.value;
-    axios({
-      url: 'http://localhost:8080/dia-chi/' + index,
-      method: 'get',
-      type: 'application/json'
-    }).then(resp => {
+    if(e.target.value == 'other'){
       setBill({
         ...bill,
-        name: resp.data.name,
-        phone: resp.data.phone,
-        address: resp.data.address
+        name: '',
+        phone: '',
+        address: ''
       });
-    })
+    }
+    else{
+      axios({
+        url: 'http://localhost:8080/dia-chi/' + index,
+        method: 'get',
+        type: 'application/json'
+      }).then(resp => {
+        setBill({
+          ...bill,
+          name: resp.data.name,
+          phone: resp.data.phone,
+          address: resp.data.address
+        });
+      })
+      setStatusadress(e.target.value)
+    }
+  
   }
   const getDiscount = (e) => {
     setDiscountName({
@@ -276,16 +297,30 @@ function Order() {
     })
   }
 
+  const cod =() =>{
+    setBill({
+      ...bill,
+      status_pay: 'Thanh toán khi nhận nhà'
+    })
+  }
+
+  const momo =() =>{
+    setBill({
+      ...bill,
+      status_pay: 'Thanh toán online'
+    })
+  }
+
   return (
     <section>
       <div className="container">
         <div className="information">
-          <form action>
-            <div className="row">
-              <div className="col-sm-3">
-
-                <select onChange={(e) => uploadDc(e)}>
-                  <option >Địa chỉ khác</option>
+          <form action>         
+            <div style={{display: "grid", gridTemplateColumns: "1fr 1fr 500px", gridColumnGap: "20px"}}>
+              <div style={{display: "grid", gridRowGap: "15px"}}>
+              <h6>Thông tin nhận hàng</h6>
+                <select value={statusadress} onChange={(e) => uploadDc(e)} className="form-select" aria-label="Default select example" >
+                  <option value="other" >Địa chỉ khác</option>
                   {
                     diachi.map(dc =>
                       <option key={dc.id} data-id={dc.name} value={dc.id} > {dc.name}, {dc.address}</option>
@@ -306,9 +341,8 @@ function Order() {
                   <label>Số điện thoại</label>
                 </div>
                 <div className="user-box">
-                  <input className="order-tt" type="text" name required onClick={handleOnClick} />
-                  <select defaultValue={selectTinh} onChange={(e) => upodateTinh(e)}>
-                    <option>Tỉnh thành</option>
+                  <select className="form-select" aria-label="Default select example" defaultValue={selectTinh} onChange={(e) => upodateTinh(e)} style={{padding: "5px 0 6px 5px"}}>
+                    <option>Tỉnh-thành</option>
                     {
 
                       tinh.map(tinh =>
@@ -318,9 +352,8 @@ function Order() {
                   </select>
                 </div>
                 <div className="user-box">
-                  <input type="text" name required />
-                  <select defaultValue={bill.district} onChange={(e) => updateQuan(e)}>
-                    <option>Quận huyện</option>
+                  <select className="form-select" aria-label="Default select example" defaultValue={bill.district} onChange={(e) => updateQuan(e)} style={{padding: "5px 0 6px 5px"}}>
+                    <option>Quận-huyện</option>
                     {
                       selectTinh != '' ? quan.map(quan =>
                         <option key={quan.code} data-id={quan.name} value={quan.code}>{quan.name}</option>
@@ -329,16 +362,14 @@ function Order() {
                   </select>
                 </div>
                 <div className="user-box">
-                  <input type="text" name required />
-                  <select defaultValue={selectXa} onChange={(e) => updateXa(e)}>
-                    <option>Xã/Phường</option>
+                  <select className="form-select" aria-label="Default select example" defaultValue={selectXa} onChange={(e) => updateXa(e)}>
+                    <option>Xã-Phường</option>
                     {
                       selectQuan != '' ? xa.map(xa =>
                         <option key={xa.code} data-id={xa.name} >{xa.name}</option>
                       ) : <option>Mời bạn chọn Quận/Huyện</option>
                     }
                   </select>
-
                 </div>
 
                 <div className="user-box">
@@ -350,20 +381,26 @@ function Order() {
                   <label htmlFor="exampleFormControlTextarea1">Ghi chú</label>
                   <textarea className="form-control" id="exampleFormControlTextarea1" rows={3} defaultValue={""} onChange={getInputValue} />
                 </div>
-                <div className="form-check" style={{ marginTop: '20px' }}>
-                  <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" defaultChecked />
+              </div>
+              <div>
+                <h6>Phương thức thanh toán</h6>
+              <div style={{border: "1px solid #cecdcd", height: "105px", padding: " 10px 0 5px 10px", borderRadius: "5px" }}>
+                <div className="form-check">
+                  <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" defaultChecked onClick={cod} />
                   <label className="form-check-label" htmlFor="flexRadioDefault1">
                     Thanh toán khhi giao hàng(COD)
                   </label>
                 </div>
-                <div className="form-check" style={{ marginTop: '20px' }}>
-                  <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" />
+                <hr />
+                <div className="form-check">
+                  <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" onClick={momo} />
                   <label className="form-check-label" htmlFor="flexRadioDefault1">
                     Thanh toán qua ngân hàng
                   </label>
                 </div>
               </div>
-              <div className="col-sm-9">
+              </div>
+              <div style={{ backgroundColor: "#fafafa" , padding: "0 10px 0 10px"}}>
                 <div className="order-detail">
                   <h2>Đơn hàng (2 sản phẩm)</h2>
                   <div className id="father">
@@ -405,28 +442,21 @@ function Order() {
                   <p>{phiship}</p>
                 </span>
                 <div className="discount">
-                  <h2>Mã giảm giá :</h2>
-                  <div className="discount-inp">
-                    <div className="dis-box">
-                      <input type="text" defaultValue={discountName.name} onChange={getDiscount} required />
-                      <label>Mã</label>
-                      <button onClick={laymagiam}>Áp dụng</button>
-                    </div>
+                  <div className="user-box">
+                    <input type="text" defaultValue={discountName.name} onChange={getDiscount} required placeholder="Nhập Mã giảm giá" />
+                    <button id="apdung-giamgia" onClick={laymagiam}>Áp dụng</button>
                   </div>
                 </div>
                 <span className="total-amount">
                   <h2>Thành tiền :</h2>
                   <p>{thanhTien} VND</p>
                 </span>
+                <button type="button" className="btn btn-light" id="btn-order" onClick={datHang} >
+                  Đặt hàng
+                </button>
               </div>
+              
             </div>
-            <button type="button" className="btn btn-light" id="btn-order" onClick={datHang} >
-              <span />
-              <span />
-              <span />
-              <span />
-              Đặt hàng
-            </button>
           </form>
         </div>
       </div>

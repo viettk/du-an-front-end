@@ -36,8 +36,18 @@ const CategoryApi = {
         return axiosClient.get(url);
     },
 
+    getAddressStatus: (id) =>{
+        const url = `/dia-chi/mac-dinh?customerId=`+id;
+        return axiosClient.get(url);
+    },
+
     getShip: (id) =>{
         const url= `/cart-detail/get-weight?cartId=`+id;
+        return axiosClient.get(url);
+    },
+
+    getTotal: (id) =>{
+        const url = `/cart-detail/totalItem?id=` + id;
         return axiosClient.get(url);
     }
 }

@@ -5,19 +5,18 @@ import { Modal } from 'react-bootstrap';
 import CategoryApi from '../../api/CategoryApi';
 
 
-function Modaldm({ show, setShow, ma, setMa }) {
+function Modaldm({ show, setShow, ma, setMa , reload, setReload}) {
 
     const [detail, setDetail] = useState({
         id: '',
         name: '',
-        parent_name:''
+        parent_name: null
     });
 
     const dong = () => {
         setShow(false);
         setDetail({});
         setLoi({});
-        setMa(0);
         setMess({});
     }
 
@@ -31,24 +30,19 @@ function Modaldm({ show, setShow, ma, setMa }) {
         name: '',
         parent_name: ''
     });
-
-
     useEffect(() => {
         const fetchList = async () =>{
           try{
-            const response = await CategoryApi.getParent();
-            setParent(response);  
-
-            if(ma !== 0 || ma !== undefined ){
-                const resp = await CategoryApi.getIdCategory(ma);
-                setDetail(resp);
-            }
+              const response = await CategoryApi.getParent();
+              setParent(response);
+              const resp = await CategoryApi.getIdCategory(ma);
+              setDetail(resp);
           }catch (error){
             console.log(error);
           }
         }
         fetchList();
-      }, [ma]);
+      }, [ma, reload]);
 
 
     //lấy dữ liệu từ input
@@ -67,6 +61,14 @@ function Modaldm({ show, setShow, ma, setMa }) {
             parent_name: newvalue,
         });
     }
+    
+    const onReload = () =>{
+        if(reload){
+            setReload(false);
+        } else {
+            setReload(true);
+        }
+    }
 
     //Thêm mới hoặc Cập nhật Sản phẩm
     const update = () => {
@@ -82,7 +84,7 @@ function Modaldm({ show, setShow, ma, setMa }) {
             }).then(resp => {
                 setDetail(resp);
                 dong();
-                console.log(resp)
+                
             }).catch((error) => {
                 console.log(error.response.data)
                 if (error.response) {
@@ -94,6 +96,7 @@ function Modaldm({ show, setShow, ma, setMa }) {
                     console.log('Error', error.message.data);
                 }
             });
+            onReload();
         }
         else{
             axios({
@@ -122,6 +125,7 @@ function Modaldm({ show, setShow, ma, setMa }) {
                 }
             });
         }
+        onReload();
     }
     return (
         <div>
@@ -158,7 +162,7 @@ function Modaldm({ show, setShow, ma, setMa }) {
                 </Modal.Body>
 
                 <Modal.Footer>
-                    <button type="button" class="btn btn-primary" onClick={() => update()} >Save</button>
+                    <button type="button" class="btn btn-primary" onClick={() => update()} >Lưu</button>
                 </Modal.Footer>
             </Modal>
         </div>

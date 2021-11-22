@@ -138,7 +138,7 @@ p {
   width: auto;
   height: auto;
   background: black;
-  color: white;
+  color: white !important;
   text-align: center;
   padding: 8px;
   font-size: 18px;
@@ -279,7 +279,7 @@ footer{
 }
 #father{
  
-  height: 300px;
+  height: 260px;
   overflow:auto;
 }
 .total-amount{
@@ -306,11 +306,6 @@ footer{
 .fee p {
   font-size: 16px;
 }
-.discount{
-  display: grid;
-  grid-template-columns: 1fr auto;
-  margin-top: 25px;
-}
 .discount h2 {
   margin: 0;
   font-size: 18px;
@@ -318,8 +313,10 @@ footer{
 .discount p {
   font-size: 16px;
 }
-.discount-inp .dis-box {
-  position: relative;
+.discount .user-box {
+  display: grid;
+  grid-template-columns: auto 100px;
+  grid-column-gap: 10px;
 }
 .discount-inp .dis-box input {
   width: 100%;
@@ -385,26 +382,6 @@ footer{
   left: 0;
   color: #000000;
   font-size: 12px;
-}
-
-.information form button {
-  position: relative;
-  display: inline-block;
-  padding: 10px 20px;
-  justify-content: flex-end !important;
-  font-size: 16px;
-  text-decoration: none;
-  text-transform: uppercase;
-  overflow: hidden;
-  transition: .5s;
-  margin-top: 40px;
-  letter-spacing: 4px
-}
-
-.information button:hover {
-  background: #fb4a2a;
-  color: #fff;
-  border-radius: 5px;
 }
 
 .information button span {
@@ -486,7 +463,36 @@ footer{
     bottom: 100%;
   }
 }
-#btn-order{float:right;width:auto;}
+#btn-order{
+  float:right;
+  padding: 10px 40px;
+  font-size: 18px;
+  border: 1px solid #dfdcdc;
+  background-color: #357ebd;
+  color: white;
+  height: 48px;
+  margin-top: 30px;
+}
+
+#btn-order:hover{
+  background-color: #2a6395;
+}
+
+#apdung-giamgia{
+  padding: 10px 15px;
+  font-size: 14px;
+  border: 1px solid #dfdcdc;
+  background-color: #357ebd;
+  color: white;
+  height: 48px;
+  margin-top: 30px;
+  border-radius: 5px;
+}
+
+#apdung-giamgia:hover{
+  background-color: #2a6395;
+}
+
 #btn-right{float:right;width:auto; margin-right: 10px;}
 .discription{
   display: grid;
@@ -753,6 +759,7 @@ span p {
   height: 180px !important;
   text-align: center;
   margin-bottom: 10px;
+  cursor: pointer;
 }
 .productinfo:hover .when-hover{
   display: block;
@@ -780,4 +787,33 @@ span p {
 .pr-category-body p {
   margin:0;padding: 2px 0 0 2px ; 
   font-size: 12px;  
+}
+.headmenu-cate{
+  display: grid;
+}
+
+.head-menu-cate-child{
+  display: none;
+  height: 0;
+}
+.head-menu-cate-child.active{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  height: 100px;
+  width: 100px;
+  background-color: white;
+  position: absolute;
+  left: 100%;
+  width: 800px;
+  height: 350px;
+  grid-column-gap: 30px;
+  grid-row-gap: 20px;
+  padding-left: 10px;
+  border: 1px solid lightblue;
+}
+.head-menu-cate-child.active a{
+  padding: 10px 0 10px 5px;
+  color: black;
+  font-size: 17px;
+  
 }

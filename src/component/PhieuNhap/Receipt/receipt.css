@@ -1,0 +1,42 @@
+.receipt-create{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 10px;
+    height: 90px;
+}
+.ghi-chu-phieu-nhap{
+    padding: 10px 45px;
+    border-radius: 5px;
+    background-color: #0b5ed7;
+    color: white;
+    font-size: 18px;
+    font-weight: 400;
+}
+.ghi-chu-phieu-nhap:hover{
+    background-color: #579fe1 
+}
+.receipt-date{
+    margin-top: 10px;
+}
+.receipt-date select{
+    margin-right: 5px;
+    padding: 5px 20px;
+}
+.table-striped{
+    margin-top: 30px;
+}
+.table-striped td{
+    padding: 20px 0 18px 0;
+}
+.table-striped tbody tr{
+    color: black;
+    font-weight: 500;
+}
+.table-striped tbody td{
+    padding: 5px 0 6px 0;
+}
+.pagination {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
