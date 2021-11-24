@@ -96,58 +96,50 @@ function Discountdm({ show, setShow, ma, setMa , reload , setReload}) {
     }
     //Thêm mới hoặc Cập nhật Sản phẩm
     const update = () => {
-        if(detail.id == 0 ){
-            axios({
-                url: 'http://localhost:8080/admin/discount',
-                method: 'POST',
-                type: 'application/json',
-                data: detail,
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            }).then(resp => {
-                setDetail(resp);
-                dong();
-            }).catch((error) => {
-                if (error.response) {
-                    setLoi(error.response.data);
-                    setMess(error.response.data);
-                } else if (error.request) {
-                    console.log(error.request);
-                } else {
-                    console.log('Error', error.message);
-                }
-            });
+        if(detail.id == 0 || detail.id == undefined ){
+            try {
+                DiscountApi.postDiscount(detail).then(resp => {
+                    setDetail(resp);
+                    dong();
+                }).catch((error) => {
+                    if (error.response) {
+                        setLoi(error.response.data);
+                        setMess(error.response.data);
+                    } else if (error.request) {
+                        console.log(error.request);
+                    } else {
+                        console.log('Error', error.message);
+                    }
+                });;
+            } catch (error) {
+                console.error(error)
+            }
         }
         else{
-axios({
-                url: 'http://localhost:8080/admin/discount/'+ detail.id,
-                method: 'PUT',
-                type: 'application/json',
-                data: detail,
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            }).then(resp => {
-                setDetail({
-                    ...detail,
-                    name: resp.data.name,
-                    valueDiscount:resp.data.valueDiscount,
-                    number:resp.data.number,
-                    open_day:resp.data.open_day,
-                    end_day:resp.data.end_day,
-                });
-                dong();
-            }).catch((error) => {
-                if (error.response) {
-                    setLoi(error.response.data);
-                    setMess(error.response.data);
-                } else if (error.request) {
-                    console.log(error.request);
-                } else {
-                    console.log('Error', error.message);
-                }
-            });
+            try {
+                DiscountApi.putDiscount(detail.id, detail).then(resp => {
+                    setDetail({
+                        ...detail,
+                        name: resp.name,
+                        valueDiscount:resp.valueDiscount,
+                        number:resp.number,
+                        open_day:resp.open_day,
+                        end_day:resp.end_day,
+                    });
+                    dong();
+                }).catch((error) => {
+                    if (error.response) {
+                        setLoi(error.response.data);
+                        setMess(error.response.data);
+                    } else if (error.request) {
+                        console.log(error.request);
+                    } else {
+                        console.log('Error', error.message);
+                    }
+                });;
+            } catch (error) {
+                console.error(error)
+            }
         }
         onReload();
     }
@@ -164,7 +156,7 @@ axios({
                 <Modal.Body>
                     <form>
                         <div className="form-group">
-                            <label>Tên Danh mục</label>
+                            <label>Tên</label>
                             <input className="form-control" type="text" onChange={(e) => updateName(e)} value={detail.name} />
                             <span style={{ color: "red", fontSize: "13px" }}>{loi.name}</span> 
                         </div>
@@ -194,7 +186,7 @@ axios({
                 </Modal.Body>
 
                 <Modal.Footer>
-                    <button type="button" class="btn btn-primary" onClick={() => update()} >Save</button>
+                    <button type="button" class="btn btn-primary" onClick={() => update()} >Lưu</button>
                 </Modal.Footer>
             </Modal>
         </div>

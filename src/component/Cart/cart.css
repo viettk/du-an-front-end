@@ -16,7 +16,7 @@ input::-webkit-inner-spin-button {
   margin: 30px 60px 30px 0;
 }
 
-#select-cart a{
+#select-cart button{
   justify-self: center;
   background-color: #000;
   padding: 10px 20px ;
@@ -26,12 +26,26 @@ input::-webkit-inner-spin-button {
   cursor: pointer;
 }
 
-#select-cart a:last-child:hover{
+#select-cart button{
+  justify-self: center;
+  background-color: #000;
+  padding: 10px 20px ;
+  color: white;
+  border: 1px solid black;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+
+#select-cart button:last-child:hover{
   background-color: white;
   color: #000;
 }
 
-button{
+.button-cart-delete{
   border: none;
-  background-color: red;
+  background-color: white;
+}
+.button-cart-delete:hover{
+  border: 1px solid black;
 }

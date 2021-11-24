@@ -36,7 +36,6 @@ function ListCategory() {
     // lấy id danh mục
     const [ma, setMa] = useState(0);
     const [reload, setReload] = useState(true);
-
     // Mở modal
     const [show, setShow] = useState(false);
 
@@ -51,7 +50,7 @@ function ListCategory() {
           }
         }
         fetchList();
-      }, [params,search.name, page, reload]);
+      }, [params,search, page, reload]);
 
       const handleChange = (event, value) => {
         setPage(value);
@@ -62,8 +61,6 @@ function ListCategory() {
             }
         );       
       };
-
-    
       
       const getMa = (id) =>{
         setShow(true);
@@ -75,7 +72,12 @@ function ListCategory() {
         setSearch({
             ...search,
             name: newvalue,
-        });          
+        });         
+        setParams({
+            ...params,
+            _page: 0
+        });
+        setPage(1)
     }
 
     const getSearchParent_name = (e) => {      
@@ -84,7 +86,11 @@ function ListCategory() {
             ...search,
             parent_name: newvalue,
         });
-        
+        setParams({
+            ...params,
+            _page: 0
+        });
+        setPage(1)
     }
     const them = () =>{
         setShow(true);

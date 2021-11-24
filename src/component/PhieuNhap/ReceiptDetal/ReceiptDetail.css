@@ -43,6 +43,10 @@
     background-color:#2769de ;
     border-radius: 5px;
     padding: 10px 20px;
+    border: none;
+    color: white;
+    float: right;
+    margin-right: 10px;
 }
 .button-them:hover{
     background-color: #579fe1 ;
@@ -66,4 +70,8 @@
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+}
+
+.rece{
+    padding: 0 5px;
 }

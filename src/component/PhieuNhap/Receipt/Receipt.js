@@ -72,15 +72,11 @@ function Receipt() {
             staffId: 1,
             describe: describe.mota
         }
-        axios({
-            url: 'http://localhost:8080/api/receipt',
-            method: 'POST',
-            type: 'application/json',
-            data: reipt,
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
+        try {
+            ReceiptApi.postReceipt(reipt);
+        } catch (error) {
+            console.error(error)
+        }
         onReload();
     }
 
@@ -96,28 +92,21 @@ function Receipt() {
     }
 
     const updateDescripbe = (e, id) => {
-        axios({
-            url: 'http://localhost:8080/api/receipt/' + id,
-            method: 'get',
-            type: 'application/json',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        }).then(resp => {
-            const data = {
-                staffId: 1,
-                describe: e.target.value
-            }
-            axios({
-                url: 'http://localhost:8080/api/receipt/' + id,
-                method: 'put',
-                type: 'application/json',
-                data: data,
-                headers: {
-                    'Content-Type': 'application/json',
+        try {
+            ReceiptApi.getOneReceipt(id).then(resp => {
+                const data = {
+                    staffId: 1,
+                    describe: e.target.value
                 }
-            })
-        });
+                try {
+                    ReceiptApi.putReceipt(id, data);
+                } catch (error) {
+                    console.error(error)
+                }
+            });;
+        } catch (error) {
+            console.error(error)
+        }
         onReload();
     }
 
@@ -191,7 +180,7 @@ function Receipt() {
                                         <td><input name="describe" defaultValue={result.describe} onChange={(e) => updateDescripbe(e, result.id)} /></td>
                                         <td>{result.total}</td>
                                         <td>
-                                            <button type="button" className="btn btn-primary" onClick={() => getMa(result.id)} ><i className="fa fa-eye"></i></button>
+                                            <button type="button" className="xem-receipt" onClick={() => getMa(result.id)} ><i className="fa fa-eye eye-receipt"></i></button>
                                         </td>
                                     </tr>
 
@@ -200,8 +189,8 @@ function Receipt() {
                     </tfoot>
                 </table>
             </TableContainer>
-            <Stack spacing={2}>
-                <Pagination className="pagination" style={{bottom: ""}} count={count} page={page} onChange={handleChange} color="secondary" />
+            <Stack spacing={2} style={{position: "relative"}} >
+                <Pagination className="pagination" count={count} page={page} onChange={handleChange} color="secondary" />
             </Stack>
         </React.Fragment>
     );

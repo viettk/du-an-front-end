@@ -52,6 +52,7 @@ function ReceiptDetail({ show, setShow, ma, setMa, reload, setReload }) {
     const dong = () => {
         setShow(false);
         onReload();
+        setInput({})
         // setDetail({});
         // setLoi({});
         // setMa(0);
@@ -73,8 +74,12 @@ function ReceiptDetail({ show, setShow, ma, setMa, reload, setReload }) {
         setSearch({
             ...search,
             [name]: value,
-
-        })
+        });
+        setParams({
+            ...params,
+            _page: 0
+        });
+        setPage(1);
     }
 
     useEffect(() => {
@@ -88,7 +93,7 @@ function ReceiptDetail({ show, setShow, ma, setMa, reload, setReload }) {
           }
         }
         fetchList();
-      }, [ input, search.sku, ma, load]);
+      }, [ input, search, ma, load, params]);
 
     const [click, setClick] = useState(false);
     const addToReceiptDetail = (id) => {
@@ -100,7 +105,7 @@ function ReceiptDetail({ show, setShow, ma, setMa, reload, setReload }) {
         }
         if(click == false){
             axios({
-                url: 'http://localhost:8080/api/receiptDetail/add',
+                url: 'http://localhost:8080/receiptDetail/add',
                 method: 'POST',
                 data: sp,
                 type: 'application/json',
@@ -122,7 +127,7 @@ function ReceiptDetail({ show, setShow, ma, setMa, reload, setReload }) {
             });
         } else{
             axios({
-                url: 'http://localhost:8080/api/receiptDetail/'+ getId,
+                url: 'http://localhost:8080/receiptDetail/'+ getId,
                 method: 'PUT',
                 data: sp,
                 type: 'application/json',
@@ -163,7 +168,7 @@ function ReceiptDetail({ show, setShow, ma, setMa, reload, setReload }) {
         setActive(true);
         if(input.productId != null){
             axios({
-                url: 'http://localhost:8080/api/receiptDetail/product?name='+ e.target.value,
+                url: 'http://localhost:8080/receiptDetail/product?name='+ e.target.value,
                 method: 'GET',
                 type: 'application/json',
                 headers: {
@@ -207,7 +212,7 @@ function ReceiptDetail({ show, setShow, ma, setMa, reload, setReload }) {
     })
     const edit = (e, id)=>{
         axios({
-            url: 'http://localhost:8080/api/receiptDetail/get/'+ id,
+            url: 'http://localhost:8080/receiptDetail/get/'+ id,
             method: 'GET',
             type: 'application/json',
             headers: {
@@ -227,7 +232,7 @@ function ReceiptDetail({ show, setShow, ma, setMa, reload, setReload }) {
 
     const xoa = (id) =>{
         axios({
-            url: 'http://localhost:8080/api/receiptDetail/'+ id +'?receiptId=' + ma ,
+            url: 'http://localhost:8080/receiptDetail/'+ id +'?receiptId=' + ma ,
             method: 'delete',
             type: 'application/json',
             headers: {
@@ -245,20 +250,22 @@ function ReceiptDetail({ show, setShow, ma, setMa, reload, setReload }) {
             }
         );       
       };
+      const changeAc = () =>{
+          setActive(false)
+      }
     return (
-        <div className="ok">
-            
+        <div className="ok">         
             <Modal show={show} onHide={() => dong()} fullscreen={true} >
                 <Modal.Header>
                     <span className="titele-name">Phiếu nhập chi tiết</span>
-                    <button type="button" class="btn-close" aria-label="Close" onClick={() => dong()}></button>
+                    <button type="button" className="btn-close" aria-label="Close" onClick={() => dong()}></button>
                 </Modal.Header>
 
-                <Modal.Body>
+                <Modal.Body onClick={changeAc}>
                     <div className ="form-receipt">
                     <form id="form-receipt-submit">
-                        <div class="information">
-                            <div className="form-group" style={{position: "relative"}}>
+                        <div className="information">
+                            <div className="form-group" style={{position: "relative"}} >
                                 <div className="user-box">
                                     <input id="namesp" type="text" name="productId" autoComplete = "off" onChange={getInputname} required />
                                     <label>Sản phẩm</label>
@@ -294,7 +301,9 @@ function ReceiptDetail({ show, setShow, ma, setMa, reload, setReload }) {
                                 <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span> 
                             </div>
                         </div>
+                        
                         <button type="button" className="button-them" onClick={() => addToReceiptDetail()} onBlur={moveClick} >Thêm</button>
+                        <button type="button" className="button-them" onClick={clearForm}>Clear</button>
                     </form>
                     </div>
                     <div className="table-receipt">
@@ -330,9 +339,9 @@ function ReceiptDetail({ show, setShow, ma, setMa, reload, setReload }) {
                 <tfoot style={{height: "10px"}}>
                     {
                         result.map(
-                            (result) =>
+                            (result, index) =>
                                 <tr key={result.id}>
-                                    <td>{result.id}</td>
+                                    <td>{index + 1}</td>
                                     <td>{result.product.photo}</td>
                                     <td>{result.product.sku}</td>
                                     <td>{result.product.name}</td>
@@ -340,8 +349,8 @@ function ReceiptDetail({ show, setShow, ma, setMa, reload, setReload }) {
                                     <td>{result.number}</td>
                                     <td>{result.total}</td>
                                     <td>
-                                        <button onClick={(e) => edit(e , result.id, result.product.photo)} type="button" style={{border: "none", marginRight: "5px", backgroundColor: "#579fe1"}}><i class="fa fa-edit"></i></button>
-                                        <button onClick={() => {if(window.confirm('Bạn có muôn xóa chứ')){xoa(result.id)};}}  type="button" style={{border: "none", backgroundColor: "red"}} ><i class="fa fa-trash"></i></button>
+                                        <button onClick={(e) => edit(e , result.id, result.product.photo)} type="button" style={{border: "none", marginRight: "5px", backgroundColor: "#579fe1", padding: 0}}><i className="fa fa-edit rece"></i></button>
+                                        <button onClick={() => {if(window.confirm('Bạn có muôn xóa chứ')){xoa(result.id)};}}  type="button" style={{border: "none", backgroundColor: "red", padding: 0}} ><i className="fa fa-trash rece"></i></button>
                                     </td>    
                                 </tr>
 
@@ -350,14 +359,10 @@ function ReceiptDetail({ show, setShow, ma, setMa, reload, setReload }) {
                 </tfoot>
                         </table>
                     </div>
-                    <Stack spacing={2}>
+                    <Stack spacing={2} style={{position: "relative"}}>
                 <Pagination className="pagination" count={count} page={page} onChange={handleChange} color="secondary" />
             </Stack>
                 </Modal.Body>
-
-                <Modal.Footer>
-                
-                </Modal.Footer>
             </Modal>
         </div>
     );

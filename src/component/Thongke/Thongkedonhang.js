@@ -10,6 +10,7 @@ import {
 import { Animation } from "@devexpress/dx-react-chart";
 import { useState, useEffect } from 'react';
 import ThongkeApi from '../../api/ThongkeApj';
+import './thongke.css';
 
 function Thongkedonhang() {
 
@@ -27,7 +28,7 @@ function Thongkedonhang() {
         const top5 = await ThongkeApi.getTop5Admin(month, year);
         const sltop5 = await ThongkeApi.getSLTop5Admin(month, year);
         const respdoanhthu = await ThongkeApi.getDoanhthu(year);
-        
+
         const data = [
           { status_order: 'Đã thanh toán', value: respone[2] },
           { status_order: 'Đã hủy', value: respone[0] },
@@ -39,14 +40,14 @@ function Thongkedonhang() {
         }
 
         const doanhThuData = [];
-        for(var x = 1 ; x < respdoanhthu.length; x++){
+        for (var x = 1; x < respdoanhthu.length; x++) {
           doanhThuData.push({ ketqua: x, value: respdoanhthu[x] });
         }
-        
+
         setResult(data);
         setTopsp(num);
         setDoanhthu(doanhThuData);
-        
+
       } catch (error) {
         console.log(error);
       }
@@ -60,9 +61,9 @@ function Thongkedonhang() {
   }
   return (
     <React.Fragment>
-      <div>
-        <div style={{ left: "45%", transition: "translateX(-50%);", position: "absolute" }}>
-          <select value={month} onChange={(e) => changeMonth(e)} >
+      <div style={{position: "relative"}}>
+        <div style={{textAlign : "center"}}>
+          <select value={month} onChange={(e) => changeMonth(e)} style={{padding: "5px 10px"}} >
             <option value="1">Tháng 1</option>
             <option value="2">Tháng 2</option>
             <option value="3">Tháng 3</option>
@@ -76,7 +77,7 @@ function Thongkedonhang() {
             <option value="11">Tháng 11</option>
             <option value="12">Tháng 12</option>
           </select>
-          <select value={year}>
+          <select value={year} style={{padding: "5px 10px"}}>
             <option value="2021">2021</option>
             <option value="2022">2022</option>
             <option value="2023">2023</option>
@@ -84,32 +85,40 @@ function Thongkedonhang() {
             <option value="2025">2025</option>
           </select>
         </div>
-        <div>
-          <Chart data={result} >
-            <PieSeries valueField="value" argumentField="status_order" />
-            <Title text="Thống kê đơn hàng" />
-          </Chart>
-        </div>
-        <div>
-          <Chart data={topsp}>
-            <ArgumentAxis />
-            <ValueAxis max={5} />
-
-            <BarSeries valueField="population" argumentField="year" />
-            <Title text="Top sản phẩm bán chạy" />
-            <Animation />
-          </Chart>
-        </div>
-
-        <div>
-          <Chart data={doanhthu}>
-            <ArgumentAxis />
-            <ValueAxis max={12} />
-
-            <BarSeries valueField="value" argumentField="ketqua" style={{width: "30px"}} />
-            <Title text="Top sản phẩm bán chạy" />
-            <Animation />
-          </Chart>
+        <div className="thong-ke">
+          <div className="don-hang-thong-ke">
+            <Chart data={result} >
+              {result.length == 0 || (result[0].value == 0 && result[1].value ==0 && result[2].value == 0) ?
+               <span className="don-hang-span">Không có dữ liệu</span> 
+              : <PieSeries valueField="value" argumentField="status_order" /> }
+              <Title text="Thống kê đơn hàng" />
+            </Chart>
+          </div>
+          <div style={{position: "relative"}}>
+            <Chart data={topsp}>
+              <ArgumentAxis />
+              <ValueAxis max={5} />
+              {
+                topsp.length == 0 ? <span className="don-hang-span">Không có dữ liệu</span> :
+                <BarSeries valueField="population" argumentField="year" />
+              }
+              <Title text="Top sản phẩm bán chạy" />
+              <Animation />
+            </Chart>
+          </div>
+            <div></div>
+          <div style={{position: "relative"}}>
+            <Chart data={doanhthu}>
+              <ArgumentAxis />
+              <ValueAxis max={12} />
+              {
+                doanhthu.length == 0 ? <span className="don-hang-span">Không có dữ liệu</span> :
+                <BarSeries valueField="value" argumentField="ketqua" style={{ width: "30px" }} />
+              }
+              <Title text="Doanh thu bán hàng" />
+              <Animation />
+            </Chart>
+          </div>
         </div>
       </div>
     </React.Fragment>

@@ -11,6 +11,7 @@ import { useParams, useLocation, useHistory } from "react-router-dom";
 import { height } from "@mui/system";
 import axios from "axios";
 import {connect} from 'react-redux';
+import './cart.css';
 
 function ListCart(props) {
     console.log(props.user)
@@ -134,10 +135,6 @@ function ListCart(props) {
         setResult(JSON.parse(reload));
       }
 
-      const dathang = ()=>{
-          console.log('ọ')
-      }
-
       const checkNumber = (e,idsp, price) =>{
           if(e.target.value <= 0){
             xoaSP(idsp);
@@ -189,7 +186,7 @@ function ListCart(props) {
                 </tbody>
                 <tfoot style={{height: "10px"}}>
                     {
-                        result.map(
+                        result.length > 0 ? result.map(
                             (result) =>
                                 <tr key={result.id}>
                                     <td>{result.id}</td>
@@ -207,16 +204,17 @@ function ListCart(props) {
                                         <button onClick={() => xoaSP( result.product.id)} >X</button>
                                     </td>
                                 </tr>
-                        )              
+                        ) : <span style={{position: "absolute", left: " 48%"}}>Không có sản phẩm</span>             
                     }
                 </tfoot>
             </table>
-            <span>{thanhTien != undefined ? thanhTien : 0  } VNĐ</span>
-
-            <div>
-                <a onClick={() =>dathang()}>Đặt hàng</a>
-            </div>
+            <span style={{float: "right", margin: "0 65px 20px 0"}}>Tổng tiền: <span style={{fontWeight: " 500"}}>{thanhTien != undefined ? thanhTien : 0  } VNĐ</span> VNĐ</span>
+            
             </TableContainer>
+            <div id="select-cart">
+                <button style={{ backgroundColor: "#3d4356" }}>Tiếp tục mua hàng</button>
+                <button>Thực hiện thanh toán</button>
+            </div>
     </React.Fragment>
     );
 }

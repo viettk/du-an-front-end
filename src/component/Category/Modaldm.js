@@ -15,9 +15,10 @@ function Modaldm({ show, setShow, ma, setMa , reload, setReload}) {
 
     const dong = () => {
         setShow(false);
-        setDetail({});
         setLoi({});
-        setMess({});
+        setMess({})
+        setDetail({});
+        setMa(0);
     }
 
     const [ parent, setParent ] = useState([]);
@@ -35,16 +36,22 @@ function Modaldm({ show, setShow, ma, setMa , reload, setReload}) {
           try{
               const response = await CategoryApi.getParent();
               setParent(response);
-              const resp = await CategoryApi.getIdCategory(ma);
-              setDetail(resp);
+              if(ma != undefined || ma != undefined){
+                const resp = await CategoryApi.getIdCategory(ma);
+                setDetail(resp);
+              } else {
+                  setDetail({
+                    id: '',
+        name: '',
+        parent_name: null  
+                  })
+              }
           }catch (error){
             console.log(error);
           }
         }
         fetchList();
       }, [ma, reload]);
-
-
     //lấy dữ liệu từ input
     const updateName = (e) => {
         const newvalue = e.target.value;
@@ -53,7 +60,7 @@ function Modaldm({ show, setShow, ma, setMa , reload, setReload}) {
             name: newvalue,
         });
     }
-
+console.log(ma)
     const updateParent = (e) => {
         const newvalue = e.target.value;
         setDetail({
@@ -72,59 +79,51 @@ function Modaldm({ show, setShow, ma, setMa , reload, setReload}) {
 
     //Thêm mới hoặc Cập nhật Sản phẩm
     const update = () => {
-        if(detail.id == 0){
-            axios({
-                url: 'http://localhost:8080/danh-muc',
-                method: 'POST',
-                type: 'application/json',
-                data: detail,
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            }).then(resp => {
-                setDetail(resp);
-                dong();
-                
-            }).catch((error) => {
-                console.log(error.response.data)
-                if (error.response) {
-                    setLoi(error.response.data);
-                    setMess(error.response.data);
-                } else if (error.request) {
-                    console.log(error.request );
-                } else {
-                    console.log('Error', error.message.data);
-                }
-            });
+        if(detail.id == 0 || detail.id == undefined){
+            try {
+                CategoryApi.postDm(detail).then(resp => {
+                    setDetail(resp);          
+                    dong(); 
+                }).catch((error) => {
+                    console.log(error.response.data)
+                    if (error.response) {
+                        setLoi(error.response.data);
+                        setMess(error.response.data);
+                    } else if (error.request) {
+                        console.log(error.request );
+                    } else {
+                        console.log('Error', error.message.data);
+                    }
+                });;
+            } catch (error) {
+                console.error(error)
+            }
             onReload();
         }
         else{
-            axios({
-                url: 'http://localhost:8080/danh-muc/'+ detail.id,
-                method: 'PUT',
-                type: 'application/json',
-                data: detail,
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            }).then(resp => {
-                setDetail({
-                    ...detail,
-                    name: resp.data.name,
-                    parent_name: resp.data.parent_name,
-                });
-                dong();
-            }).catch((error) => {
-                if (error.response) {
-                    setLoi(error.response.data);
-                    setMess(error.response.data);
-                } else if (error.request) {
-                    console.log(error.request);
-                } else {
-                    console.log('Error', error.message);
-                }
-            });
+            try {
+                CategoryApi.putDm(detail.id, detail).then(resp => {
+                    setDetail({
+                        ...detail,
+                        name: resp.name,
+                        parent_name: resp.parent_name,
+                    });
+                    dong(); 
+                }).catch((error) => {
+                    if (error.response) {
+                        setLoi(error.response.data);
+                        setMess(error.response.data);
+                    } else if (error.request) {
+                        console.log(error.request);
+                    } else {
+                        console.log('Error', error.message);
+                    }
+                });;
+            } catch (error) {
+                console.error(error)
+            }
         }
+        
         onReload();
     }
     return (

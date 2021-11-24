@@ -86,7 +86,7 @@ console.log(params)
              <Discountdm show={show} setShow={setShow} ma={ma} setMa={setMa} reload={reload} setReload={setReload} />
         <h3 style={{marginTop: 10}}>Danh sách phiếu giảm giá</h3>
         <TableContainer component={Paper}>
-<button className="btn btn-primary" onClick={() => getMa()} >Thêm mới</button>
+<button className="btn btn-primary" onClick={() => getMa(ma)} >Thêm mới</button>
         <table className="table table-striped">
             <thead>
                 <tr>
@@ -96,7 +96,7 @@ console.log(params)
             </thead>
                 <tbody>
                     <tr>
-                        <td scope="col">Name</td>
+                        <td scope="col">Tên</td>
                         <td scope="col">Giá giảm</td>
                         <td scope="col">Số lượng</td>
                         <td scope="col">Ngày bắt đầu</td>
@@ -114,7 +114,7 @@ console.log(params)
                                     <td>{result.number}</td>
                                     <td>{result.open_day}</td>
                                     <td>{result.end_day}</td>
-                                    <td><button type="button" class="btn btn-primary" onClick={() => getMa(result.id)}>Sửa</button></td>    
+                                    <td><button type="button" className="xem-receipt" style={{padding: 0}} onClick={() => getMa(result.id)}><i class="fa fa-edit"></i></button></td>    
                                 </tr>
 
                         ) : (         

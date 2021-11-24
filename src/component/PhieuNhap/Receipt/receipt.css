@@ -11,6 +11,7 @@
     color: white;
     font-size: 18px;
     font-weight: 400;
+    border: none;
 }
 .ghi-chu-phieu-nhap:hover{
     background-color: #579fe1 
@@ -40,3 +41,18 @@
     left: 50%;
     transform: translateX(-50%);
 }
+
+.xem-receipt{
+    border: none;
+    background-color: white;
+    border-radius: 50%;
+}
+
+.xem-receipt:hover{
+    background-color: lightgray;
+}
+
+.xem-receipt:hover .eye-receipt{
+    color: white;
+}
+
