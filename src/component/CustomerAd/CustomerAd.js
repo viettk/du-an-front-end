@@ -154,7 +154,7 @@ function CustomerAd() {
                 </table>
             </TableContainer>
             <Stack spacing={2}>
-                <Pagination className="pagination" count={count} page={page} onChange={handleChange} color="secondary" />
+                <Pagination className="d-flex justify-content-center" count={count} page={page} onChange={handleChange} color="secondary" />
             </Stack>
         </React.Fragment>
     );

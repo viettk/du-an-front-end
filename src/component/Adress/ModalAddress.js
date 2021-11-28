@@ -4,7 +4,8 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import CartApi from "../../api/CartApi";
-function ModalAddress({ show, setShow, ma, setMa }) {
+function ModalAddress({ show, setShow, ma, setMa, reload, setReload}) {
+    const token = localStorage.token;
     const [tinh, setTinh] = useState([]);
     const [quan, setQuan] = useState([]);
     const [xa, setXa] = useState([]);
@@ -29,21 +30,30 @@ function ModalAddress({ show, setShow, ma, setMa }) {
 
     const dong = () => {
         setShow(false);
-        setDetail({});
+        setDetail({
+            ...detail,
+            name: '',
+            phone:'',
+            address: '',
+            status: 0
+        });
         setLoi({});
         setMa(0);
         setMess({});
-        setDetail({
-            status: 0,
-            customerInput: 1
-        })
     }
     useEffect(() => {
         const fetchList = async () => {
             try {
                 if (ma !== 0 || ma !== undefined) {
                     const resp = await CartApi.getOnAddress(ma);
-                    setDetail(resp);
+                    setDetail({
+                        id: resp.id,
+                        name: resp.name,
+                        phone: resp.phone,
+                        address: resp.address,
+                        status: resp.status,
+                        customerInput: resp.customer.id,
+                    })
                 }
 
             } catch (error) {
@@ -61,6 +71,14 @@ function ModalAddress({ show, setShow, ma, setMa }) {
         })
     }
 
+    const onReload = () =>{
+        if(reload){
+            setReload(false);
+        } else {
+            setReload(true);
+        }
+    }
+
     const create = () => {
         if (detail.id == 0 || detail.id == undefined) {
             axios({
@@ -70,10 +88,12 @@ function ModalAddress({ show, setShow, ma, setMa }) {
                 data: detail,
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
                 }
             }).then(resp => {
                 setDetail(resp);
                 dong();
+                onReload();
             }).catch((error) => {
                 if (error.response) {
                     setLoi(error.response.data);
@@ -92,9 +112,11 @@ function ModalAddress({ show, setShow, ma, setMa }) {
                 data: detail,
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
                 }
             }).then(resp => {
                 dong();
+                onReload();
             }).catch((error) => {
                 if (error.response) {
                     setLoi(error.response.data);
@@ -105,10 +127,9 @@ function ModalAddress({ show, setShow, ma, setMa }) {
                     console.log('Error', error.message);
                 }
             });
-
-        }
+        }      
     }
-
+console.log(detail)
     const changeStatus = ()=>{
         if(detail.status == 0){
             setDetail({
@@ -124,6 +145,7 @@ function ModalAddress({ show, setShow, ma, setMa }) {
         }
         
     }
+
     return (
         <div>
             <Modal show={show} onHide={() => dong()}>

@@ -5,6 +5,7 @@ import { useHistory, useParams } from "react-router";
 import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
 import ProductApi from "../../api/ProductApi";
+import axios from "axios";
 
 
 function Favorite(){
@@ -49,9 +50,23 @@ function Favorite(){
                 _page : value-1,
             }
         );       
-        console.log(page);
       };
 
+      const xoa = (idpr) =>{
+          let datasp = {
+            productId: idpr,
+            customerId: 1
+          }
+        axios({
+            url: 'http://localhost:8080/yeu-thich',
+            method: 'delete',
+            type: 'application/json',
+            data: datasp,
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+      }
     return(
         <React.Fragment>
         <h3 style={{marginTop: 10}}>Danh sách Danh mục Sản phẩm</h3>
@@ -69,14 +84,14 @@ function Favorite(){
                 <tfoot style={{height: "10px"}}>
                     {
                         result.map(
-                            (result) =>
+                            (result, index) =>
                                 <tr key={result.id}>
-                                    <td></td>
+                                    <td>{index}</td>
                                     <td>{result.product.image}</td>
                                     <td>{result.product.name}</td>
                                     <td>{result.product.price}</td>
                                     <td>
-                                        <button>Xóa</button>
+                                        <button onClick={(e) => xoa(result.product.id)} >Xóa</button>
                                     </td>
                                 </tr>
 
@@ -86,7 +101,7 @@ function Favorite(){
             </table>
             </TableContainer>
             <Stack spacing={2}>
-                <Pagination className="pagination" count={count}  page={page} onChange={handleChange}  color="secondary"/>
+                <Pagination className="d-flex justify-content-center" count={count}  page={page} onChange={handleChange}  color="secondary"/>
             </Stack>
     </React.Fragment>
     );

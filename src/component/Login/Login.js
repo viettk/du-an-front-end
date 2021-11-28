@@ -4,7 +4,12 @@ import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import Link from '@mui/material/Link';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -28,7 +33,7 @@ function Copyright(props) {
     </Typography>
   );
 }
- 
+
 const theme = createTheme();
 
 function SignInSide(props) {
@@ -64,7 +69,7 @@ function SignInSide(props) {
         }
       }).then(resp=>{
         const token = localStorage.setItem('token', resp.data.token);
-        localStorage.setItem('name', resp.data.name);
+       localStorage.setItem('name', resp.data.name);
         props.addUser(resp.data)
         history.push("/")
       }).catch(error=>{
@@ -149,13 +154,12 @@ function SignInSide(props) {
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link href="http://localhost:3000/forgot" variant="body2">
-                    Quên mật khẩu?
-                  </Link>
+                <Link  to="/forgot">Quên mật khẩu</Link>
                 </Grid>
                 <Grid item>
-                  <Link href="http://localhost:3000/register" variant="body2">
-                    {"Bạn chưa có tài khoản? Đăng ký ngay"}
+                Bạn chưa có tài khoản? 
+                  <Link to="/register" >
+                    {"Đăng ký ngay"}
                   </Link>
                 </Grid>
               </Grid>

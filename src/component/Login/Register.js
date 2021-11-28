@@ -14,6 +14,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from 'react';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
+import {addUser} from '../../redux_user/user-action';
+import {connect} from 'react-redux';
 
 function Copyright(props) {
   return (
@@ -30,7 +32,7 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function SignUp() {
+function SignUp(props) {
     const history = useHistory();
     const [result, setResult] = useState({
         email: '',
@@ -65,7 +67,11 @@ export default function SignUp() {
           'Content-Type':'application/json',
         }
       }).then(resp=>{
-        setSuccess(true)
+        localStorage.setItem('token',resp.data.token);
+        localStorage.setItem('name',resp.data.name);
+        props.addUser(resp.data)
+        alert("Đăng ký thành công!")
+        history.push("/")
       }).catch(error=>{
         if (error.response) {
           setLoi(error.response.data);
@@ -152,11 +158,6 @@ export default function SignUp() {
                  <span style={{ color: "red", fontSize: "13px" }}>{loi.repeatPassword}</span>
               <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span>
               </Grid>
-              <Grid item xs={12} >
-              {success && (
-              <Alert severity="success">Đăng ký thành công! </Alert>
-              )} 
-              </Grid>
               {/* <Grid item xs={12}>
                 <FormControlLabel
                   control={<Checkbox value="allowExtraEmails" color="primary" />}
@@ -174,7 +175,7 @@ export default function SignUp() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="http://localhost:3000/login" variant="body2">
+                <Link to="/login" variant="body2">
                   Bạn đã có tài khoản? Đăng nhập ngay
                 </Link>
               </Grid>
@@ -186,3 +187,7 @@ export default function SignUp() {
     </ThemeProvider>
   );
 }
+const mapDispatchToProps = dispatch => ({
+  addUser: userInfo => dispatch(addUser(userInfo))
+})
+export default  connect(null,mapDispatchToProps)(SignUp)

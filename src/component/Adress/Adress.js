@@ -4,10 +4,11 @@ import CartApi from "../../api/CartApi";
 import ModalAddress from "./ModalAddress";
 
 function Address() {
-
+    const token = localStorage.token;
     const [result, setResult] = useState([]);
     const [ma, setMa] = useState(0);
     const [show, setShow] = useState(false);
+    const [reload, setReload] = useState(true);
 
     useEffect(() => {
         const fetchList = async () => {
@@ -19,7 +20,7 @@ function Address() {
             }
         }
         fetchList();
-    }, [result]);
+    }, [reload]);
 
     const getMa = (id) =>{
         setShow(true);
@@ -32,6 +33,15 @@ function Address() {
         setShow(true);
     }
 
+
+    const onReload = () =>{
+        if(reload){
+            setReload(false);
+        } else {
+            setReload(true);
+        }
+    }
+
     const xoadc = (id)=>{
         axios({
             url: 'http://localhost:8080/dia-chi/'+ id,
@@ -39,12 +49,15 @@ function Address() {
             type: 'application/json',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
             }
-        })
+        });
+        onReload();
     }
+    console.log(reload)
     return (
         <div className="all-dc">
-             <ModalAddress show={show} setShow={setShow} ma={ma} setMa={setMa}  />
+             <ModalAddress show={show} setShow={setShow} ma={ma} setMa={setMa} reload={reload} setReload={setReload}  />
             <button type="button"  onClick={() => getMahidden()} disabled={result.length >= 3 ? "disabled" : ""} > Thêm</button>
             {
                 result.map(result =>

@@ -2,10 +2,12 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import './order.css';
 import CartApi from "../../api/CartApi";
+import DiscountApi from "../../api/DiscountApi";
 import queryString from 'query-string';
+import BillApi from "../../api/BillApi";
 
 function Order() {
-
+  const token = localStorage.token;
   const [cartId, setCartId] = useState({
     cart: ''
   });
@@ -23,7 +25,8 @@ function Order() {
     thema: '',
     themb: '',
     themc: '',
-    discountName: ''
+    discountName: '',
+    total:0
   });
 
   
@@ -63,6 +66,24 @@ function Order() {
   const [demo, setDemo] = useState(JSON.parse(getStorage));
   const [thanhTien, setThanhTien] = useState(0);
   const [statusadress, setStatusadress] = useState();
+  const [mess, setMess] = useState({
+    errorMessage: ''
+  });
+
+  const [loi, setLoi] = useState({
+    email: '',
+    name: '',
+    phone: '',
+    status_pay: '',
+    address: '',
+    city: '',
+    district: '',
+    wards: '',
+  })
+
+  const [loidiscount, setLoidiscount] = useState({
+    loi: ''
+  })
 
   useEffect(() => {
     const fetchList = async () => {
@@ -95,7 +116,11 @@ function Order() {
             setThanhTien(-1);
           }
           setTongtien(resp.total);
-          setThanhTien(resp.total + phiship)
+          setThanhTien(resp.total + phiship);
+          setBill({
+            ...bill,
+            total: (resp.total + phiship)
+          });
         } else {
           let storage = localStorage.getItem('cart');
           setCart(JSON.parse(storage));            
@@ -113,7 +138,11 @@ function Order() {
             setThanhTien(-1);
           }
           setTongtien(demo.reduce((a,v) =>  a = a + v.total , 0 ));
-          setThanhTien(demo.reduce((a,v) =>  a = a + v.total + phiship , 0 ));     
+          setThanhTien(demo.reduce((a,v) =>  a = a + v.total + phiship , 0 ));   
+          setBill({
+            ...bill,
+            total: (demo.reduce((a,v) =>  a = a + v.total + phiship , 0 ))
+          });  
         }
         tt();
       } catch (error) {
@@ -185,7 +214,9 @@ function Order() {
     })
     console.log(bill)
   }
+
   const datHang = () => {
+    
     const result = {
       cartId: '',
       input: bill,
@@ -196,37 +227,44 @@ function Order() {
       url: 'http://localhost:8080/order/dat',
       method: 'post',
       data: result.input,
-      type: 'application/json'
+      headers: {
+        'content-type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+    },
     }).catch((error) => {
       if (error.response) {
-        console.log(error.response);
+        setLoi(error.response.data);
+        setMess(error.response.data);
       } else if (error.request) {
         console.log(error.request);
       } else {
         console.log('Error', error.message);
       }
-    }).then(resp =>{
-      axios({
-        url: 'http://localhost:8080/order/detail/date/' + resp.data.id ,
-        method: 'post',
-        data: demo,
-        type: 'application/json'
-      }).catch((error) => {
-        if (error.response) {
-          console.log(error.response);
-        } else if (error.request) {
-          console.log(error.request);
-        } else {
-          console.log('Error', error.message);
-        }
-      })
+    // }).then(resp =>{
+    //   axios({
+    //     url: 'http://localhost:8080/order/detail/date/' + resp.data.id ,
+    //     method: 'post',
+    //     data: demo,
+    //     type: 'application/json'
+    //   }).catch((error) => {
+    //     if (error.response) {
+    //       console.log(error.response);
+    //     } else if (error.request) {
+    //       console.log(error.request);
+    //     } else {
+    //       console.log('Error', error.message);
+    //     }
+    //   })
     })
   } else {
     axios({
       url: 'http://localhost:8080/order/dat/' + 2 ,
       method: 'post',
       data: result.input,
-      type: 'application/json'
+      headers: {
+        'content-type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+    },
     }).catch((error) => {
       if (error.response) {
         console.log(error.response);
@@ -277,26 +315,42 @@ function Order() {
 
   const laymagiam = () => {
     axios({
-      url: 'http://localhost:8080/admin/discount/apdung?discountName=' + discountName.name,
+      url: 'http://localhost:8080/discount/apdung?discountName=' + discountName.name,
       method: 'get',
-      type: 'application/json'
+      headers: {
+        'content-type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+    },
     }).then(resp => {
-      setThanhTien(thanhTien - resp.data)
-      setBill({
-        ...bill,
-        discountName: discountName.name
-      })
+      let finaltt = thanhTien - resp.data;
+      if (finaltt <= 0) {
+        setThanhTien(0);
+        setBill({
+          ...bill,
+          discountName: discountName.name,
+          total: 0
+        })
+      } else {
+        setThanhTien(finaltt);
+        setBill({
+          ...bill,
+          discountName: discountName.name,
+          total: finaltt
+        })
+      }
     }).catch((error) => {
       if (error.response) {
-        console.log(error.response);
+        setLoidiscount({
+          loi: error.response.data.errorMessage
+        });
       } else if (error.request) {
         console.log(error.request);
       } else {
         console.log('Error', error.message);
       }
-    })
+    });
   }
-
+  console.log(loidiscount.loi)
   const cod =() =>{
     setBill({
       ...bill,
@@ -330,19 +384,22 @@ function Order() {
 
                 <div className="user-box">
                   <input type="text" name="email" defaultValue={bill.email} required onChange={getInputValue} />
-                  <label>Email</label>
+                  <label>Email*</label>
+                  <span style={{ color: "red", fontSize: "13px" }}>{loi.email}</span>
                 </div>
                 <div className="user-box">
                   <input type="text" name="name" defaultValue={bill.name} required onChange={getInputValue} />
-                  <label>Họ và tên</label>
+                  <label>Họ và tên*</label>
+                  <span style={{ color: "red", fontSize: "13px" }}>{loi.name}</span>
                 </div>
                 <div className="user-box">
                   <input type="text" name="phone" defaultValue={bill.phone} required onChange={getInputValue} />
-                  <label>Số điện thoại</label>
+                  <label>Số điện thoại*</label>
+                  <span style={{ color: "red", fontSize: "13px" }}>{loi.phone}</span>
                 </div>
                 <div className="user-box">
                   <select className="form-select" aria-label="Default select example" defaultValue={selectTinh} onChange={(e) => upodateTinh(e)} style={{padding: "5px 0 6px 5px"}}>
-                    <option>Tỉnh-thành</option>
+                    <option>Tỉnh-thành*</option>
                     {
 
                       tinh.map(tinh =>
@@ -350,31 +407,35 @@ function Order() {
                       )
                     }
                   </select>
+                  <span style={{ color: "red", fontSize: "13px" }}>{loi.city}</span>
                 </div>
                 <div className="user-box">
                   <select className="form-select" aria-label="Default select example" defaultValue={bill.district} onChange={(e) => updateQuan(e)} style={{padding: "5px 0 6px 5px"}}>
-                    <option>Quận-huyện</option>
+                    <option>Quận-huyện*</option>
                     {
                       selectTinh != '' ? quan.map(quan =>
                         <option key={quan.code} data-id={quan.name} value={quan.code}>{quan.name}</option>
                       ) : <option>Mời bạn chọn Tỉnh/Thành</option>
                     }
                   </select>
+                  <span style={{ color: "red", fontSize: "13px" }}>{loi.district}</span>
                 </div>
                 <div className="user-box">
                   <select className="form-select" aria-label="Default select example" defaultValue={selectXa} onChange={(e) => updateXa(e)}>
-                    <option>Xã-Phường</option>
+                    <option>Xã-Phường*</option>
                     {
                       selectQuan != '' ? xa.map(xa =>
                         <option key={xa.code} data-id={xa.name} >{xa.name}</option>
                       ) : <option>Mời bạn chọn Quận/Huyện</option>
                     }
                   </select>
+                  <span style={{ color: "red", fontSize: "13px" }}>{loi.wards}</span>
                 </div>
 
                 <div className="user-box">
                   <input type="text" name="phone" defaultValue={bill.address} required onChange={getInputValue} />
-                  <label>Địa chỉ</label>
+                  <label>Địa chỉ*</label>
+                  <span style={{ color: "red", fontSize: "13px" }}>{loi.address}</span>
                 </div>
 
                 <div className="form-group">
@@ -395,7 +456,7 @@ function Order() {
                 <div className="form-check">
                   <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" onClick={momo} />
                   <label className="form-check-label" htmlFor="flexRadioDefault1">
-                    Thanh toán qua ngân hàng
+                    Thanh toán online
                   </label>
                 </div>
               </div>
@@ -439,13 +500,15 @@ function Order() {
                 </span>
                 <span className="fee">
                   <h2>Phí vận chuyển :</h2>
-                  <p>{phiship}</p>
+                  <p>{phiship} VNĐ</p>
                 </span>
                 <div className="discount">
                   <div className="user-box">
                     <input type="text" defaultValue={discountName.name} onChange={getDiscount} required placeholder="Nhập Mã giảm giá" />
-                    <button id="apdung-giamgia" onClick={laymagiam}>Áp dụng</button>
+                    <button type="button" id="apdung-giamgia" onClick={laymagiam}>Áp dụng</button>
+                    <span style={{ color: "red", fontSize: "13px" }}>{loidiscount.loi}</span>              
                   </div>
+                  <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span>
                 </div>
                 <span className="total-amount">
                   <h2>Thành tiền :</h2>

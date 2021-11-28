@@ -35,7 +35,17 @@ const HomeApi = {
     getProductByParentCate: (id, params) =>{
         const url = `/home/`+id;
         return axiosClient.get(url, {params});
-    }
+    },
+
+    getTop5: () =>{
+        const url = "/home/top5sp";
+        return axiosClient.get(url);
+    },
+
+    getProductByCategoryParent:(params) =>{
+        const url = `/home/parentName`;
+        return axiosClient.get(url, {params});
+    },
 
 }
 export default HomeApi;

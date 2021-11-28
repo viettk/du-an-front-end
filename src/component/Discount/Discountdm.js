@@ -1,11 +1,19 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Modal } from 'react-bootstrap';
+import { Alert, Modal } from 'react-bootstrap';
 import DiscountApi from '../../api/DiscountApi';
+import { Snackbar } from '@mui/material';
 
 
 function Discountdm({ show, setShow, ma, setMa , reload , setReload}) {
+
+    const [open, setOpen] = useState(false);
+    const handleClose = () =>{
+        setOpen(false);
+    }
+
+
     const [detail, setDetail] = useState({
         id: '',
         name: '',
@@ -101,6 +109,7 @@ function Discountdm({ show, setShow, ma, setMa , reload , setReload}) {
                 DiscountApi.postDiscount(detail).then(resp => {
                     setDetail(resp);
                     dong();
+                    setOpen(true);
                 }).catch((error) => {
                     if (error.response) {
                         setLoi(error.response.data);
@@ -127,6 +136,7 @@ function Discountdm({ show, setShow, ma, setMa , reload , setReload}) {
                         end_day:resp.end_day,
                     });
                     dong();
+                    setOpen(true);
                 }).catch((error) => {
                     if (error.response) {
                         setLoi(error.response.data);
@@ -189,6 +199,11 @@ function Discountdm({ show, setShow, ma, setMa , reload , setReload}) {
                     <button type="button" class="btn btn-primary" onClick={() => update()} >Lưu</button>
                 </Modal.Footer>
             </Modal>
+            <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
+                <Alert severity="success" sx={{ width: '100%' }}>
+                    Thao tác thành công!
+                </Alert>
+            </Snackbar>
         </div>
     );
 }

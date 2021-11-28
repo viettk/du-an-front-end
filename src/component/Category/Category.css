@@ -1,9 +1,4 @@
-.pagination{
-    position: absolute;
-    left: 50%;
-    bottom: -50px;
-    transform: translateX(-50%);
-}
+
 .dm tbody{
     border: unset;
 }
@@ -31,4 +26,12 @@
 .fa-edit{
     cursor: pointer;
     padding: 0 10px 0 10px;
+}
+.searh-icon{
+    padding: 0 5px;
+    border: 1px solid lightgray;
+    cursor: pointer;
+}
+.searh-icon:hover{
+    background-color: gray;
 }

@@ -34,7 +34,7 @@ function Home() {
         setResulshf(respSHF.content);
         const respKit = await HomeApi.getKit();
         setResultKit(respKit.content);
-        const top5 = await ThongkeApi.getTop5();
+        const top5 = await HomeApi.getTop5();
         setFavorite(top5);
       } catch (error) {
         console.log(error);
@@ -58,7 +58,7 @@ function Home() {
               <Carousel.Item >
                 <div className="new-produtc">
               <div className="productinfo text-center" key={result.id}>
-                <img src={logo} alt="" />
+                <img src={'/images/'+result.photo} alt="" />
                 <p className="fix-line-css">{result.name}</p>
                 <p>SKU: {result.sku}</p>
                 <span className="pro-body">
@@ -87,7 +87,7 @@ function Home() {
           </nav>
           <div className="product-title " >
           <a href>
-              <img src={logoa} width="300px" height="380px" className="float-start" style={{ marginTop: '15px', border: "1px solid black" }} alt="" />
+              <img src={logo} width="300px" height="380px" className="float-start" style={{ marginTop: '15px', border: "1px solid black" }} alt="" />
             </a>
             <div className="product-child" >
               <Carousel  cols={3} rows={3} gap={10} >             
@@ -95,7 +95,7 @@ function Home() {
                     resultShf.map(respSHF =>
                       <Carousel.Item >
                       <div className="details" key={respSHF.id}>
-                        <img src={logo} className="rounded mx-auto d-block" onClick={()=>detail(respSHF.id)} />
+                        <img src={'/images/'+respSHF.photo} className="rounded mx-auto d-block" onClick={()=>detail(respSHF.id)} />
                         <span onClick={()=>detail(respSHF.id)}>
                           <p className="fix-line-css">{respSHF.name}</p>
                           <p>SKU: {respSHF.sku}</p>
@@ -133,7 +133,7 @@ function Home() {
                     resultShf.map(respSHF =>
                       <Carousel.Item >
                       <div className="details" key={respSHF}>
-                        <img src={logo} className="rounded mx-auto d-block" />
+                        <img src={'/images/'+respSHF.photo} className="rounded mx-auto d-block" />
                         <span>
                           <p className="fix-line-css">abc</p>
                           <p>SKU: JP202101</p>
@@ -161,7 +161,7 @@ function Home() {
             {
               favorite.map(result =>
                 <div className="product-body-live">
-              <img src={logoa}  className="rounded-like mx-auto d-block" />
+              <img src={'/images/'+result.photo}  className="rounded-like mx-auto d-block" />
               <span>
                 <p className="fix-line-css">{result.name}</p>
                 <p>SKU: {result.sku}</p>

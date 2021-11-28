@@ -25,12 +25,15 @@ import Sidebar from "../Layout/Sidebar/Sidebar";
 import CustomerAd from "../component/CustomerAd/CustomerAd";
 import ListDiscount from "../component/Discount/ListDiscount";
 import Giamgia from "../component/Giamgia/Giamgia";
+import HomeCateParentName from "../component/Home/HomeCateParentName.";
+import { useState } from "react";
+import Bill from "../component/billadmin/Bill";
 
 function ListRoute(){
     return(
-        <BrowserRouter>
+        
        <Switch>
-        <Route exact path={["/", "/home"]} component={App } />
+        <Route exact path={["/", "/home"]} component={Home } />
 
         <Route exact path="/login" component={SignInSide} />
 
@@ -40,11 +43,11 @@ function ListRoute(){
 
         <Route path="/changepassword/:token?" component={ChangePassword} />
 
-        <Route path= "/:sanpham/:id/:xpage" component={HomeCate } />
+        <Route path= "/:sanpham/:id/page=:xpage/sort=:sort" component={HomeCate } />
+
+        <Route path="/:sanpham/page=:xpage/sort=:sort" component={HomeCateParentName } />
 
         <Route path= "/dia-chi" component={Address } />
-
-        <Route path="/cart" component={ListCart} />
 
         <Route path="/head" component={Head} />
 
@@ -52,13 +55,15 @@ function ListRoute(){
     
         <Route path="/danh-muc/:xpage?" component={ListCategory} />
 
-        <Route path="/admin/san-pham/:xpage?" component={ProductAd} />
+        <Route path="/admin/san-pham" component={ProductAd} />
 
         <Route path="/order" component={Order} />
 
         <Route path="/yeu-thich" component={Favorite} />
 
         <Route path="/api/receipt" component={Receipt} />
+
+        <Route path="/cart" component={ListCart} />
 
         <Route path="/cart_none" component={ListCartNone} />
 
@@ -76,13 +81,15 @@ function ListRoute(){
 
         <Route path="/giam-gia" component={Giamgia} />
 
+        <Route path="/admin/bill" component={Bill} />
+
         {/* <PrivateRoutes component={ListDanhmuc} authed={false} path='/admin'  /> */}
         {/* component PageNotFound phải để cuối cùng */}
         <Route path="*" component={PageNotFound} />
 
         <Route path="/404" component={PageNotFound} />
       </Switch>
-      </BrowserRouter>
+     
     );
 }
 export default ListRoute;

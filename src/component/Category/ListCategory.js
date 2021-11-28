@@ -21,6 +21,8 @@ function ListCategory() {
     const initParams= {
         _limit : '5',
         _page : 0,
+        _field: 'name',
+        _known: 'up'
     };
 
     const [ params, setParams] = useState(initParams);
@@ -95,6 +97,20 @@ function ListCategory() {
     const them = () =>{
         setShow(true);
     }
+    const sort = () =>{
+        if(params._known == 'up'){
+            setParams({
+                ...params,
+                _known: 'down'
+            })
+        } else {
+            setParams({
+                ...params,
+                _known: 'up'
+            })
+        }
+    }
+
     return(
         <React.Fragment>
              <Modaldm show={show} setShow={setShow} ma={ma} setMa={setMa} reload={reload} setReload={setReload} />
@@ -113,7 +129,7 @@ function ListCategory() {
                 <tbody>
                     <tr>
                         <td scope="col">STT</td>
-                        <td scope="col">Tên Danh mục</td>
+                        <td scope="col">Tên Danh mục <i class={params._known == 'up' ? "fa fa-angle-up searh-icon" : "fa fa-angle-down searh-icon"} onClick={sort}></i></td>
                         <td scope="col">Danh mục cha</td>
                         <td scope="col">Sửa</td>
                     </tr>
@@ -140,7 +156,7 @@ function ListCategory() {
             </table>
             </TableContainer>
             <Stack spacing={2}>
-                <Pagination className="pagination" count={count}  page={page} onChange={handleChange}  color="secondary"/>
+                <Pagination className="d-flex justify-content-center" count={count}  page={page} onChange={handleChange}  color="secondary"/>
             </Stack>
     </React.Fragment>
     );

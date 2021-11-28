@@ -22,7 +22,9 @@ function ListDiscount() {
         _limit : '5',
         _page : 0,
         name: '',
-        valueDiscount: 0
+        valueDiscount: 0,
+        _field: 'name',
+        _known: 'up'
     };
 
     const [ params, setParams] = useState(initParams);
@@ -56,12 +58,13 @@ function ListDiscount() {
         setPage(value);
         setParams(
             {
+                ...params,
                 _limit : '5',
                 _page : value-1,
             }
         );       
       };
-      
+      console.log(params._page);
       const getMa = (id) =>{
         setShow(true);
         setMa(id);
@@ -80,7 +83,39 @@ function ListDiscount() {
             valueDiscount: e.target.value
         })
     }
-console.log(params)
+
+    const nameSort = () =>{
+        if(params._known == 'up'){
+            setParams({
+                ...params,
+                _field: 'name',
+                _known: 'down'
+            })
+        } else {
+            setParams({
+                ...params,
+                _field: 'name',
+                _known: 'up'
+            })
+        }
+    }
+
+    const valueDiscountSort = () =>{
+        if(params._known == 'up'){
+            setParams({
+                ...params,
+                _field: 'valueDiscount',
+                _known: 'down'
+            })
+        } else {
+            setParams({
+                ...params,
+                _field: 'valueDiscount',
+                _known: 'up'
+            })
+        }
+    }
+
     return(
         <React.Fragment>
              <Discountdm show={show} setShow={setShow} ma={ma} setMa={setMa} reload={reload} setReload={setReload} />
@@ -91,13 +126,17 @@ console.log(params)
             <thead>
                 <tr>
                     <td scope="col"><input onChange={getSearch} name="name" placeholder="Lọc theo Tên" /> </td>
-                    <td scope="col"><input onChange={changeValue} namee="valueDiscount" placeholder="Lọc theo Giá giảm" /> </td>
+                    <td scope="col"><input onChange={changeValue} namee="valueDiscount" placeholder="Lọc theo Giá giảm" /></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
             </thead>
                 <tbody>
                     <tr>
-                        <td scope="col">Tên</td>
-                        <td scope="col">Giá giảm</td>
+                        <td scope="col">Tên <i class={ params._known == 'up' && params._field =='name' ? "fa fa-angle-up searh-icon" : "fa fa-angle-down searh-icon"  } onClick={nameSort}></i></td>
+                        <td scope="col">Giá giảm <i class={ params._known == 'up' && params._field =='valueDiscount' ? "fa fa-angle-up searh-icon" : "fa fa-angle-down searh-icon"  } onClick={valueDiscountSort}></i></td>
                         <td scope="col">Số lượng</td>
                         <td scope="col">Ngày bắt đầu</td>
                         <td scope="col">Ngày kết thúc</td>
@@ -110,9 +149,9 @@ console.log(params)
                             (result, index) =>
                                 <tr key={index + 1}>
                                     <td>{result.name}</td>
-                                    <td>{result.valueDiscount}</td>
+                                    <td>{String(Math.round(result.valueDiscount)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' VNĐ'}</td>
                                     <td>{result.number}</td>
-                                    <td>{result.open_day}</td>
+                                    <td>{(result.open_day.split('T')[0]).split('-').reverse().join('-')}</td>
                                     <td>{result.end_day}</td>
                                     <td><button type="button" className="xem-receipt" style={{padding: 0}} onClick={() => getMa(result.id)}><i class="fa fa-edit"></i></button></td>    
                                 </tr>
@@ -125,7 +164,7 @@ console.log(params)
             </table>
             </TableContainer>
             <Stack spacing={2}>
-                <Pagination className="pagination" count={count}  page={page} onChange={handleChange}  color="secondary"/>
+                <Pagination className="d-flex justify-content-center" count={count}  page={page} onChange={handleChange}  color="secondary"/>
             </Stack>
     </React.Fragment>
     );

@@ -62,8 +62,3 @@
 .table-striped tbody td{
     padding: 5px 0 6px 0;
 }
-.pagination {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-}

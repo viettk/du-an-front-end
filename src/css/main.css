@@ -867,4 +867,24 @@
     .active {
       font-size: 14px;
     }
-    
+
+.drop-menu-hidden-vi-hover{
+  position: relative;
+  cursor: pointer;
+}
+.drop-menu-hidden-vi{
+  position: absolute;
+  height: 0;
+  overflow: hidden;
+  background-color: white;
+  padding: 0;
+}
+
+.drop-menu-hidden-vi li{
+  color: #000;
+  padding: 0;
+}
+
+.drop-menu-hidden-vi-hover:hover .drop-menu-hidden-vi{
+  height: 100px;
+}

@@ -5,8 +5,8 @@ import { useHistory, useParams } from "react-router";
 import HomeApi from "../../api/HomeApi";
 import Head from "../../Layout/Head";
 
-function HomeCate() {
-    const {sanpham, id,xpage, sort}= useParams();
+function HomeCateParentName() {
+    const {sanpham, xpage, sort}= useParams();
     let history = useHistory();
     
     const initValues = [];
@@ -15,8 +15,10 @@ function HomeCate() {
         _page : (xpage-1),
         _field : 'id',
         _known : 'up',
+        parentName: sanpham
     };
     const [ params, setParams] = useState(initParams);
+    console.log(params)
     const [ result, setResult] = useState(initValues);
     const [ page, setPage] = useState(initParams._page + 1);
     const [sele, setSele] = useState({
@@ -31,22 +33,23 @@ function HomeCate() {
     const [ma, setMa] = useState(0);
 
     const handleChange = (event, value) => {
-        history.push("/"+ sanpham+'/' + id+'/page=' + value+'/sort='+sort);
         setPage(value);
         setParams(
             {
+                ...params,
                 _limit : '2',
                 _page : value-1,
                 _field : 'id',
                 _known : 'up',
             }
         );       
+        history.push('/'+ sanpham +'/page='+ xpage + '/sort='+ sort);
       };
 
     useEffect(() => {
         const fetchList = async () =>{
           try{
-            const response = await HomeApi.getProductByCategory(id, params);
+            const response = await HomeApi.getProductByCategoryParent(params);
             setResult(response.content);      
             setCount(response.totalPages);
           }catch (error){
@@ -95,7 +98,7 @@ function HomeCate() {
                 _known: 'up'
             });
         }
-        history.push('/'+ sanpham + '/'+ id +'/page='+ xpage + '/sort='+ ina);
+        history.push('/'+ sanpham +'/page='+ xpage + '/sort='+ ina);
     }
     return (
         <section>
@@ -124,4 +127,4 @@ function HomeCate() {
         </section>
     );
 }
-export default HomeCate;
+export default HomeCateParentName;

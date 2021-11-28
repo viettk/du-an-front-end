@@ -1,6 +1,7 @@
 
 import axios from 'axios';
 import queryString from 'query-string';
+import { useHistory } from 'react-router-dom';
 
 const token = localStorage.token;
 const axiosClient = axios.create({
@@ -21,10 +22,11 @@ axiosClient.interceptors.response.use((response) => {
     if (response && response.data) {
         return response.data;
     }
-
     return response;
 }, (error) => {
-    // Handle errors
+if(error.response.status===403){
+    window.location.replace('http://localhost:3000/login')
+  } 
     throw error;
 });
 

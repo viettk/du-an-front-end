@@ -3,9 +3,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, useLocation, useHistory } from "react-router-dom";
 import HomeApi from "../../api/HomeApi";
-import '../../css/bootstrap.min.css'
-function ProductDetail(){
+import '../../css/bootstrap.min.css';
+import {connect} from 'react-redux';
+function ProductDetail(props){
 
+  const customerId = props.user.id;
+
+  const token = localStorage.token;
   const idpage = useParams();
   const [result, setResult] = useState({});
   const [count, setCount] = useState({
@@ -60,7 +64,6 @@ const history = useHistory();
   // localStorage.clear();
   const muaNgay = (idsp, price, photo, name, weight) =>{
     const detail ={
-      cartId: 2,
       productId: idsp,
       number: count.num
     }
@@ -74,8 +77,8 @@ const history = useHistory();
       total: price * count.num,
       number: count.num,
     }
-    
-    if(detail.cartId == ''){
+
+    if(customerId == '' || customerId == undefined){
       let storage = localStorage.getItem('cart');
       if(storage){
         cart = JSON.parse(storage);
@@ -104,12 +107,13 @@ const history = useHistory();
         localStorage.setItem('cart', JSON.stringify(cart));
 
     axios({
-      url: 'http://localhost:8080/cart-detail',
+      url: 'http://localhost:8080/cart-detail/'+ customerId,
       method: 'post',
       type: 'application/json',
       data: detail,
       headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
       }
   }).catch((error) => {
     if (error.response) {
@@ -126,24 +130,11 @@ const history = useHistory();
   }
 }
 
-  const [initParams, setInitParams]= useState(
-    {
-        cartId: '',
-        productId: '',
-        number: ''
-    }
-);
-
-  const [local, setLocal] = useState([initParams]);
-  const loadLocal =()=>{
-    
-  }
   // localStorage.removeItem('cart');
 
   let cart =[];
   const addToCart = (idsp, price, photo, name, weight) =>{
     const detail ={
-      cartId: 2,
       productId: idsp,
       number: count.num,
     }
@@ -158,7 +149,7 @@ const history = useHistory();
       number: count.num,
     }
     
-    if(detail.cartId == ''){
+    if(customerId == '' || customerId == undefined){
         let storage = localStorage.getItem('cart');
         if(storage){
           cart = JSON.parse(storage);
@@ -172,13 +163,15 @@ const history = useHistory();
         }
         localStorage.setItem('cart', JSON.stringify(cart))
     } else{
+      
      axios({
-        url: 'http://localhost:8080/cart-detail/',
+        url: 'http://localhost:8080/cart-detail/'+customerId,
         method: 'post',
         type: 'application/json',
         data: detail,
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
         }
     }).catch((error) => {
       if (error.response) {
@@ -537,4 +530,6 @@ const history = useHistory();
       </section>
     );
 }
-export default ProductDetail;
+
+const mapStateToProps = (state) => ({user : state.userReducer});
+export default connect(mapStateToProps,null) (ProductDetail);

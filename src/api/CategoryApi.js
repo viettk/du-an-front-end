@@ -11,6 +11,16 @@ const CategoryApi = {
         return axiosClient.get(url);
     },
 
+    getAllCateCustomer:()=>{
+        const url = "/danh-muc/cha/cha";
+        return axiosClient.get(url);
+    },
+
+    getAllCateCustomerByParent_name:(name)=>{
+        const url = "/danh-muc/cha/timtheocha?parentName=" + name;
+        return axiosClient.get(url);
+    },
+
     getIdCategory: (id) =>{
         const url = `/api/danh-muc/${id}`;
         return axiosClient.get(url, {id});

@@ -178,7 +178,7 @@ function Receipt() {
                                         <td>{result.id_code}</td>
                                         <td>{result.create_date}</td>
                                         <td><input name="describe" defaultValue={result.describe} onChange={(e) => updateDescripbe(e, result.id)} /></td>
-                                        <td>{result.total}</td>
+                                        <td>{String(Math.round(result.total)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' VNĐ'}</td>
                                         <td>
                                             <button type="button" className="xem-receipt" onClick={() => getMa(result.id)} ><i className="fa fa-eye eye-receipt"></i></button>
                                         </td>
@@ -190,7 +190,7 @@ function Receipt() {
                 </table>
             </TableContainer>
             <Stack spacing={2} style={{position: "relative"}} >
-                <Pagination className="pagination" count={count} page={page} onChange={handleChange} color="secondary" />
+                <Pagination className="d-flex justify-content-center" count={count} page={page} onChange={handleChange} color="secondary" />
             </Stack>
         </React.Fragment>
     );

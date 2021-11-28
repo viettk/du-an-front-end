@@ -7,7 +7,7 @@ const CategoryApi = {
     },
 
     getCartDetail:(cartId) =>{
-        const url = "/cart-detail"+"?cartId="+cartId ;
+        const url = "/cart-detail/list/"+cartId ;
         return axiosClient.get(url);
     },
 
@@ -34,6 +34,16 @@ const CategoryApi = {
     getOnAddress: (id) =>{
         const url = `/dia-chi/${id}`;
         return axiosClient.get(url);
+    },
+
+    postAdress: (detail) =>{
+        const url = `/dia-chi`;
+        return axiosClient.post(url, detail);
+    },
+
+    putAddress: (id, detail) =>{
+        const url = `/dia-chi/${id}`;
+        return axiosClient.put(url, {detail})
     },
 
     getAddressStatus: (id) =>{

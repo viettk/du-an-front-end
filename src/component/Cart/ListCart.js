@@ -15,22 +15,21 @@ import './cart.css';
 
 function ListCart(props) {
     console.log(props.user)
+    const token = localStorage.token;
+    const customerId = props.user.id;
     const initValues = [];
     const [initParams, setInitParams]= useState(
         {
-            cartId: 2,
             productId: '',
             number: ''
         }
     );
 
-    const [idCustomer, setIdCustomer] = useState({
-        customerId: 1
-    })
-
     const [number, setNumber] = useState({
         num: ''
     });
+    
+    const [reload, setReload] = useState(true);
 
     const [thanhTien, SetThanhTien] = useState(0);
 
@@ -44,30 +43,31 @@ function ListCart(props) {
     const [loi, setLoi] = useState({
         number:''
     });
-
     useEffect(() => {
         const fetchList = async () =>{
+            if(customerId){
           try{
-            const response = await CartApi.getCartDetail(params.cartId);
+            const response = await CartApi.getCartDetail(customerId);
             setResult(response); 
-            const resp = await CartApi.getCart(idCustomer.customerId);
+            
+            const resp = await CartApi.getCart(customerId);
             SetThanhTien(resp.total);
+            
           }catch (error){
             console.log(error);
           }
         }
+    }
         fetchList();
-      }, [params]);
+      }, [params, reload,customerId]);
 
       const tangSL=(e, idp,sl)=>{
-        
         const sp = {
-            cartId: 2,
             productId: idp,
             number: sl
         }
         axios({
-            url: 'http://localhost:8080/cart-detail/up',
+            url: 'http://localhost:8080/cart-detail/up/'+  props.user.id,
             method: 'PUT',
             type: 'application/json',
             data: sp,
@@ -85,54 +85,50 @@ function ListCart(props) {
                 console.log('Error', error.message);
             }
         }).then(resp =>{
-            setResult([])
+            setResult(resp.data)
+            onReload();
         })
       }
 
       const giamSl =(e, idp, sl)=>{
      
         const sp = {
-            cartId: 2,
             productId: idp,
             number: sl
         }
         axios({
-            url: 'http://localhost:8080/cart-detail/down',
+            url: 'http://localhost:8080/cart-detail/down/'+ props.user.id,
             method: 'PUT',
             type: 'application/json',
             data: sp,
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
             }
         }).then(resp =>{
-            setResult([])
+            setResult(resp.data)
+            onReload();
         })
       }
 
       const xoaSP =(idp)=>{
         const sp = {
-            cartId: 2,
             productId: idp,
         }
         axios({
-            url: 'http://localhost:8080/cart-detail/',
+            url: 'http://localhost:8080/cart-detail/delete/'+ props.user.id,
             method: 'delete',
             type: 'application/json',
             data: sp,
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
             }
-        });
-        let cart =[];
-        let storage = localStorage.getItem('cart');
-        if(storage){
-          cart = JSON.parse(storage);
-        }
-        cart = cart.filter(c => c.product_id != idp);
-        cart.total = cart.price * cart.number;
-        localStorage.setItem('cart', JSON.stringify(cart));
-        let reload = localStorage.getItem('cart');
-        setResult(JSON.parse(reload));
+        }).then(reps=>{
+            setResult([]);
+            onReload();
+        })
+        
       }
 
       const checkNumber = (e,idsp, price) =>{
@@ -140,17 +136,17 @@ function ListCart(props) {
             xoaSP(idsp);
           } else{
             const sp = {
-                cartId: 2,
                 productId: idsp,
                 number: Math.round(e.target.value),
             }
             axios({
-                url: 'http://localhost:8080/cart-detail/',
+                url: 'http://localhost:8080/cart-detail/' + props.user.id,
                 method: 'put',
                 type: 'application/json',
                 data: sp,
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
                 }
             }).catch((error) => {
                     if (error.response) {
@@ -163,10 +159,19 @@ function ListCart(props) {
                     }
                 }).then(respp =>{
                     setResult([])
+                    onReload();
                 })
           }
         
       }
+
+      const onReload = () =>{
+        if(reload){
+            setReload(false);
+        } else{
+            setReload(true)
+        }
+    }
 
     return(
         <React.Fragment>
@@ -190,7 +195,7 @@ function ListCart(props) {
                             (result) =>
                                 <tr key={result.id}>
                                     <td>{result.id}</td>
-                                    <td>{result.product.image}</td>
+                                    <td>{result.product.photo}</td>
                                     <td>{result.product.name}</td>
                                     <td>{result.product.price}</td>
                                     <td>

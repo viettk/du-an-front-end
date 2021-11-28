@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal } from 'react-bootstrap';
 import CategoryApi from '../../api/CategoryApi';
+import { Alert, Snackbar } from '@mui/material';
 
 
 function Modaldm({ show, setShow, ma, setMa , reload, setReload}) {
@@ -31,6 +32,8 @@ function Modaldm({ show, setShow, ma, setMa , reload, setReload}) {
         name: '',
         parent_name: ''
     });
+    const [open, setOpen] = useState(false);
+
     useEffect(() => {
         const fetchList = async () =>{
           try{
@@ -60,7 +63,7 @@ function Modaldm({ show, setShow, ma, setMa , reload, setReload}) {
             name: newvalue,
         });
     }
-console.log(ma)
+
     const updateParent = (e) => {
         const newvalue = e.target.value;
         setDetail({
@@ -84,6 +87,7 @@ console.log(ma)
                 CategoryApi.postDm(detail).then(resp => {
                     setDetail(resp);          
                     dong(); 
+                    setOpen(true);
                 }).catch((error) => {
                     console.log(error.response.data)
                     if (error.response) {
@@ -94,7 +98,7 @@ console.log(ma)
                     } else {
                         console.log('Error', error.message.data);
                     }
-                });;
+                });
             } catch (error) {
                 console.error(error)
             }
@@ -109,6 +113,7 @@ console.log(ma)
                         parent_name: resp.parent_name,
                     });
                     dong(); 
+                    setOpen(true);
                 }).catch((error) => {
                     if (error.response) {
                         setLoi(error.response.data);
@@ -125,6 +130,10 @@ console.log(ma)
         }
         
         onReload();
+    }
+
+    const handleClose = () =>{
+        setOpen(false);
     }
     return (
         <div>
@@ -164,6 +173,11 @@ console.log(ma)
                     <button type="button" class="btn btn-primary" onClick={() => update()} >Lưu</button>
                 </Modal.Footer>
             </Modal>
+            <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
+                <Alert severity="success" sx={{ width: '100%' }}>
+                    Thao tác thành công!
+                </Alert>
+            </Snackbar>
         </div>
     );
 }
