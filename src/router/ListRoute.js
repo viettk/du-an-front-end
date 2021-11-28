@@ -26,6 +26,7 @@ import CustomerAd from "../component/CustomerAd/CustomerAd";
 import ListDiscount from "../component/Discount/ListDiscount";
 import Giamgia from "../component/Giamgia/Giamgia";
 import HomeCateParentName from "../component/Home/HomeCateParentName.";
+import PrivateRoute from "./PrivateRouter";
 import { useState } from "react";
 import Bill from "../component/billadmin/Bill";
 
@@ -55,7 +56,9 @@ function ListRoute(){
     
         <Route path="/danh-muc/:xpage?" component={ListCategory} />
 
-        <Route path="/admin/san-pham" component={ProductAd} />
+        {/* <Route path="/admin/san-pham" component={ProductAd} /> */}
+
+        <PrivateRoute  path="/admin/san-pham" component={ProductAd} role='USER'/>
 
         <Route path="/order" component={Order} />
 
