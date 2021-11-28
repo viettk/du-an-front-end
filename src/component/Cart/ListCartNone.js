@@ -126,7 +126,7 @@ function ListCartNone(){
                                             {/* {result.number} */}
                                         <button className="button-sl" onClick={e=> tangSl(e, result.product_id)}>+</button>
                                     </td>
-                                    <td>{result.totalf}</td>
+                                    <td>{result.total}</td>
                                     <td>
                                         <button className="button-cart-delete" onClick={(e) => xoa(e, result.product_id) } ><i class="fa fa-trash"></i></button>
                                     </td>

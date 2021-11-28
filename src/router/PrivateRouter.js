@@ -40,10 +40,9 @@ const PrivateRoute = ({ component,role, path }) => {
       path={path}
       render={props =>
         check==null ? (
-            token===role ? <SignInSide {...props} />: <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
-        ) : (
-          
             <Redirect to={{ pathname: '/api/login', state: { from: props.location } }} />
+        ) : (
+            token===role ? <SignInSide {...props} />: <Redirect to={{ pathname: '/login', state: { from: props.location } }} />
         )
       }
     />

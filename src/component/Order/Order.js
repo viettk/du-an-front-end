@@ -5,9 +5,12 @@ import CartApi from "../../api/CartApi";
 import DiscountApi from "../../api/DiscountApi";
 import queryString from 'query-string';
 import BillApi from "../../api/BillApi";
+import {connect} from 'react-redux';
 
-function Order() {
+function Order(props) {
   const token = localStorage.token;
+  const customerId = props.user.id;
+
   const [cartId, setCartId] = useState({
     cart: ''
   });
@@ -88,10 +91,11 @@ function Order() {
   useEffect(() => {
     const fetchList = async () => {
       try {
-        if (cartId.cart != '') {
-          const response = await CartApi.getCartDetail(2);
+        if (customerId) {
+          const response = await CartApi.getCartDetail(customerId);
           setCart(response);
-          const respAdress = await CartApi.getAddressStatus(1);
+          console.log(response)
+          const respAdress = await CartApi.getAddressStatus(customerId);
           setStatusadress(respAdress.id);
           setBill({
             ...bill,
@@ -99,8 +103,8 @@ function Order() {
             phone: respAdress.phone,
             address: respAdress.address
           });
-          const resp = await CartApi.getCart(1);
-          const respo = await CartApi.getAddress(1);
+          const resp = await CartApi.getCart(customerId);
+          const respo = await CartApi.getAddress(customerId);
           setDiachi(respo);
           const ship = await CartApi.getShip(2);
           if (ship >= 2.99) {
@@ -350,7 +354,6 @@ function Order() {
       }
     });
   }
-  console.log(loidiscount.loi)
   const cod =() =>{
     setBill({
       ...bill,
@@ -526,4 +529,6 @@ function Order() {
     </section>
   );
 }
-export default Order;
+
+const mapStateToProps = (state) => ({user : state.userReducer});
+export default connect(mapStateToProps,null) ( Order);

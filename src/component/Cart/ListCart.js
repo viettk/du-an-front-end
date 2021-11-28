@@ -7,7 +7,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import CartApi from "../../api/CartApi";
-import { useParams, useLocation, useHistory } from "react-router-dom";
+import { useParams, useLocation, useHistory, Link } from "react-router-dom";
 import { height } from "@mui/system";
 import axios from "axios";
 import {connect} from 'react-redux';
@@ -217,8 +217,8 @@ function ListCart(props) {
             
             </TableContainer>
             <div id="select-cart">
-                <button style={{ backgroundColor: "#3d4356" }}>Tiếp tục mua hàng</button>
-                <button>Thực hiện thanh toán</button>
+                <Link to="/" style={{ backgroundColor: "#3d4356" }}>Tiếp tục mua hàng</Link>
+                <Link to="/order">Thực hiện thanh toán</Link>
             </div>
     </React.Fragment>
     );

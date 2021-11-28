@@ -78,24 +78,228 @@
     border-top: 1px solid lightgray;
     height: 60px;
     background-color: black;
+    position: relative;
 }
 
-.header-bottom ul{
+.header-bottom .header-menu-ul-main{
     list-style-type: none;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr; 
-    align-items: center; 
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    height: 60px;
 }
 
-.header-bottom ul li .head-menu-bottom{
+.header-bottom .header-menu-ul-main li{
+    justify-self: center;
+    cursor: pointer;
+}
+
+.header-bottom .header-menu-ul-main li:hover .head-menu-bottom{
+    color: #ffba00;
+}
+
+.header-bottom .header-menu-ul-main li .head-menu-bottom{
     text-decoration: none;
     color: white;
+    font-size: 17px;
+}
+
+.drop-menu-hidden-vi{
+    position: absolute;
+    overflow: hidden;
+    height: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background-color: white;
+    transition: height 0.25s;
+    width: 150px;
+}
+
+.drop-menu-hidden-vi li{
+    padding: 5px 10px;
+}
+
+.head-dropdown{
+    justify-self: end !important;
+    background-color: #ffba00;
+    height: 60px;
+    padding-top: 18px;
+    text-align: center;
+    position: relative;
+}
+
+.head-dropdown a{
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+    width: 100%;
+    font-size: 17px;
+    padding: 0 18px;
+}
+
+.head-dropdown a:hover{
+    color: white;
+}
+
+.drop-menu-hidden-vi li:hover{
+    background-color: lightgray;
+}
+
+.head-menu-huong-dan:hover .drop-menu-hidden-vi{
+    height: 100px;
+    border: 1px solid lightgray;
+}   
+
+.head-cong{
+    display: none;
+    position: absolute;
+    top: 28%;
+    color: white;
+    left: 95%;
+    transform: translateX(-95%);
+}
+
+.head-menu-hidden-bottom{
+    position: absolute;
+    height: 0;
+    overflow: hidden;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    transition: height 0.5s;
+}
+
+.drop-menu-hidden-vi li a{
+    text-decoration: none;
+    color: black;
+}
+
+.header-category-show{
+    width: 100%;
+    height: 0;
+    overflow: hidden;
+    list-style: none;
+    margin: 15px 0 0 0;
+    padding: 0;
+    background-color: white;
+    transition: height 0.5s;
+}
+
+.head-category-first li{
+    text-align: start;
+    padding: 5px 10px;
+    width: 100%;
+}
+
+.head-category-first li:hover{
+    background-color: black;
+}
+
+.head-category-first li:hover a{
+    font-size: 15px;
+    color: white;
+}
+
+.head-category-first li .head-cate-parent{
+    color: black;
+}
+
+.head-dropdown:hover .header-category-show{
+    border: 1px solid lightgray;
+    height: 100px;
+}
+
+.head-menu-cate-child{
+    width: 800px;
+    position: absolute;
+    height: 0;
+    overflow: hidden;
+    transition: height 0.2s;
+    left: 100%;
+    top: 98%;
+    background-color: white;
+}
+
+.head-menu-cate-child.active{
+    height: 100px;
+    border: 1px solid lightgray;
+}
+
+.head-menu-cate-all-child{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    list-style: none;
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+}
+
+.head-menu-cate-all-child li{
+    justify-self: start !important;
+    padding: 5px 0;
+}
+
+.head-menu-cate-child ul{
+    text-decoration: none;
+    padding: 0;
+}
+
+.head-parent-name:hover .head-menu-cate-child.activte{
+    height: 100px;
     
 }
 
-@media only screen and (max-width: 767px) {
+.head-menu-cate-child ul li .head-cate-name{
+    color: black;
+}
+
+.head-menu-hidden-bottom.acitve{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    position: absolute;
+    overflow: hidden;
+    height: 40px;
+    background-color: black;
+    color: white;
+    align-items: center;
+    width: 100%;
+}
+
+.head-menu-hidden-bottom li{
+    justify-self: center;
+}
+
+.head-menu-hidden-bottom li a{
+    text-decoration: none;
+    color: white;
+}
+
+@media only screen and (max-width: 1110px) {
+    .head-dropdown a span{
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 1000px) {
+    .head-menu-cate-child.active{
+        width: 500px;
+    }
+}
+
+ @media only screen and (max-width: 767px) {
+
+    .header-bottom .header-menu-ul-main li{
+        justify-self: start;
+    }
+
+    .header-bottom .header-menu-ul-main li:not(:first-child){
+        display: none;
+    }
+
     .header_top h6{
-        font-size: 13px;
+font-size: 13px;
         padding-left: 10px;
     }  
 
@@ -113,4 +317,8 @@
     .head-midd-linkto-cart {
         font-size: 14px;
     }
-}
+
+    .head-cong{
+        display: grid;    
+    }
+} 

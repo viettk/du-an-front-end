@@ -1,17 +1,14 @@
 import { useEffect, useState } from "react";
 import HomeApi from "../../api/HomeApi";
 import { useHistory } from "react-router-dom";
-import '../../css/style.css'
-import '../../css/demo.css'
-import '../../css/responsive.css'
-import '../../css/bootstrap.min.css'
-import logo from './a.jpg';
+import './css/home.css';
 import logoa from './b.jpg';
 import { border } from "@mui/system";
 import Carousel from 'react-grid-carousel'
 import axios from "axios";
 import Head from "../../Layout/Head";
 import ThongkeApi from "../../api/ThongkeApj";
+import {Link} from 'react-router-dom';
 
 function Home() {
 
@@ -50,127 +47,99 @@ function Home() {
 
   return (
     <section style={{marginTop: "30px"}}>
-      <div className="container">
-        <h2 className="title text-center">NEW ARRIVALS</h2>    
-        <Carousel  cols={5} rows={2} gap={5} > 
+      <div className="body-container">
+        <h4 style={{margin: "20px 0"}} className="title text-center">Hàng mới về</h4>    
+        <Carousel  cols={5} rows={2} gap={50} > 
           {
             resultnew.map(result =>
               <Carousel.Item >
-                <div className="new-produtc">
-              <div className="productinfo text-center" key={result.id}>
-                <img src={'/images/'+result.photo} alt="" />
-                <p className="fix-line-css">{result.name}</p>
-                <p>SKU: {result.sku}</p>
-                <span className="pro-body">
-                  <h2>{result.price} VND</h2>
-                </span>
-              </div>
-              </div>
+                  <div className="body-new-pro" key={result.id}>
+                    <img className="body-new-img-pro" src={logoa} alt="" />
+                    <p className="fix-line-css">{result.name}</p>
+                    <p>SKU: {result.sku}</p>
+                    <span className="pro-body">
+                      <h6 style={{fontSize: "15px"}}>{result.price} đ</h6>
+                    </span>
+                  </div>
               </Carousel.Item>
               )
           }
           </Carousel>
         
         <div className="product-name-title" id="product-first">
-          <nav className="navbar navbar-expand-sm navbar-dark bg-light" style={{padding: "0", backgroundColor: "unset"}} >
-            <div className="container-fluid" style={{borderBottom: "1px solid black"}} >
-              <a className="brand" href>Mô hình SHF</a>
-              <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
-                <span className="navbar-toggler">
-                  <i className="fa fa-bars fa-3x" />
-                </span>
-              </button>
-              <div className="collapse navbar-collapse" id="mynavbar">
-                <div className="navbar-nav me-auto" />
-              </div>
-            </div>
+          <nav className="body-nav-pr">
+            <Link className="body-link-a"> Mô Hình SHF </Link>
           </nav>
-          <div className="product-title " >
-          <a href>
-              <img src={logo} width="300px" height="380px" className="float-start" style={{ marginTop: '15px', border: "1px solid black" }} alt="" />
-            </a>
+          <div className="product-title product-first-home-body" style={{marginTop: "15px"}}>
+          <img className="body-img-main" src={logoa} width="300px" height="380px" style={{ marginRight: "30px",border: "1px solid black" }} alt="" />
             <div className="product-child" >
-              <Carousel  cols={3} rows={3} gap={10} >             
+              <Carousel  cols={4} rows={2} gap={15} >             
                   {
                     resultShf.map(respSHF =>
                       <Carousel.Item >
-                      <div className="details" key={respSHF.id}>
-                        <img src={'/images/'+respSHF.photo} className="rounded mx-auto d-block" onClick={()=>detail(respSHF.id)} />
-                        <span onClick={()=>detail(respSHF.id)}>
+                        <div className="body-new-pro" key={respSHF.id}>
+                          <img style={{width: "90%", height: "207px"}} className="body-new-img-pro" src={'/images/'+respSHF.photo} alt="" />
                           <p className="fix-line-css">{respSHF.name}</p>
                           <p>SKU: {respSHF.sku}</p>
-                          <h2 className="price">{respSHF.price}</h2>
-                        </span>
-                      </div>
+                          <span className="pro-body">
+                            <h6 style={{ fontSize: "15px" }}>{respSHF.price} đ</h6>
+                          </span>
+                        </div>
                       </Carousel.Item>
                     )
-                  }
-                
+                  }        
               </Carousel>
             </div>        
           </div>
-
         </div>
-        <div className="product-name-title">
-          <nav className="navbar navbar-expand-sm navbar-dark bg-light" style={{padding: "0", backgroundColor: "unset"}} >
-            <div className="container-fluid" style={{borderBottom: "1px solid black"}} >
-              <a className="brand" href>Mô hình SHF</a>
-              <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
-                <span className="navbar-toggler">
-                  <i className="fa fa-bars fa-3x" />
-                </span>
-              </button>
-              <div className="collapse navbar-collapse" id="mynavbar">
-                <div className="navbar-nav me-auto" />
-              </div>
-            </div>
+        <div className="product-name-title" id="product-first">
+          <nav className="body-nav-pr">
+            <Link className="body-link-a"> Mô Hình SHF </Link>
           </nav>
-          <div className="product-title ">
-
+          <div className="product-title body-second-pro">
             <div className="product-child" >
-              <Carousel  cols={3} rows={3} gap={10} >               
+              <Carousel  cols={4} rows={2} gap={15} >             
                   {
                     resultShf.map(respSHF =>
                       <Carousel.Item >
-                      <div className="details" key={respSHF}>
-                        <img src={'/images/'+respSHF.photo} className="rounded mx-auto d-block" />
-                        <span>
-                          <p className="fix-line-css">abc</p>
-                          <p>SKU: JP202101</p>
-                          <h2 className="price">613.000 VND</h2>
-                        </span>
-                      </div>
+                        <div className="body-new-pro" key={respSHF.id}>
+                          <img style={{width: "90%", height: "207px"}} className="body-new-img-pro" src={'/images/'+respSHF.photo} alt="" />
+                          <p className="fix-line-css">{respSHF.name}</p>
+                          <p>SKU: {respSHF.sku}</p>
+                          <span className="pro-body">
+                            <h6 style={{ fontSize: "15px" }}>{respSHF.price} đ</h6>
+                          </span>
+                        </div>
                       </Carousel.Item>
                     )
-                  }
-                
+                  }            
               </Carousel>
-            </div>
-
-            <a href>
-              <img src={logoa} width="300px" height="380px" className="float-start" style={{ marginTop: '15px', border: "1px solid black" }} alt="" />
-            </a>
+            </div>   
+            <img className="body-img-main" src={logoa} width="300px" height="380px" style={{ marginRight: "30px",border: "1px solid black" }} alt="" />     
           </div>
-
         </div>
-        <div className="product-name-title">
-          <div className="title-pro-favorite">
-            <h2>Sản phẩm bán chạy</h2>
+
+        <div className="product-name-title" style={{marginBottom: "50px"}}>
+          <div className="title-pro-favorite" style={{marginBottom: "30px"}}>
+            <h5>Sản phẩm bán chạy</h5>
           </div>
-          <div className="product-body">
+          <div className="product-body-favorite">
+          <Carousel  cols={5} rows={1} gap={15} >
             {
               favorite.map(result =>
+                <Carousel.Item >
                 <div className="product-body-live">
-              <img src={'/images/'+result.photo}  className="rounded-like mx-auto d-block" />
-              <span>
-                <p className="fix-line-css">{result.name}</p>
-                <p>SKU: {result.sku}</p>
-                <h2 className="price">Giá: {result.price}</h2>
-              </span>
-
-            </div>
+                  <img src={'/images/' + result.photo} style={{width: "90%", height: "210px"}} className="rounded-like mx-auto d-block" />
+                  <div className="body-pro-buy">
+                    <p className="fix-line-css">{result.name}</p>
+                    <p>SKU: {result.sku}</p>
+                    <h6 className="price">{result.price}</h6>
+                  </div>
+                </div>
+                </Carousel.Item>
                 )
             }
+            </Carousel>
           </div>
         </div>
       </div>

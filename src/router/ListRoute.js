@@ -29,8 +29,10 @@ import HomeCateParentName from "../component/Home/HomeCateParentName.";
 import PrivateRoute from "./PrivateRouter";
 import { useState } from "react";
 import Bill from "../component/billadmin/Bill";
+import {connect} from 'react-redux';
 
-function ListRoute(){
+function ListRoute(props){
+  const customerId = props.user.id;
     return(
         
        <Switch>
@@ -66,7 +68,7 @@ function ListRoute(){
 
         <Route path="/api/receipt" component={Receipt} />
 
-        <Route path="/cart" component={ListCart} />
+        <Route path="/cart" component={customerId ? ListCart : ListCartNone} />
 
         <Route path="/cart_none" component={ListCartNone} />
 
@@ -95,4 +97,5 @@ function ListRoute(){
      
     );
 }
-export default ListRoute;
+const mapStateToProps = (state) => ({user : state.userReducer});
+export default connect(mapStateToProps,null) ( ListRoute);
