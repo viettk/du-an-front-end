@@ -60,8 +60,9 @@ function Thongkedonhang() {
   //   setMonth(index);
   // }
   return (
-    <React.Fragment>
-      {/* <div style={{position: "relative"}}>
+    <div></div>
+    // <React.Fragment>
+      /* <div style={{position: "relative"}}>
         <div style={{textAlign : "center"}}>
           <select value={month} onChange={(e) => changeMonth(e)} style={{padding: "5px 10px"}} >
             <option value="1">Tháng 1</option>
@@ -120,8 +121,8 @@ function Thongkedonhang() {
             </Chart>
           </div>
         </div>
-      </div> */}
-    </React.Fragment>
+      </div> */
+    // </React.Fragment>
   );
 }
 export default Thongkedonhang;
