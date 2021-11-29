@@ -70,7 +70,7 @@ function ListRoute(props){
 
         <Route path="/cart" component={customerId ? ListCart : ListCartNone} />
 
-        <Route path="/cart_none" component={ListCartNone} />
+        {/* <Route path="/cart_none" component={ListCartNone} /> */}
 
         <Route path="/lich-su-mua-hang" component={BillCustomer} />
 
