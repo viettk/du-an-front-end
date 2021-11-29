@@ -155,7 +155,7 @@ function Order(props) {
     }
     
     fetchList();
-  }, [demo.reduce((a,v) =>  a = a + v.total + phiship , 0 )]);
+  }, [demo.reduce((a,v) =>  a = a + v.total + phiship , 0 ), customerId]);
   const tt = () => {
     axios({
       url: 'https://provinces.open-api.vn/api/p?depth=2',
