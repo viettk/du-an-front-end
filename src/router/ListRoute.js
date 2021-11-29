@@ -60,7 +60,7 @@ function ListRoute(props){
 
         {/* <Route path="/admin/san-pham" component={ProductAd} /> */}
 
-        <PrivateRoute  path="/admin/san-pham" component={ProductAd} role='USER'/>
+        <PrivateRoute  path="/admin/san-pham" component={ProductAd} role='ADMIN'/>
 
         <Route path="/order" component={Order} />
 

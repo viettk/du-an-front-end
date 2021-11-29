@@ -68,8 +68,10 @@ function SignInSide(props) {
           'Content-Type':'application/json',
         }
       }).then(resp=>{
-        const token = localStorage.setItem('token', resp.data.token);
+        console.log(resp.data)
+      localStorage.setItem('token', resp.data.token);
        localStorage.setItem('name', resp.data.name);
+       localStorage.setItem('role', resp.data.role);
         props.addUser(resp.data)
         history.push("/")
       }).catch(error=>{

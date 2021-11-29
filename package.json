@@ -5,6 +5,7 @@
   "dependencies": {
     "@devexpress/dx-chart-core": "^2.7.6",
     "@devexpress/dx-core": "^2.7.6",
+    "@devexpress/dx-react-chart": "^2.7.6",
     "@devexpress/dx-react-chart-material-ui": "^2.7.6",
     "@emotion/react": "^11.5.0",
     "@emotion/styled": "^11.3.0",

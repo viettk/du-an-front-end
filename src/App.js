@@ -25,8 +25,8 @@ function App(props) {
         props.addUser(resp.data)
       }).catch(error=>{
         // localStorage.clear();
-        localStorage.removeItem('token')
-        localStorage.removeItem('name')
+        // localStorage.removeItem('token')
+        // localStorage.removeItem('name')
       });
     }
     fetch();

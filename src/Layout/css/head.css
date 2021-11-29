@@ -207,6 +207,7 @@
     color: black;
 }
 
+
 .head-dropdown:hover .header-category-show{
     border: 1px solid lightgray;
     height: 100px;
@@ -215,17 +216,18 @@
 .head-menu-cate-child{
     width: 800px;
     position: absolute;
-    height: 0;
-    overflow: hidden;
-    transition: height 0.2s;
+    display: block;
     left: 100%;
     top: 98%;
-    background-color: white;
+    background-color: red;
+    z-index: 999;
+    height: 300px;
 }
 
-.head-menu-cate-child.active{
-    height: 100px;
+.head-category-first .head-parent-name:hover .head-menu-cate-child{
+    display: block;
     border: 1px solid lightgray;
+    height: 100px;
 }
 
 .head-menu-cate-all-child{

@@ -133,7 +133,7 @@ function Head(props) {
                   )
                 }
               </div>
-              <div className={active == false ? "head-menu-cate-child" : "head-menu-cate-child active"} >
+              <div className="head-menu-cate-child" >
                 <ul className="head-menu-cate-all-child">
                   {
                     cate.map(result =>

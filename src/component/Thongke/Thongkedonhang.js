@@ -6,7 +6,7 @@ import {
   ArgumentAxis,
   ValueAxis,
   PieSeries
-} from "dx-react-chart-material-ui";
+} from "@devexpress/dx-react-chart-material-ui";
 import { Animation } from "@devexpress/dx-react-chart";
 import { useState, useEffect } from 'react';
 import ThongkeApi from '../../api/ThongkeApj';

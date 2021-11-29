@@ -61,7 +61,7 @@ function Address() {
             <button type="button"  onClick={() => getMahidden()} disabled={result.length >= 3 ? "disabled" : ""} > Thêm</button>
             {
                 result.map(result =>
-                    <div key={result.id} class="dia-chi">
+                    <div key={result.id} className="dia-chi">
                         <p>Tên người nhận: {result.name}</p>
                         <p>Địa chỉ: {result.address}</p>
                         <p>Số điện thoại: {result.phone}</p>
