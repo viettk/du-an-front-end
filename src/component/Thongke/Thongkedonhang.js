@@ -1,68 +1,67 @@
-// import * as React from 'react';
-// import {
-//   Chart,
-//   BarSeries,
-//   Title,
-//   ArgumentAxis,
-//   ValueAxis,
-//   PieSeries
-// } from "dx-react-chart-material-ui";
-// import { Animation } from "@devexpress/dx-react-chart";
-// import { useState, useEffect } from 'react';
-// import ThongkeApi from '../../api/ThongkeApj';
-// import './thongke.css';
+import * as React from 'react';
+import {
+  Chart,
+  BarSeries,
+  Title,
+  ArgumentAxis,
+  ValueAxis,
+  PieSeries
+} from "dx-react-chart-material-ui";
+import { Animation } from "@devexpress/dx-react-chart";
+import { useState, useEffect } from 'react';
+import ThongkeApi from '../../api/ThongkeApj';
+import './thongke.css';
 
 function Thongkedonhang() {
 
-  // let newDate = new Date()
-  // const [month, setMonth] = useState(newDate.getMonth() + 1)
-  // const [year, setYear] = useState(newDate.getFullYear());
-  // const [topsp, setTopsp] = useState([]);
-  // const [result, setResult] = useState([]);
-  // const [doanhthu, setDoanhthu] = useState([]);
+  let newDate = new Date()
+  const [month, setMonth] = useState(newDate.getMonth() + 1)
+  const [year, setYear] = useState(newDate.getFullYear());
+  const [topsp, setTopsp] = useState([]);
+  const [result, setResult] = useState([]);
+  const [doanhthu, setDoanhthu] = useState([]);
 
-  // useEffect(() => {
-  //   const fetchList = async () => {
-  //     try {
-  //       const respone = await ThongkeApi.getAll(month, year);
-  //       const top5 = await ThongkeApi.getTop5Admin(month, year);
-  //       const sltop5 = await ThongkeApi.getSLTop5Admin(month, year);
-  //       const respdoanhthu = await ThongkeApi.getDoanhthu(year);
+  useEffect(() => {
+    const fetchList = async () => {
+      try {
+        const respone = await ThongkeApi.getAll(month, year);
+        const top5 = await ThongkeApi.getTop5Admin(month, year);
+        const sltop5 = await ThongkeApi.getSLTop5Admin(month, year);
+        const respdoanhthu = await ThongkeApi.getDoanhthu(year);
 
-  //       const data = [
-  //         { status_order: 'Đã thanh toán', value: respone[2] },
-  //         { status_order: 'Đã hủy', value: respone[0] },
-  //         { status_order: 'Đã hoàn trả', value: respone[1] },
-  //       ]
-  //       const num = [];
-  //       for (var i = 0; i < top5.length; i++) {
-  //         num.push({ year: top5[i].name + top5[i].id, population: sltop5[i] });
-  //       }
+        const data = [
+          { status_order: 'Đã thanh toán', value: respone[2] },
+          { status_order: 'Đã hủy', value: respone[0] },
+          { status_order: 'Đã hoàn trả', value: respone[1] },
+        ]
+        const num = [];
+        for (var i = 0; i < top5.length; i++) {
+          num.push({ year: top5[i].name + top5[i].id, population: sltop5[i] });
+        }
 
-  //       const doanhThuData = [];
-  //       for (var x = 1; x < respdoanhthu.length; x++) {
-  //         doanhThuData.push({ ketqua: x, value: respdoanhthu[x] });
-  //       }
+        const doanhThuData = [];
+        for (var x = 1; x < respdoanhthu.length; x++) {
+          doanhThuData.push({ ketqua: x, value: respdoanhthu[x] });
+        }
 
-  //       setResult(data);
-  //       setTopsp(num);
-  //       setDoanhthu(doanhThuData);
+        setResult(data);
+        setTopsp(num);
+        setDoanhthu(doanhThuData);
 
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }
+      } catch (error) {
+        console.log(error);
+      }
+    }
 
-  //   fetchList();
-  // }, [month, year]);
-  // const changeMonth = (e) => {
-  //   let index = e.target.value;
-  //   setMonth(index);
-  // }
+    fetchList();
+  }, [month, year]);
+  const changeMonth = (e) => {
+    let index = e.target.value;
+    setMonth(index);
+  }
   return (
-    <div></div>
-    // <React.Fragment>
-      /* <div style={{position: "relative"}}>
+     <React.Fragment>
+       <div style={{position: "relative"}}>
         <div style={{textAlign : "center"}}>
           <select value={month} onChange={(e) => changeMonth(e)} style={{padding: "5px 10px"}} >
             <option value="1">Tháng 1</option>
@@ -121,8 +120,8 @@ function Thongkedonhang() {
             </Chart>
           </div>
         </div>
-      </div> */
-    // </React.Fragment>
+      </div> 
+    </React.Fragment>
   );
 }
 export default Thongkedonhang;
