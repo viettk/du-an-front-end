@@ -94,9 +94,9 @@ function Order(props) {
         if (customerId) {
           const response = await CartApi.getCartDetail(customerId);
           setCart(response);
-          console.log(response)
           const respAdress = await CartApi.getAddressStatus(customerId);
           setStatusadress(respAdress.id);
+          console.log(respAdress.id)
           setBill({
             ...bill,
             name: respAdress.name,

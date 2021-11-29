@@ -20,6 +20,7 @@ function Favorite(){
         _known: 'up'
     };
 
+    const [reload, setReload] = useState(true);
     const [ params, setParams] = useState(initParams);
     const [ result, setResult] = useState(initValues);
     const [ page, setPage] = useState(initParams._page + 1);
@@ -28,6 +29,8 @@ function Favorite(){
         name: '',
         parent_name: ''
     });
+
+
 
     useEffect(() => {
         const fetchList = async () =>{
@@ -39,7 +42,7 @@ function Favorite(){
           }
         }
         fetchList();
-      }, [params]);
+      }, [params, reload]);
 
       const handleChange = (event, value) => {
         history.push("/danh-muc/" + value);
@@ -65,11 +68,21 @@ function Favorite(){
             headers: {
                 'Content-Type': 'application/json',
             }
-        })
+        });
+        onReload();
       }
+
+      const onReload = () =>{
+          if(reload){
+              setReload(false);
+          } else{
+              setReload(true);
+          }
+      }
+
     return(
         <React.Fragment>
-        <h3 style={{marginTop: 10}}>Danh sách Danh mục Sản phẩm</h3>
+        <h3 style={{marginTop: 10}}>Danh sách Sản phẩm yêu thích</h3>
         <TableContainer component={Paper}>
         <table className="table table-striped">
                 <tbody>
@@ -86,7 +99,7 @@ function Favorite(){
                         result.map(
                             (result, index) =>
                                 <tr key={result.id}>
-                                    <td>{index}</td>
+                                    <td>{index + 1}</td>
                                     <td>{result.product.image}</td>
                                     <td>{result.product.name}</td>
                                     <td>{result.product.price}</td>
