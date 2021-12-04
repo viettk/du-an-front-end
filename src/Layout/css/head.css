@@ -188,22 +188,32 @@
     transition: height 0.5s;
 }
 
-.head-category-first li{
+.header-category-show li{
     text-align: start;
-    padding: 5px 10px;
+    padding: 8px 10px;
     width: 100%;
+    align-items: center;
 }
 
-.head-category-first li:hover{
+.header-category-show li:hover{
     background-color: black;
 }
 
-.head-category-first li:hover a{
+.header-category-show  li:hover a{
     font-size: 15px;
     color: white;
 }
 
-.head-category-first li .head-cate-parent{
+.viet-li-arrow-cate{
+    float: right;
+    padding-top: 5px;
+}
+
+.header-category-show  li:hover .viet-li-arrow-cate{
+    color: white;
+}
+
+.header-category-show li .head-cate-parent{
     color: black;
 }
 
@@ -213,48 +223,34 @@
     height: 100px;
 }
 
-.head-menu-cate-child{
-    /* width: 800px;
-    position: absolute;
-    display: block;
-    left: 100%;
-    top: 98%;
-    background-color: red;
-    z-index: 999;
-    height: 300px; */
-}
-
-.head-category-first .head-parent-name:hover .head-menu-cate-child{
-    display: block;
-    border: 1px solid lightgray;
-    height: 100px;
-}
 
 .head-menu-cate-all-child{
+    position: absolute;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: auto;
     list-style: none;
     grid-column-gap: 10px;
     grid-row-gap: 10px;
-}
-
-.head-menu-cate-all-child li{
-    justify-self: start !important;
-    padding: 5px 0;
-}
-
-.head-menu-cate-child ul{
-    text-decoration: none;
+    background-color: white;
+    margin: 0;
     padding: 0;
+    height: 0;
+    overflow: hidden;
+    z-index: 999;
+    left: 100%; 
+    top: 99%;
 }
 
-.head-parent-name:hover .head-menu-cate-child.activte{
-    height: 100px;
-    
+.head-menu-cate-all-child.active{
+    height:300px;
+    width: 800px;
+    border: 1px solid lightgray;
 }
 
-.head-menu-cate-child ul li .head-cate-name{
+.head-menu-cate-all-child li .head-cate-name{
     color: black;
+    padding: 0 5px;
 }
 
 .head-menu-hidden-bottom.acitve{
@@ -285,9 +281,7 @@
 }
 
 @media only screen and (max-width: 1000px) {
-    .head-menu-cate-child.active{
-        width: 500px;
-    }
+
 }
 
  @media only screen and (max-width: 767px) {

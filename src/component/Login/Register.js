@@ -14,8 +14,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from 'react';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
-import {addUser} from '../../redux_user/user-action';
-import {connect} from 'react-redux';
+import CookieService from  '../../cookie/CookieService'
 
 function Copyright(props) {
   return (
@@ -32,7 +31,7 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-function SignUp(props) {
+function SignUp() {
     const history = useHistory();
     const [result, setResult] = useState({
         email: '',
@@ -67,11 +66,13 @@ function SignUp(props) {
           'Content-Type':'application/json',
         }
       }).then(resp=>{
-        localStorage.setItem('token',resp.data.token);
-        localStorage.setItem('name',resp.data.name);
-        props.addUser(resp.data)
+        CookieService.setCookie('token',resp.data.token,7);
+        CookieService.setCookie('name',resp.data.name,7);
+        CookieService.setCookie('role',resp.data.role,7);
+        CookieService.setCookie('id',resp.data.id,7);
+        CookieService.setCookie('email',resp.data.email,7);
         alert("Đăng ký thành công!")
-        history.push("/")
+        window.location.replace('http://localhost:3000')
       }).catch(error=>{
         if (error.response) {
           setLoi(error.response.data);
@@ -187,7 +188,4 @@ function SignUp(props) {
     </ThemeProvider>
   );
 }
-const mapDispatchToProps = dispatch => ({
-  addUser: userInfo => dispatch(addUser(userInfo))
-})
-export default  connect(null,mapDispatchToProps)(SignUp)
+export default SignUp

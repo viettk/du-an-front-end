@@ -2,7 +2,7 @@ import axiosClient from "./axiosClient";
 
 const BillApi = {
     getBillCustomer: (params) =>{
-        const url = `lich-su-mua-hang`;
+        const url = `/lich-su-mua-hang`;
         return axiosClient.get(url, {params});
     },
 
@@ -16,13 +16,18 @@ const BillApi = {
         return axiosClient.post(url, data);
     },
 
+    dathangKhachLogin: (id, data)=>{
+        const url = `/order/dat/${id}`;
+        return axiosClient.post(url, data);
+    },
+
     datDetail: (id, data) =>{
         const url = `order/detail/date/${id}`;
         return axiosClient.post(url, data);
     },
 
-    dathangKhachLogin: (data) =>{
-        const url = `/order/dat/`;
+    datHangKhachhangkoLogin: (id, data) =>{
+        const url = `/order/detail/date/${id}`;
         return axiosClient.post(url, data);
     }
 }

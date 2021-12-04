@@ -18,12 +18,27 @@ const ReceiptApi = {
 
     postReceipt : (params)=>{
         const url = `/api/receipt`;
-        return axiosClient.post(url, params)
+        return axiosClient.post(url, params);
     },
 
     putReceipt : (id, params)=>{
         const url = `/api/receipt/`+id;
-        return axiosClient.put(url, params)
+        return axiosClient.put(url, params);
+    },
+
+    postReceiptDetail: (sp)=>{
+        const url ='/receiptDetail/add';
+        return axiosClient.post(url, sp);
+    },
+
+    putReceiptDetail: (idsp, sp)=>{
+        const url = '/receiptDetail/'+idsp;
+        return axiosClient.put(url, sp);
+    },
+
+    deleteReceiptDetail: (id, ma )=>{
+        const url = '/receiptDetail/'+ id +'?receiptId=' + ma;
+        return axiosClient.delete(url);
     }
     
 }

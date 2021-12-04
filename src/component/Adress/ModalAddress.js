@@ -3,8 +3,12 @@ import axios from 'axios';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { Modal } from 'react-bootstrap';
+import AddressApi from '../../api/AddressApi';
 import CartApi from "../../api/CartApi";
+import CookieService from '../../cookie/CookieService';
 function ModalAddress({ show, setShow, ma, setMa, reload, setReload}) {
+
+    const emailc = CookieService.getCookie('email');
     const token = localStorage.token;
     const [tinh, setTinh] = useState([]);
     const [quan, setQuan] = useState([]);
@@ -32,6 +36,7 @@ function ModalAddress({ show, setShow, ma, setMa, reload, setReload}) {
         setShow(false);
         setDetail({
             ...detail,
+            id: 0,
             name: '',
             phone:'',
             address: '',
@@ -45,7 +50,7 @@ function ModalAddress({ show, setShow, ma, setMa, reload, setReload}) {
         const fetchList = async () => {
             try {
                 if (ma !== 0 || ma !== undefined) {
-                    const resp = await CartApi.getOnAddress(ma);
+                    const resp = await CartApi.getOnAddress(ma, emailc);
                     setDetail({
                         id: resp.id,
                         name: resp.name,
@@ -81,19 +86,11 @@ function ModalAddress({ show, setShow, ma, setMa, reload, setReload}) {
 
     const create = () => {
         if (detail.id == 0 || detail.id == undefined) {
-            axios({
-                url: 'http://localhost:8080/dia-chi',
-                method: 'POST',
-                type: 'application/json',
-                data: detail,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                }
-            }).then(resp => {
+            AddressApi.postAdress(detail, emailc).then(resp => {
                 setDetail(resp);
                 dong();
                 onReload();
+                console.log(resp)
             }).catch((error) => {
                 if (error.response) {
                     setLoi(error.response.data);
@@ -105,16 +102,7 @@ function ModalAddress({ show, setShow, ma, setMa, reload, setReload}) {
                 }
             });
         } else {
-            axios({
-                url: 'http://localhost:8080/dia-chi/' + detail.id,
-                method: 'PUT',
-                type: 'application/json',
-                data: detail,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                }
-            }).then(resp => {
+            AddressApi.putAddress(detail.id, emailc, detail).then(resp => {
                 dong();
                 onReload();
             }).catch((error) => {
@@ -129,7 +117,7 @@ function ModalAddress({ show, setShow, ma, setMa, reload, setReload}) {
             });
         }      
     }
-console.log(detail)
+
     const changeStatus = ()=>{
         if(detail.status == 0){
             setDetail({

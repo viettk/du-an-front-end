@@ -7,16 +7,16 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import CartApi from "../../api/CartApi";
-import { useParams, useLocation, useHistory, Link } from "react-router-dom";
+import {Link } from "react-router-dom";
 import { height } from "@mui/system";
 import axios from "axios";
-import {connect} from 'react-redux';
 import './cart.css';
+import CookieService from  '../../cookie/CookieService'
 
-function ListCart(props) {
-    console.log(props.user)
-    const token = localStorage.token;
-    const customerId = props.user.id;
+function ListCart() {
+    const token = CookieService.getCookie('token');
+    const customerId = CookieService.getCookie('id');
+    const emailc = CookieService.getCookie('email');
     const initValues = [];
     const [initParams, setInitParams]= useState(
         {
@@ -47,7 +47,7 @@ function ListCart(props) {
         const fetchList = async () =>{
             if(customerId){
           try{
-            const response = await CartApi.getCartDetail(customerId);
+            const response = await CartApi.getCartDetail(customerId, emailc);
             setResult(response); 
             
             const resp = await CartApi.getCart(customerId);
@@ -66,15 +66,7 @@ function ListCart(props) {
             productId: idp,
             number: sl
         }
-        axios({
-            url: 'http://localhost:8080/cart-detail/up/'+  props.user.id,
-            method: 'PUT',
-            type: 'application/json',
-            data: sp,
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        }).catch((error) => {
+        CartApi.tangSL(customerId, emailc, sp).catch((error) => {
             if (error.response) {
                 setLoi(error.response.data);
                 setMess(error.response.data);
@@ -85,7 +77,7 @@ function ListCart(props) {
                 console.log('Error', error.message);
             }
         }).then(resp =>{
-            setResult(resp.data)
+            setResult(resp.data);
             onReload();
         })
       }
@@ -96,16 +88,7 @@ function ListCart(props) {
             productId: idp,
             number: sl
         }
-        axios({
-            url: 'http://localhost:8080/cart-detail/down/'+ props.user.id,
-            method: 'PUT',
-            type: 'application/json',
-            data: sp,
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            }
-        }).then(resp =>{
+        CartApi.giamSL(customerId, emailc, sp).then(resp =>{
             setResult(resp.data)
             onReload();
         })
@@ -115,16 +98,7 @@ function ListCart(props) {
         const sp = {
             productId: idp,
         }
-        axios({
-            url: 'http://localhost:8080/cart-detail/delete/'+ props.user.id,
-            method: 'delete',
-            type: 'application/json',
-            data: sp,
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            }
-        }).then(reps=>{
+        CartApi.xoaSP(customerId, emailc, sp).then(reps=>{
             setResult([]);
             onReload();
         })
@@ -139,16 +113,7 @@ function ListCart(props) {
                 productId: idsp,
                 number: Math.round(e.target.value),
             }
-            axios({
-                url: 'http://localhost:8080/cart-detail/' + props.user.id,
-                method: 'put',
-                type: 'application/json',
-                data: sp,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                }
-            }).catch((error) => {
+            CartApi.checknumber(customerId, emailc, sp).catch((error) => {
                     if (error.response) {
                         setLoi(error.response.data);
                         setMess(error.response.data);
@@ -199,10 +164,10 @@ function ListCart(props) {
                                     <td>{result.product.name}</td>
                                     <td>{result.product.price}</td>
                                     <td>
-                                        <button onClick={(e) => tangSL(e, result.product.id,result.number)}>+</button>
+                                        <button className="btn btn-outline-primary btn-number" onClick={(e) => tangSL(e, result.product.id,result.number)}></button>
                                         <input className="num" type="number" defaultValue={result.number} onBlur={(e)=>checkNumber(e,result.product.id, result.price)} />
                                             {/* {result.number} */}
-                                        <button onClick={e=> giamSl(e, result.product.id,result.number)}>-</button>
+                                        <button className="btn btn-outline-success btn-number" onClick={e=> giamSl(e, result.product.id,result.number)}></button>
                                     </td>
                                     <td>{result.total}</td>
                                     <td>
@@ -224,5 +189,4 @@ function ListCart(props) {
     );
 }
 
-const mapStateToProps = (state) => ({user : state.userReducer});
-export default connect(mapStateToProps,null) (ListCart);
+export default  ListCart;

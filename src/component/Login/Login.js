@@ -3,11 +3,14 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
+import CookieService from  '../../cookie/CookieService'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import {GoogleLogin} from 'react-google-login';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
+  useLocation,
   Link
 } from "react-router-dom";
 import Paper from '@mui/material/Paper';
@@ -16,9 +19,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
-import {connect} from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import {addUser} from '../../redux_user/user-action'
 import { useState } from 'react';
 
 function Copyright(props) {
@@ -36,7 +37,8 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-function SignInSide(props) {
+function SignInSide() {
+  let location = useLocation();
     const history = useHistory();
     const [result, setResult] = useState({
       email: '',
@@ -58,7 +60,7 @@ function SignInSide(props) {
         [name]:value
       })
     } 
-  const handleSubmit = (event) => {
+  const handleSubmit =  (event) => {
     event.preventDefault();
     axios({
         url: 'http://localhost:8080/api/login',
@@ -68,12 +70,17 @@ function SignInSide(props) {
           'Content-Type':'application/json',
         }
       }).then(resp=>{
-        console.log(resp.data)
-      localStorage.setItem('token', resp.data.token);
-       localStorage.setItem('name', resp.data.name);
-       localStorage.setItem('role', resp.data.role);
-        props.addUser(resp.data)
-        history.push("/")
+        // CookieService.removeCookie();
+        CookieService.setCookie('token',resp.data.token,7);
+        CookieService.setCookie('name',resp.data.name,7);
+        CookieService.setCookie('role',resp.data.role,7);
+        CookieService.setCookie('id',resp.data.id,7);
+        CookieService.setCookie('email',resp.data.email,7);
+        if(location.state){
+          window.location.replace('http://localhost:3000'+location.state.from)
+        }else{
+        window.location.replace('http://localhost:3000')
+        }
       }).catch(error=>{
         if (error.response) {
           setLoi(error.response.data);
@@ -154,6 +161,13 @@ function SignInSide(props) {
               >
                 Đăng nhập
               </Button>
+              <Grid container sx={{display:'block', textAlign:'center',mb: 2 }} >
+              <GoogleLogin 
+    clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
+    buttonText="Login"
+    // onSuccess={responseGoogle}
+    // onFailure={responseGoogle}
+    cookiePolicy={'single_host_origin'}>Sign in with google</GoogleLogin></Grid>
               <Grid container>
                 <Grid item xs>
                 <Link  to="/forgot">Quên mật khẩu</Link>
@@ -173,7 +187,4 @@ function SignInSide(props) {
     </ThemeProvider>
   );
 }
-const mapDispatchToProps = dispatch => ({
-    addUser: userInfo => dispatch(addUser(userInfo))
-})
-export default connect(null,mapDispatchToProps)(SignInSide);
+export default SignInSide;

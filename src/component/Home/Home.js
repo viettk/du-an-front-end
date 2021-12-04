@@ -44,6 +44,9 @@ function Home() {
     history.push('/product/' + id);
   }
 
+  const chuyentrang = (id) =>{
+    history.push('/product/' + id );
+  }
 
   return (
     <section style={{marginTop: "30px"}}>
@@ -53,14 +56,14 @@ function Home() {
           {
             resultnew.map(result =>
               <Carousel.Item >
-                  <div className="body-new-pro" key={result.id}>
-                    <img className="body-new-img-pro" src={logoa} alt="" />
-                    <p className="fix-line-css">{result.name}</p>
-                    <p>SKU: {result.sku}</p>
-                    <span className="pro-body">
-                      <h6 style={{fontSize: "15px"}}>{result.price} đ</h6>
-                    </span>
-                  </div>
+                <div className="body-new-pro" key={result.id} onClick={() => chuyentrang(result.id)}>
+                  <img className="body-new-img-pro" src={logoa} alt="" />
+                  <p className="fix-line-css">{result.name}</p>
+                  <p>SKU: {result.sku}</p>
+                  <span className="pro-body">
+                    <h6 style={{ fontSize: "15px" }}>{result.price} đ</h6>
+                  </span>
+                </div>
               </Carousel.Item>
               )
           }
@@ -77,7 +80,7 @@ function Home() {
                   {
                     resultShf.map(respSHF =>
                       <Carousel.Item >
-                        <div className="body-new-pro" key={respSHF.id}>
+                        <div className="body-new-pro" key={respSHF.id} onClick={() => chuyentrang(respSHF.id)}>
                           <img style={{width: "90%", height: "207px"}} className="body-new-img-pro" src={'/images/'+respSHF.photo} alt="" />
                           <p className="fix-line-css">{respSHF.name}</p>
                           <p>SKU: {respSHF.sku}</p>
@@ -102,7 +105,7 @@ function Home() {
                   {
                     resultShf.map(respSHF =>
                       <Carousel.Item >
-                        <div className="body-new-pro" key={respSHF.id}>
+                        <div className="body-new-pro" key={respSHF.id} onClick={() => chuyentrang(respSHF.id)}>
                           <img style={{width: "90%", height: "207px"}} className="body-new-img-pro" src={'/images/'+respSHF.photo} alt="" />
                           <p className="fix-line-css">{respSHF.name}</p>
                           <p>SKU: {respSHF.sku}</p>
@@ -121,14 +124,14 @@ function Home() {
 
         <div className="product-name-title" style={{marginBottom: "50px"}}>
           <div className="title-pro-favorite" style={{marginBottom: "30px"}}>
-            <h5>Sản phẩm bán chạy</h5>
+            <h5>Top Sản phẩm bán chạy</h5>
           </div>
           <div className="product-body-favorite">
           <Carousel  cols={5} rows={1} gap={15} >
             {
               favorite.map(result =>
                 <Carousel.Item >
-                <div className="product-body-live">
+                <div className="product-body-live" onClick={() => chuyentrang(result.id)}>
                   <img src={'/images/' + result.photo} style={{width: "90%", height: "210px"}} className="rounded-like mx-auto d-block" />
                   <div className="body-pro-buy">
                     <p className="fix-line-css">{result.name}</p>

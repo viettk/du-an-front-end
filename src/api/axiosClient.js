@@ -2,8 +2,9 @@
 import axios from 'axios';
 import queryString from 'query-string';
 import { useHistory } from 'react-router-dom';
+import CookieService from '../cookie/CookieService';
 
-const token = localStorage.token;
+const token = CookieService.getCookie('token');
 const axiosClient = axios.create({
     baseURL: process.env.REACT_APP_API_URL,
     headers: {
@@ -25,6 +26,7 @@ axiosClient.interceptors.response.use((response) => {
     return response;
 }, (error) => {
 if(error.response.status===403){
+    CookieService.removeCookie();
     window.location.replace('http://localhost:3000/login')
   } 
     throw error;

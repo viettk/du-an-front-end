@@ -6,6 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
 import ProductApi from "../../api/ProductApi";
 import axios from "axios";
+import FavoriteApi from "../../api/FavoritApi";
 
 
 function Favorite(){
@@ -60,16 +61,10 @@ function Favorite(){
             productId: idpr,
             customerId: 1
           }
-        axios({
-            url: 'http://localhost:8080/yeu-thich',
-            method: 'delete',
-            type: 'application/json',
-            data: datasp,
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
-        onReload();
+        FavoriteApi.deleteYeuthich(datasp).then(resp=>{
+            onReload();
+        })
+       
       }
 
       const onReload = () =>{

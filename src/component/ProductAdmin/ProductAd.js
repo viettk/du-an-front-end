@@ -297,7 +297,7 @@ function ProductAd() {
                                         <td><img src={'/images/' + result.photo} style={{ width: 100 }} /></td>
                                         <td>{result.name}</td>
                                         <td>{result.category.name}</td>
-                                        <td>{String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' VNĐ'}</td>
+                                        <td>{String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' đ'}</td>
                                         <td>{(result.value_extra) ? result.value_extra : '0'}%</td>
                                         <td>{(result.createDate.split('T')[0]).split('-').reverse().join('-')}</td>
                                         <td>{result.number}</td>

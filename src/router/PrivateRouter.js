@@ -1,19 +1,13 @@
 import React from 'react'
 import { Redirect, Route } from 'react-router-dom'
-import { useEffect, useState } from 'react';
+import CookieService from '../cookie/CookieService';
 
 const PrivateRoute = ({ role ,component: Component}) => {
-  const rolle = localStorage.role;
+  const rolle = CookieService.getCookie('role');
   return (
     <Route
       render={(props) =>
-        (rolle === 'ADMIN') ? <Component {...props} /> : (rolle==='STAFF'&&role!=='ADMIN' ? <Component {...props} />:(rolle===role?<Component {...props} />:<Redirect to="/login" />))
-  
-        // (rolle===role || rolle ==='ADMIN') ? (
-        //   <Component {...props} />
-        // ) : (
-        //   <Redirect to="/login" />
-        // )
+        (rolle ==='ADMIN'||(rolle==='STAFF'&& role!=='ADMIN')|| (rolle===role)) ? <Component {...props} /> : <Redirect to={{ pathname: '/login', state: { from: props.location.pathname }}} />
       }
     />
   )

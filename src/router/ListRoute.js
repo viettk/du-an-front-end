@@ -29,10 +29,12 @@ import HomeCateParentName from "../component/Home/HomeCateParentName.";
 import PrivateRoute from "./PrivateRouter";
 import { useState } from "react";
 import Bill from "../component/billadmin/Bill";
-import {connect} from 'react-redux';
+import CookieService from '../cookie/CookieService';
+import CreatePdf from '../component/CreatePdf/CreatePdf'
+import AllProduct from "../component/Home/AllProduct";
 
-function ListRoute(props){
-  const customerId = props.user.id;
+function ListRoute(){
+  const customerId = CookieService.getCookie('id');
     return(
         
        <Switch>
@@ -49,6 +51,8 @@ function ListRoute(props){
         <Route path= "/:sanpham/:id/page=:xpage/sort=:sort" component={HomeCate } />
 
         <Route path="/:sanpham/page=:xpage/sort=:sort" component={HomeCateParentName } />
+
+        <Route path="/all-product" component={AllProduct} />
 
         <Route path= "/dia-chi" component={Address } />
 
@@ -88,14 +92,17 @@ function ListRoute(props){
 
         <Route path="/admin/bill" component={Bill} />
 
+        <Route path="/pdfff" component={CreatePdf} />
+
         {/* <PrivateRoutes component={ListDanhmuc} authed={false} path='/admin'  /> */}
         {/* component PageNotFound phải để cuối cùng */}
         <Route path="*" component={PageNotFound} />
 
         <Route path="/404" component={PageNotFound} />
+
+        
       </Switch>
      
     );
 }
-const mapStateToProps = (state) => ({user : state.userReducer});
-export default connect(mapStateToProps,null) ( ListRoute);
+export default ListRoute;

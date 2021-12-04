@@ -27,6 +27,9 @@ function Receipt() {
     const [count, setCount] = useState(0);
     const [month, setMonth] = useState(newDate.getMonth() + 1 );
     const [year, setYear] = useState(newDate.getFullYear());
+    const [describe, setDescribe] = useState({
+        mota: ''
+    });
     // const [search, setSearch] = useState({
     //     name: '',
     //     parent_name: ''
@@ -53,7 +56,7 @@ function Receipt() {
             }
         }
         fetchList();
-    }, [params, page, month, year, reload]);
+    }, [params, page, month, year, reload, describe]);
 
     const handleChange = (event, value) => {
         setPage(value);
@@ -73,16 +76,18 @@ function Receipt() {
             describe: describe.mota
         }
         try {
-            ReceiptApi.postReceipt(reipt);
+            ReceiptApi.postReceipt(reipt).then(resp=>{
+                setDescribe({
+                    ...describe,
+                    mota: ''
+                });
+            });
         } catch (error) {
             console.error(error)
         }
         onReload();
     }
-
-    const [describe, setDescribe] = useState({
-        mota: ''
-    });
+    
     const update = (e) => {
         setDescribe({
             ...describe,
@@ -98,8 +103,14 @@ function Receipt() {
                     staffId: 1,
                     describe: e.target.value
                 }
+                
                 try {
-                    ReceiptApi.putReceipt(id, data);
+                    ReceiptApi.putReceipt(id, data).then(resp=>{
+                        setDescribe({
+                            ...describe,
+                            mota: ''
+                        })
+                    });
                 } catch (error) {
                     console.error(error)
                 }
@@ -130,7 +141,7 @@ function Receipt() {
             <TableContainer component={Paper}>
                 <div style={{position: "relative"}}>
                     <div className="receipt-create">
-                        <textarea  name="describecreate" onChange={update} placeholder="Ghi chú phiếu nhập"></textarea>
+                        <textarea value={describe.mota} name="describecreate" onChange={update} placeholder="Ghi chú phiếu nhập"></textarea>
                         <div className="receipt-create-filter">
                             <button className="ghi-chu-phieu-nhap" onClick={() => create()}>Tạo</button>
                             <div className="receipt-date">

@@ -1,7 +1,10 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import AddressApi from "../../api/AddressApi";
 import CartApi from "../../api/CartApi";
+import CookieService from "../../cookie/CookieService";
 import ModalAddress from "./ModalAddress";
+import './adress.css';
 
 function Address() {
     const token = localStorage.token;
@@ -9,11 +12,14 @@ function Address() {
     const [ma, setMa] = useState(0);
     const [show, setShow] = useState(false);
     const [reload, setReload] = useState(true);
+    const emailc = CookieService.getCookie('email');
+    const customerId = CookieService.getCookie('id');
 
     useEffect(() => {
         const fetchList = async () => {
             try {
-                const response = await CartApi.getAddress(1);
+                const response = await CartApi.getAddress(customerId, emailc);
+                console.log(response)
                 setResult(response)
             } catch (error) {
                 console.log(error);
@@ -43,30 +49,35 @@ function Address() {
     }
 
     const xoadc = (id)=>{
-        axios({
-            url: 'http://localhost:8080/dia-chi/'+ id,
-            method: 'delete',
-            type: 'application/json',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            }
-        });
-        onReload();
+        AddressApi.xoadc(id, emailc).then(resp =>{
+            onReload();
+        });    
     }
-    console.log(reload)
+
     return (
         <div className="all-dc">
              <ModalAddress show={show} setShow={setShow} ma={ma} setMa={setMa} reload={reload} setReload={setReload}  />
-            <button type="button"  onClick={() => getMahidden()} disabled={result.length >= 3 ? "disabled" : ""} > Thêm</button>
+            <span className='add-rigth'>
+                <button type="button" className="btn btn-danger addAdress"  onClick={() => getMahidden()} disabled={result.length >= 3 ? "disabled" : ""} > Thêm</button>
+            </span>
             {
                 result.map(result =>
-                    <div key={result.id} className="dia-chi">
-                        <p>Tên người nhận: {result.name}</p>
-                        <p>Địa chỉ: {result.address}</p>
-                        <p>Số điện thoại: {result.phone}</p>
-                        <button type="button" onClick={() => getMa(result.id)} >Chỉnh sửa địa chỉ</button>
-                        <button type="button" onClick={() => xoadc(result.id) } >Xóa</button>
+                    <div className="add-information" key={result.id}>
+                        <span>
+                            <p className="thanh-p-address">Tên người nhận: </p>
+                            <p className="thanh-p-address">Địa chỉ: </p>
+                            <p className="thanh-p-address">Số điện thoại: </p>
+                        </span>
+                        <div>
+                            <p className="add-right">{result.name}</p>
+                            <p className="add-right">{result.address}</p>
+                            <p className="add-right">{result.phone}</p>
+                        </div>
+                        <div className="add-function">
+                            <button type="button" className="btn btn-default add-add" onClick={() => getMa(result.id)} ><i class="fa fa-edit"></i></button>
+                            <br/>
+                            <button type="button" className="btn btn-default add-delete" onClick={() => xoadc(result.id)} ><i class="fa fa-trash"></i></button>
+                        </div>
                     </div>
                 )
             }

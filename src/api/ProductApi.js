@@ -27,12 +27,12 @@ const ProductApi = {
     },
 
     getFavorite: (id, params) =>{
-        const url =  `http://localhost:8080/yeu-thich/1?known=up&field=id`;
+        const url =  '/yeu-thich/1?known=up&field=id';
         return axiosClient.get(url, {params});
     },
 
     xoaFavorite: ( params) =>{
-        const url =  `/yeu-thich`;
+        const url =  '/yeu-thich';
         return axiosClient.delete(url, {params});
     },
 

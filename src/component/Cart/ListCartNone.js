@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -7,15 +7,15 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import CartApi from "../../api/CartApi";
-import { useParams, useLocation, useHistory } from "react-router-dom";
-import { height } from "@mui/system";
-import axios from "axios";
+import { useHistory } from "react-router-dom";
 import './cart.css';
+import {Link} from 'react-router-dom';
 
-function ListCartNone(){
+function ListCartNone() {
+    const history = useHistory();
     let storage = localStorage.getItem('cart');
     const [result, setResult] = useState(JSON.parse(storage));
-    const [totalf, setTotalf] =useState((result.reduce((a,v) =>  a = a + v.total , 0 )));
+    const [totalf, setTotalf] = useState((result.reduce((a, v) => a = a + v.total, 0)));
     const [mess, setMess] = useState({
         errorMessage: ''
     });
@@ -23,21 +23,21 @@ function ListCartNone(){
         name: '',
         parent_name: ''
     });
-    
+
 
     // localStorage.removeItem('cart');
-    const giamSl = (e, id) =>{
+    const giamSl = (e, id) => {
         // productId là productId trong localStorage
-        let item = result.find(c => c.product_id == id );
-          item.number -= 1;
-          if(item.number <= 0 ){
+        let item = result.find(c => c.product_id == id);
+        item.number -= 1;
+        if (item.number <= 0) {
             item.number = 1;
-          }
-          item.total = item.price * item.number
+        }
+        item.total = item.price * item.number
         localStorage.setItem('cart', JSON.stringify(result));
         let reload = localStorage.getItem('cart');
         setResult(JSON.parse(reload));
-        setTotalf((result.reduce((a,v) =>  a = a + v.total , 0 )));
+        setTotalf((result.reduce((a, v) => a = a + v.total, 0)));
     }
 
     const tangSl = (e, id) => {
@@ -47,43 +47,40 @@ function ListCartNone(){
         localStorage.setItem('cart', JSON.stringify(result));
         let reload = localStorage.getItem('cart');
         setResult(JSON.parse(reload));
-        setTotalf((result.reduce((a,v) =>  a = a + v.total , 0 )))
+        setTotalf((result.reduce((a, v) => a = a + v.total, 0)))
     }
 
     const checkNumber = (e, idsp) => {
+        if( e.target.value < 1 ){
+            e.target.value = 1;
+        }
         let item = result.find(c => c.product_id == idsp);
         item.number = Math.round(e.target.value);
         item.total = item.price * item.number
         localStorage.setItem('cart', JSON.stringify(result));
         let reload = localStorage.getItem('cart');
         setResult(JSON.parse(reload));
-        setTotalf((result.reduce((a,v) =>  a = a + v.total , 0 )))
+        setTotalf((result.reduce((a, v) => a = a + v.total, 0)))
     }
 
-    let cart =[];
-    const xoa = (e, idsp) =>{
+    let cart = [];
+    const xoa = (e, idsp) => {
         let storage = localStorage.getItem('cart');
-        if(storage){
-          cart = JSON.parse(storage);
+        if (storage) {
+            cart = JSON.parse(storage);
         }
         cart = cart.filter(c => c.product_id != idsp);
         cart.total = cart.price * cart.number;
         localStorage.setItem('cart', JSON.stringify(cart));
         let reload = localStorage.getItem('cart');
         setResult(JSON.parse(reload));
-        setTotalf((cart.reduce((a,v) =>  a = a + v.total , 0 )));
+        setTotalf((cart.reduce((a, v) => a = a + v.total, 0)));
     }
 
-    const checkCart = () =>{
-        const demo= JSON.parse(localStorage.getItem('cart'));
-        axios({
-            url: 'http://localhost:8080/check/checkcart',
-            method: 'post',
-            data: demo,
-            type: 'application/json',
-            headers: {
-                'Content-Type': 'application/json',
-            }
+    const checkCart = () => {
+        const demo = JSON.parse(localStorage.getItem('cart'));
+        CartApi.dathangnotlogin(demo).then(resp =>{
+            history.push('/order');
         }).catch((error) => {
             if (error.response) {
                 setLoi(error.response.data);
@@ -95,55 +92,72 @@ function ListCartNone(){
             }
         });
     }
-    return(
+
+    const returnAll = () =>{
+        history.push('/all-product');
+    }
+    return (
         <React.Fragment>
-        <h3 style={{marginTop: 10}}>Giỏ hàng của bạn</h3>
-        <TableContainer component={Paper}>
-        <table className="table table-striped">
-                <tbody>
-                    <tr>
-                        <td scope="col">STT</td>
-                        <td scope="col">Hình ảnh</td>
-                        <td scope="col">Tên Sản phẩm</td>
-                        <td scope="col">Giá</td>
-                        <td scope="col">Số lượng</td>
-                        <td scope="col">Tổng tiền</td>
-                        <td scope="col">Xóa</td>
-                    </tr>
-                </tbody>
-                <tfoot style={{height: "10px"}}>
-                    {
-                        result.length > 0 ? result.map(
-                            (result) =>
-                                <tr key={result.product_id}>
-                                    <td>{result.product_id}</td>
-                                    <td>{result.photo}</td>
-                                    <td>{result.name}</td>
-                                    <td>{result.price}</td>
-                                    <td key={result.number}>
-                                    <button className="button-sl" onClick={e=> giamSl(e, result.product_id)} >-</button>
-                                        <input style={{border: "1px solid #ddd", height: "30px", width: "60px", textAlign: "center", padding: "10px 0"}} type="number" defaultValue={result.number} onBlur={(e)=>checkNumber(e,result.product_id)} />
-                                            {/* {result.number} */}
-                                        <button className="button-sl" onClick={e=> tangSl(e, result.product_id)}>+</button>
-                                    </td>
-                                    <td>{result.total}</td>
-                                    <td>
-                                        <button className="button-cart-delete" onClick={(e) => xoa(e, result.product_id) } ><i class="fa fa-trash"></i></button>
-                                    </td>
-                                </tr>
-                        )   : <span>Giỏ hàng trống</span>           
-                    }
-                </tfoot>
-            </table>
-            <span style={{ color: "red", fontSize: "13px" }}>{loi.parent_name}</span>
-            <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span>
-            <span style={{float: "right", margin: "0 65px 20px 0"}}>Tổng tiền: <span style={{fontWeight: " 500"}}>{totalf}</span> VNĐ</span>
-            </TableContainer>
-            <div id="select-cart">
-                <button style={{ backgroundColor: "#3d4356" }}>Tiếp tục mua hàng</button>
-                <button onClick={checkCart} >Thực hiện thanh toán</button>
+            <div className="container">
+                <nav aria-label="breadcrumb">
+                    <ol className="breadcrumb">
+                        <Link style={{textDecoration: 'none'}} to='/home'>Home</Link>
+                        <span className="span-link"><i class="fa fa-angle-right"></i></span>
+                        <span>Giỏ hàng</span>
+                    </ol>
+                </nav>
+                <TableContainer component={Paper}>
+                    <table className="table table-hover">
+                        <tbody>
+                            <tr>
+                                <td scope="col">STT</td>
+                                <td scope="col">Hình ảnh</td>
+                                <td scope="col">Tên Sản phẩm</td>
+                                <td scope="col">Giá</td>
+                                <td scope="col">Số lượng</td>
+                                <td scope="col">Tổng tiền</td>
+                                <td scope="col">Xóa</td>
+                            </tr>
+                        </tbody>
+                        <tfoot style={{ height: "10px", position: "relative"}}>
+                            {
+                                result.lenght > 0 ? result.map(
+                                    (result) =>
+                                        <tr key={result.product_id}>
+                                            <td>{result.product_id}</td>
+                                            <td>{result.photo}</td>
+                                            <td>{result.name}</td>
+                                            <td>{result.price}</td>
+                                            <td key={result.number}>
+                                                <button className="button-sl" onClick={e => giamSl(e, result.product_id)} >-</button>
+                                                <input style={{ border: "1px solid #ddd", width: "60px", textAlign: "center", padding: "2px 0" }} type="number" defaultValue={result.number} onBlur={(e) => checkNumber(e, result.product_id)} />
+                                                <button className="button-sl1" onClick={e => tangSl(e, result.product_id)}>+</button>
+                                            </td>
+                                            <td>{result.total}</td>
+                                            <td>
+                                                <button style={{border: "none"}} className="btn btn-outline-danger" onClick={(e) => xoa(e, result.product_id)} ><i class="fa fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                ) : <span style={{fontWeight: 500, position:"absolute", top: "5px", textAlign: "center", width: "100%"}}>Giỏ hàng của bạn không có Sản phẩm nào</span> 
+                            }
+                        </tfoot>
+                    </table>
+                    <span style={{ color: "red", fontSize: "13px", marginLeft: "10px" }}>{loi.parent_name}</span>
+                    <span style={{ color: "red", fontSize: "13px", marginLeft: "10px" }}>{mess.errorMessage}</span>
+                    <span style={{ float: "right", margin: "0 65px 20px 0" }}>Tổng tiền: <span style={{ fontWeight: " 500" }}>{totalf}</span> VNĐ</span>
+                </TableContainer>
+                {
+                    result.lenght > 0 ?
+                        <div id="select-cart">
+                            <div className="cart-hidden"></div>
+                            <div className="cart-contact">
+                                <button onClick={returnAll} style={{ backgroundColor: "#3d4356" }} >Tiếp tục mua hàng</button>
+                                <button onClick={checkCart} >Thực hiện thanh toán</button>
+                            </div>
+                        </div> : <div></div>
+                }
             </div>
-    </React.Fragment>
+        </React.Fragment>
     );
 }
 export default ListCartNone;

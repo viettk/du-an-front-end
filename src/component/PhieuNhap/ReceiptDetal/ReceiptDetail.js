@@ -54,9 +54,13 @@ function ReceiptDetail({ show, setShow, ma, setMa, reload, setReload }) {
         onReload();
         setInput({})
         // setDetail({});
-        // setLoi({});
+        setLoi({
+            productId: '',
+            number: '',
+            price: ''
+        });
         // setMa(0);
-        // setMess({});
+        setMess({errorMessage: ''});
     }
     const [active, setActive] = useState(false); 
     const [product, setProduct] = useState([]);
@@ -104,16 +108,16 @@ function ReceiptDetail({ show, setShow, ma, setMa, reload, setReload }) {
             price: input.price
         }
         if(click == false){
-            axios({
-                url: 'http://localhost:8080/receiptDetail/add',
-                method: 'POST',
-                data: sp,
-                type: 'application/json',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            }).then(resp => {
-                clearForm();           
+            ReceiptApi.postReceiptDetail(sp).then(resp=>{
+                clearForm(); 
+                setLoi({
+                    productId: '',
+                    number: '',
+                    price: ''
+                });
+                setMess({
+                    errorMessage: ''
+                })
             }).catch((error) => {
                 if (error.response) {
                     setLoi(error.response.data);
@@ -125,17 +129,17 @@ function ReceiptDetail({ show, setShow, ma, setMa, reload, setReload }) {
                     console.log('Error', error.message);
                 }
             });
-        } else{
-            axios({
-                url: 'http://localhost:8080/receiptDetail/'+ getId,
-                method: 'PUT',
-                data: sp,
-                type: 'application/json',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            }).then(resp => {
-                clearForm();           
+        } else{         
+            ReceiptApi.putReceiptDetail(getId, sp).then(resp=>{
+                clearForm();
+                setLoi({
+                    productId: '',
+                    number: '',
+                    price: ''
+                });
+                setMess({
+                    errorMessage: ''
+                })
             }).catch((error) => {
                 if (error.response) {
                     setLoi(error.response.data);
@@ -189,9 +193,6 @@ function ReceiptDetail({ show, setShow, ma, setMa, reload, setReload }) {
         setClick(false);
     }
 
-    const moveClick = () =>{
-        setInput({})
-    }
     const [a, setA] = useState({
         idpro: ''
     });
@@ -231,12 +232,15 @@ function ReceiptDetail({ show, setShow, ma, setMa, reload, setReload }) {
     }
 
     const xoa = (id) =>{
-        axios({
-            url: 'http://localhost:8080/receiptDetail/'+ id +'?receiptId=' + ma ,
-            method: 'delete',
-            type: 'application/json',
-            headers: {
-                'Content-Type': 'application/json',
+        ReceiptApi.deleteReceiptDetail(id, ma).catch((error) => {
+            if (error.response) {
+                setLoi(error.response.data);
+                setMess(error.response.data);
+                console.log(error.response.data)
+            } else if (error.request) {
+                console.log(error.request);
+            } else {
+                console.log('Error', error.message);
             }
         });
          onLoad();
@@ -299,7 +303,7 @@ function ReceiptDetail({ show, setShow, ma, setMa, reload, setReload }) {
     }
     
     return (
-        <div className="ok">         
+        <div className="ok" style={{zIndex: "999"}}>         
             <Modal show={show} onHide={() => dong()} fullscreen={true} >
                 <Modal.Header>
                     <span className="titele-name">Phiếu nhập chi tiết</span>
@@ -326,7 +330,6 @@ function ReceiptDetail({ show, setShow, ma, setMa, reload, setReload }) {
                                     </ul>
                                 </div>
                                 <span style={{ color: "red", fontSize: "13px" }}>{loi.productId}</span> 
-                                <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span> 
                             </div>
                             <div className="form-group">
                                 <div className="user-box">
@@ -334,7 +337,6 @@ function ReceiptDetail({ show, setShow, ma, setMa, reload, setReload }) {
                                     <label>Số lượng</label>
                                 </div>
                                 <span style={{ color: "red", fontSize: "13px" }}>{loi.number}</span> 
-                                <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span> 
                             </div>
 
                             <div className="form-group">
@@ -343,11 +345,11 @@ function ReceiptDetail({ show, setShow, ma, setMa, reload, setReload }) {
                                     <label>Giá nhập</label>
                                 </div>
                                 <span style={{ color: "red", fontSize: "13px" }}>{loi.price}</span> 
-                                <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span> 
                             </div>
+                            <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span> 
                         </div>
                         
-                        <button type="button" className="button-them" onClick={() => addToReceiptDetail()} onBlur={moveClick} >Thêm</button>
+                        <button type="button" className="button-them" onClick={() => addToReceiptDetail()} >Thêm</button>
                         <button type="button" className="button-them" onClick={clearForm}>Clear</button>
                     </form>
                     </div>

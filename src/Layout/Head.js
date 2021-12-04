@@ -2,9 +2,8 @@ import './css/head.css';
 import Carousel from 'react-elastic-carousel';
 import { useEffect, useState } from 'react';
 import CategoryApi from '../api/CategoryApi';
-import { connect } from 'react-redux';
-import { removeUser } from '../redux_user/user-action'
 import axios from 'axios';
+import CookieService from '../cookie/CookieService';
 import { useHistory } from 'react-router-dom';
 import {
   BrowserRouter as Router,
@@ -14,42 +13,50 @@ import {
   useParams
 } from "react-router-dom";
 import { LinearProgress } from '@mui/material';
+import CartApi from '../api/CartApi';
 
-function Head(props) {
+function Head() {
   const history = useHistory();
   const [result, setResult] = useState([]);
   const [cate, setCate] = useState([]);
-  const username = localStorage.getItem('name')
   // const [username, setUsername] = useState(name);
   const [number, setNumber] = useState(0);
   const [active, setActive] = useState(false);
+  const [itemSp, setItemSp] = useState(0);
 
+  const user_name = CookieService.getCookie('name');
+  const customerId = CookieService.getCookie('id');
+  const emailc = CookieService.getCookie('email');
+
+  // console.log(document.cookie)
+  const [username,setUsername] = useState(user_name)
   // biến load lại trang
   const [load, setLoad] = useState(false);
-  const onLoad = () => {
-    if (load) {
-      setLoad(false)
-    } else {
-      setLoad(true)
-    }
-  }
+
+  let getStorage = localStorage.getItem('cart');
+  const [demo, setDemo] = useState(JSON.parse(getStorage));
   useEffect(() => {
     const fetchList = async () => {
       try {
         const response = await CategoryApi.getAllCateCustomer();
+        if (customerId) {
+          const numberOfCart = await CartApi.getNumberOfCart(customerId, emailc);
+          // setItemSp(numberOfCart);
+
+        } else{
+          setItemSp(demo.length);
+        }
+        
         setResult(response);
       } catch (error) {
         console.log(error);
       }
     }
     fetchList();
-  }, [load]);
+  }, []);
   const logout = () => {
-    localStorage.removeItem('token')
-    localStorage.removeItem('name')
-    props.removeUser('')
-    onLoad()
-    history.push("/login")
+    CookieService.removeCookie();
+    window.location.replace('http://localhost:3000/login')
   }
 
 
@@ -58,13 +65,16 @@ function Head(props) {
     try {
       CategoryApi.getAllCateCustomerByParent_name(e.currentTarget.textContent).then(reps => {
         setCate(reps)
-        setActive(true);
-      });
+        if(reps.length > 0){
+          setActive(true)
+        } else{
+          setActive(false)
+        }
+      });   
     } catch (error) {
       console.log(error);
     }
   }
-
   const changeValue = () => {
     setCate([])
   }
@@ -110,7 +120,7 @@ function Head(props) {
         </div>
         <div className="head-cart_template">
           <i className="icon-tow fa fa-shopping-cart" />
-          <Link to="/cart" className="head-midd-linkto-cart" >(0) Giỏ hàng</Link>
+          <Link to="/cart" className="head-midd-linkto-cart" >({itemSp}) Giỏ hàng</Link>
         </div>
       </div>
 
@@ -118,31 +128,25 @@ function Head(props) {
       <div className="header-bottom">
         <ul className="header-menu-ul-main">
           <li className="head-dropdown">
-            <Link href="#"  >
               <i className="fa fa-align-justify" style={{ margin: "0 5px 0 5px" }} />
               Danh mục <span>sản phẩm</span>
-            </Link>
             <ul className="header-category-show" >
-              <div className="head-category-first" style={{ position: "relative", display: "grid" }} >
                 {
                   result.map((result) =>
                     <li className="head-parent-name" key={result} value={result} onMouseOver={(e) => getValue(e)} >
                       <Link className="head-cate-parent" key={result} to={'/' + result + '/page=1/sort=0'}>{result}</Link>
+                      <i class="fa fa-angle-right viet-li-arrow-cate"></i>
                     </li>
-
                   )
                 }
-              </div>
-              <div className="head-menu-cate-child" >
-                <ul className="head-menu-cate-all-child">
-                  {
-                    cate.map(result =>
-                      <li><Link className="head-cate-name" key={result.id} to={'/' + result.name + '/' + result.id + '/page=1/sort=0'}>{result.name}</Link></li>
-                    )
-                  }
-                </ul>
-              </div>
-            </ul>
+            </ul>   
+            <ul className={active == true > 0 ? "head-menu-cate-all-child active" : "head-menu-cate-all-child" }>
+                {
+                  cate.map((result, index) =>
+                    <li key={index}><Link className="head-cate-name" key={result.id} to={'/' + result.name + '/' + result.id + '/page=1/sort=0'}>{result.name}</Link></li>
+                  )
+                }
+              </ul> 
           </li>
           <li><Link className="head-menu-bottom">Trang chủ</Link></li>
           <li><Link className="head-menu-bottom">Khiếu Nại</Link></li>
@@ -166,8 +170,4 @@ function Head(props) {
     </header>
   );
 }
-const mapDispatchToProps = dispatch => ({
-  removeUser: userInfo => dispatch(removeUser(userInfo))
-})
-const mapStateToProps = (state) => ({ user: state.userReducer });
-export default connect(mapStateToProps, mapDispatchToProps)(Head);
+export default Head;

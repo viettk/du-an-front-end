@@ -1,13 +1,13 @@
 import axiosClient from "./axiosClient";
 
 const CategoryApi = {
-    getCart: (params) =>{
-        const url = `/cart/${params}`;
+    getCart: (params, email) =>{
+        const url = '/cart/'+params+'?email='+email;
         return axiosClient.get(url);
     },
 
-    getCartDetail:(cartId) =>{
-        const url = "/cart-detail/list/"+cartId ;
+    getCartDetail:(cartId, email) =>{
+        const url = "/cart-detail/list/"+cartId +'?email='+email ;
         return axiosClient.get(url);
     },
 
@@ -26,39 +26,74 @@ const CategoryApi = {
         return axiosClient.put(url, {params});
     },
 
-    getAddress: (id) =>{
-        const url = `/dia-chi/all/${id}`;
+    getAddress: (id, email) =>{
+        const url = '/dia-chi/all/' + id +'?email='+email;
         return axiosClient.get(url);
     },
 
-    getOnAddress: (id) =>{
-        const url = `/dia-chi/${id}`;
+    getOnAddress: (id, email) =>{
+        const url = '/dia-chi/'+id+'?email='+email;
         return axiosClient.get(url);
     },
 
-    postAdress: (detail) =>{
-        const url = `/dia-chi`;
+    postAdress: (detail, email) =>{
+        const url = '/dia-chi' + '?email='+email;
         return axiosClient.post(url, detail);
     },
 
-    putAddress: (id, detail) =>{
-        const url = `/dia-chi/${id}`;
-        return axiosClient.put(url, {detail})
+    putAddress: (id, detail, email) =>{
+        const url = '/dia-chi/${id}' +'?email='+email ;
+        return axiosClient.put(url, detail)
     },
 
-    getAddressStatus: (id) =>{
-        const url = `/dia-chi/mac-dinh?customerId=`+id;
+    getAddressStatus: (id, email) =>{
+        const url = '/dia-chi/mac-dinh?customerId=' +id+'&email='+email;
         return axiosClient.get(url);
     },
 
-    getShip: (id) =>{
-        const url= `/cart-detail/get-weight?cartId=`+id;
+    getShip: (id, email) =>{
+        const url= '/cart-detail/get-weight?cartId='+id + '&email='+email;
         return axiosClient.get(url);
     },
 
-    getTotal: (id) =>{
-        const url = `/cart-detail/totalItem?id=` + id;
+    getTotal: (id, email) =>{
+        const url = '/cart-detail/totalItem?id=' + id+'&email='+email;
         return axiosClient.get(url);
+    },
+
+    getNumberOfCart: (customerId, emailc) =>{
+        const url = '/cart-detail/soluongtronggio?idcustomer='+ customerId +'&email=' +emailc ;
+        return axiosClient.get(url);
+    },
+
+
+//thao tác cập nhật giỏ hàng
+    tangSL: (id, email, data) =>{
+        const url = '/cart-detail/up/'+  id +'&email='+ email;
+        return axiosClient.put(url, data);
+    },
+
+    giamSL: (id, email, data) =>{
+        const url = '/cart-detail/down/'+  id +'&email='+ email;
+        return axiosClient.put(url, data);
+    },
+
+    xoaSP: (id, email, data) =>{
+        const url = '/cart-detail/delete/'+  id +'&email='+ email;
+        return axiosClient.put(url, data);
+    },
+
+    checknumber: (id, email, data) =>{
+        const url = '/cart-detail/'+  id +'&email='+ email;
+        return axiosClient.put(url, data);
+    },
+
+    //đặt hàng
+    dathangnotlogin :(demo) =>{
+        const url = 'http://localhost:8080/check/checkcart';
+        return axiosClient.post(url, demo);
     }
+
+
 }
 export default CategoryApi;

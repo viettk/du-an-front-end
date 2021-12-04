@@ -14,7 +14,7 @@ function BillCustomer(){
 
     const [initParams, setInitParams]= useState(
         {
-            email: 'viettkph09818@fpt.edu.vn',
+            email: 'viet@gmail.com',
             _limit: 5,
             _page: 0
         }
@@ -37,8 +37,8 @@ function BillCustomer(){
             console.log(error);
           }
         }
-        
-      }, [params, result]);
+        fetchList();
+      }, [params]);
     return(
         <React.Fragment>
         <h3 style={{marginTop: 10}}>Giỏ hàng của bạn</h3>
@@ -62,9 +62,9 @@ function BillCustomer(){
                             (result) =>
                                 <tr key={result.id}>
                                     <td>{result.id_code}</td>
-                                    <td>{result.create_date}</td>
+                                    <td>{(result.create_date.split('T')[0]).split('-').reverse().join('-')}</td>
                                     <td>{result.district}-{result.city}  </td>
-                                    <td>{result.total}</td>
+                                    <td>{String(Math.round(result.total)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' đ'}</td>
                                     <td>{result.status_pay}</td>
                                     <td>{result.status_order}</td>
                                     <td>
