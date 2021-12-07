@@ -52,7 +52,7 @@ function ListRoute(){
 
         <Route path="/:sanpham/page=:xpage/sort=:sort" component={HomeCateParentName } />
 
-        <Route path="/all-product" component={AllProduct} />
+        <Route path={["/all-product/query=:query/page=:xpage&sort=:sort", "/all-product"]} component={AllProduct} />
 
         <Route path= "/dia-chi" component={Address } />
 
@@ -64,7 +64,7 @@ function ListRoute(){
 
         {/* <Route path="/admin/san-pham" component={ProductAd} /> */}
 
-        <PrivateRoute  path="/admin/san-pham" component={ProductAd} role='ADMIN'/>
+        <PrivateRoute  path="/api/san-pham" component={ProductAd} role='ADMIN'/>
 
         <Route path="/order" component={Order} />
 

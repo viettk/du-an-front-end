@@ -8,6 +8,7 @@ import BillApi from "../../api/BillApi";
 import { Link } from 'react-router-dom';
 import CookieService from "../../cookie/CookieService";
 import { Alert, Snackbar } from "@mui/material";
+import AddressApi from "../../api/AddressApi";
 
 function Order() {
 
@@ -298,12 +299,8 @@ function Order() {
         address: ''
       });
     }
-    else {
-      axios({
-        url: 'http://localhost:8080/dia-chi/' + index + '?email=' + emailc,
-        method: 'get',
-        type: 'application/json'
-      }).then(resp => {
+    else {      
+      AddressApi.getOnAddress(index, emailc).then(resp => {
         setBill({
           ...bill,
           name: resp.data.name,

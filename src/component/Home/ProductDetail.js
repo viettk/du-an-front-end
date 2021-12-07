@@ -12,12 +12,14 @@ import CookieService from "../../cookie/CookieService";
 import './css/product-detail.css'
 import FavoriteApi from "../../api/FavoritApi";
 import SyncLoader from "react-spinners/SyncLoader";
+import Carousel from 'react-grid-carousel'
 
 function ProductDetail() {
   const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
   const customerId = CookieService.getCookie('id');
   const emailc = CookieService.getCookie('email');
   const [loading, setLoading] = useState(false);
+  const [imagep, setImagep] = useState([]);
 
   const token = localStorage.token;
   const idpage = useParams();
@@ -36,13 +38,15 @@ function ProductDetail() {
       try {
         const response = await HomeApi.getDetail(idpage.id);
         const resp = await FavoriteApi.getOne(customerId, idpage.id);
+        console.log(resp)
         setResult(response);
         setY(resp);
         setLoading(true);
+        setImagep(response.photos)
         setTimeout(() => {
           setLoading(false);
-        }, 1000);     
-        
+        }, 1000);
+
       } catch (error) {
         console.log(error);
       }
@@ -98,7 +102,7 @@ function ProductDetail() {
 
     if (customerId) {
       axios({
-        url: 'http://localhost:8080/cart-detail/' + customerId+'?email=' + emailc,
+        url: 'http://localhost:8080/cart-detail/' + customerId + '?email=' + emailc,
         method: 'post',
         type: 'application/json',
         data: detail,
@@ -191,125 +195,117 @@ function ProductDetail() {
       localStorage.setItem('cart', JSON.stringify(cart));
     }
   }
-  let [click, setClick] = useState(true);
+
   const yeuThich = (idsp) => {
     const yt = {
       productId: idsp,
       customerId: customerId
     }
 
-    if (click) {
-      FavoriteApi.postYeuthich(yt).then(resp=>{
-        setClick(false);
+    if (y) {
+      FavoriteApi.deleteYeuthich(yt).then(resp => {
+        setY(false);
       })
-      
+
     } else {
-      FavoriteApi.deleteYeuthich(yt).then(resp=>{
-        setClick(true);
+      FavoriteApi.postYeuthich(yt).then(resp => {
+        setY(true);
       })
-     
+    }
+  }
+
+  const changeimg = (index) => {
+    if (index == 0) {
+      var a = document.getElementsByClassName('product-detail-image')[0].src;
+      document.getElementById('product-detail-image-main').src = a;
+    } else if (index == 1) {
+      var b = document.getElementsByClassName('product-detail-image')[1].src;
+      document.getElementById('product-detail-image-main').src = b;
+    } else if (index == 2) {
+      var c = document.getElementsByClassName('product-detail-image')[2].src;
+      document.getElementById('product-detail-image-main').src = c;
+    } else {
+      var d = document.getElementById('product-detail-image-main-b').src;
+      document.getElementById('product-detail-image-main').src = d;
     }
   }
 
   return (
     <section>
       {loading ?
-      <div className="screenn-load">
-        <SyncLoader loading={loading} color={'#8DD344'} />
-      </div>
-        : 
+        <div className="screenn-load">
+          <SyncLoader loading={loading} color={'#8DD344'} />
+        </div>
+        :
         <div className="container">
-        <nav aria-label="breadcrumb">
-          <ol className="breadcrumb">
-            <li className="breadcrumb-item"><a href="#">Home</a></li>
-            <li className="breadcrumb-item active" aria-current="page">Sản phẩm chi tiết</li>
-          </ol>
-        </nav>
-        <div className="product-details">
-          <div className="row left">
-            <div className="col-sm-4">
-              <div className="view-product">
-                <img src="images/demo2.png" alt="" />
-              </div>
-              <div className="img-detail">
-                <a href>
-                  <img src="images/demo2.png" alt="" />
-                </a>
-                <a href>
-                  <img src="images/demo3.png" alt="" />
-                </a>
-                <a href>
-                  <img src="images/demo4.png" alt="" />
-                </a>
-              </div>
-            </div>
-            <div className="col-sm-8">
-              <div className="product-information">
-                {/*/product-information*/}
-                <h2 className="fix-line-css">{result.name}</h2>
-                <p>Tình trạng : {result.number > 0 ? 'Còn hàng' : 'Hết hàng'}</p>
-                <p>SKU: {result.sku}</p>
-                <img src="images/product-details/rating.png" alt="" /><br />
-                <span>
-                  <span>
-                    <strike> {result.price} </strike>
-                    <u>đ</u>
-                  </span>
-                  <span style={{ fontWeight: 'bold' }}>
-                    {result.price}
-                    <u>đ</u>
-                  </span><br />
-                </span>
-                <p style={{ fontSize: '14px' }}><b>Thông tin sản phẩm</b></p>
-                <div className="frames">
-                  <p> <i className="fa fa-angellist " />
-                    <span className="frames-text">
-                      {result.describe}
-                    </span>
-                  </p>
-                  <p> <i className="fa fa-angellist " />
-                    <span className="frames-text">
-                      Mô hình có độ chi tiết tốt, các khớp cử động linh hoạt.
-                    </span>
-                  </p>
-                  <p> <i className="fa fa-angellist " />
-                    <span className="frames-text">
-                      Có thiết kế đẹp mắt, màu sắc tươi sáng, thích hợp để trang trí.
-                    </span>
-                  </p>
-                  <p> <i className="fa fa-angellist " />
-                    <span className="frames-text">
-                      Dễ dàng để chơi, tạo dáng, phù hợp với mọi lứa tuổi.
-                    </span>
-                  </p>
+          <nav aria-label="breadcrumb">
+            <ol className="breadcrumb">
+              <li className="breadcrumb-item"><a href="#">Home</a></li>
+              <li className="breadcrumb-item active" aria-current="page">Sản phẩm chi tiết</li>
+            </ol>
+          </nav>
+          <div className="product-details">
+            <div className="product-detail-body">
+              <div className="pr-detail-img">
+                <img id="product-detail-image-main" src={'/images/' + result.photo} height="400px" />
+                <div className="img-detail">
+                  {
+                    imagep.map((i, index) =>
+                      <img key={index} className="product-detail-image" src={'/images/' + i.name} onClick={() => changeimg(index)} />
+                    )
+                  }
+                  <img id="product-detail-image-main-b" src={'/images/' + result.photo} onClick={() => changeimg(3)} />
                 </div>
-                <div className="quantity">
-                  <p className="text-quantity"><b>Số lượng:</b></p>
-                  <div className="input-group1">
-                    <button type="button" className="btn btn-outline-primary btn-number" onClick={() => downCount()}>
-                      -
-                    </button>
-                    <input type="text" className="form-control input-number" onChange={(e) => updateCount(e)} style={{ width: '50px', textAlign: 'center' }} value={count.num} max={15} />
-                    <button type="button" className="btn btn-outline-success btn-number" onClick={() => upCount()}>
-                      +
-                    </button>
-                  </div>
-                  <div className="heart">
-                    <Checkbox onClick={() => yeuThich(result.id)} style={{ color: 'red' , margin: '0px' }}{...label} icon={<FavoriteBorder />} checkedIcon={<Favorite /> } />
-                    </div>
-                </div>
+              </div>
+              <div className="pr-detail-infor">
+                <div className="product-information">
 
-                <div className="button-pro-detai">
-                  <button onClick={() => addToCart(result.id, result.price, result.photo, result.name, result.weight)} type="button" className="btn btn-outline-primary" style={{ fontSize: '18px', width: '200px', fontWeight: '500', padding: '10px 0' }}><i className="fa fa-shopping-basket" /> Thêm vào giỏ hàng</button>
-                  <button onClick={() => muaNgay(result.id, result.price, result.photo, result.name, result.weight)} type="button" className="btn btn-outline-danger" style={{ fontSize: '18px', width: '200px', fontWeight: '500', padding: '10px 0', marginLeft: '15px' }}>Mua ngay </button>
+                  <h4 className="fix-line-css">{result.name}</h4>
+                  <span>Tình trạng : {result.number > 0 ? 'Còn hàng' : 'Hết hàng'}</span>
+                  <span style={{ margin: "0 5px" }}> | </span>
+                  <span>SKU: {result.sku}</span>
+
+                  <div style={{ margin: "10px 0" }}>
+                    <span style={{ fontWeight: 'bold', marginRight: " 20px", fontSize: "25px" }}>
+                      {result.price}
+                      <u>đ</u>
+                    </span>
+                    <span style={result.price != result.price_extra ? { display: "inline-block" } : { display: "none" }}>
+                      <strike> {result.price_extra} </strike>
+                      <u>đ</u>
+                    </span>
+                  </div>
+
+                  <div className="frames">
+                    <p> <i class="fa fa-check-circle" style={{ color: "#64c343", marginRight: "5px" }}></i>Tặng móc chìa khóa cho đơn hàng trên 500K</p>
+                    <p> <i class="fa fa-check-circle" style={{ color: "#64c343", marginRight: "5px" }}></i>Mô hình có độ chi tiết tốt, các khớp cử động linh hoạt.</p>
+                    <p> <i class="fa fa-check-circle" style={{ color: "#64c343", marginRight: "5px" }}></i>Có thiết kế đẹp mắt, màu sắc tươi sáng, thích hợp để trang trí.</p>
+                    <p> <i class="fa fa-check-circle" style={{ color: "#64c343", marginRight: "5px" }}></i> Dễ dàng để chơi, tạo dáng, phù hợp với mọi lứa tuổi.</p>
+                  </div>
+                  <div className="quantity">
+                    <p className="text-quantity"><b>Số lượng:</b></p>
+                    <div className="input-group1">
+                      <button type="button" className="btn btn-outline-primary btn-number" onClick={() => downCount()}>
+                        -
+                      </button>
+                      <input type="text" className="form-control input-number" onChange={(e) => updateCount(e)} style={{ width: '100%', textAlign: 'center' }} value={count.num} max={15} />
+                      <button type="button" className="btn btn-outline-success btn-number" onClick={() => upCount()}>
+                        +
+                      </button>
+                    </div>
+                    {customerId ? <i onClick={() => yeuThich(result.id)} style={{color: y ? "red" : "lightgray", cursor: "pointer"}} class="fa fa-heart pr-he"></i> : <span></span>}
+                  </div>
+
+                  <div className="button-pro-detai">
+                    <button onClick={() => addToCart(result.id, result.price, result.photo, result.name, result.weight)} type="button" className="btn btn-outline-primary btn-de"><i className="fa fa-shopping-basket" /> Thêm vào giỏ hàng</button>
+                    <button onClick={() => muaNgay(result.id, result.price, result.photo, result.name, result.weight)} type="button" className="btn btn-outline-danger btn-de">Mua ngay </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="category-tab shop-details-tab">
-          {/*category-tab*/}
-          <div className="col-sm-12">
+          <div className="category-tab shop-details-tab" style={{ marginTop: "40px" }}>
+            {/*category-tab*/}
             <ul className="nav nav-tabs">
               <li className="active"><a className="nav-title" data-toggle="tab">Mô tả sản phẩm</a></li>
               <span className="descriptio">
@@ -337,72 +333,71 @@ function ProductDetail() {
               </span>
             </ul>
           </div>
-        </div>
-        <div className="product-name-title">
-          <nav className="navbar navbar-expand-sm navbar-dark bg-light">
-            <div className="container-fluid">
-              <a className="brand" href>FIGMA &amp; S.H.F</a>
-              <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
-                <span className="navbar-toggler">
-                  <i className="fa fa-bars fa-3x" />
-                </span>
-              </button>
-              <div className="collapse navbar-collapse" id="mynavbar">
-                <div className="navbar-nav me-auto" />
-                <div className="d-flex">
-                  <ul className="navbar-nav me-auto text">
-                    <div className="correction">
-                      <a className="nav-link" href>Marvel</a>
-                    </div>
-                    <div className="correction">
-                      <a className="nav-link" href>Marvel</a>
-                    </div>
-                    <div className="correction">
-                      <a className="nav-link" href>Marvel</a>
-                    </div>
-                    <div className="correction">
-                      <a className="nav-link" href>Marvel</a>
-                    </div>
-                    <div className="correction">
-                      <a className="nav-link" href>Xem tất cả</a>
-                    </div>
-                  </ul>
+          <div className="product-name-title">
+            <nav className="navbar navbar-expand-sm navbar-dark bg-light">
+              <div className="container-fluid">
+                <a className="brand" href>FIGMA &amp; S.H.F</a>
+                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+                  <span className="navbar-toggler">
+                    <i className="fa fa-bars fa-3x" />
+                  </span>
+                </button>
+                <div className="collapse navbar-collapse" id="mynavbar">
+                  <div className="navbar-nav me-auto" />
+                  <div className="d-flex">
+                    <ul className="navbar-nav me-auto text">
+                      <div className="correction">
+                        <a className="nav-link" href>Marvel</a>
+                      </div>
+                      <div className="correction">
+                        <a className="nav-link" href>Marvel</a>
+                      </div>
+                      <div className="correction">
+                        <a className="nav-link" href>Marvel</a>
+                      </div>
+                      <div className="correction">
+                        <a className="nav-link" href>Marvel</a>
+                      </div>
+                      <div className="correction">
+                        <a className="nav-link" href>Xem tất cả</a>
+                      </div>
+                    </ul>
+                  </div>
+                </div>
+                <div className="icon">
+                  <a href><i className="fa fa-angle-left fa-2x" style={{ marginRight: '5px' }} /></a>
+                  <a href><i className="fa fa-angle-right fa-2x" /></a>
                 </div>
               </div>
-              <div className="icon">
-                <a href><i className="fa fa-angle-left fa-2x" style={{ marginRight: '5px' }} /></a>
-                <a href><i className="fa fa-angle-right fa-2x" /></a>
+            </nav>
+            <div className="product-body-favorite">
+              <div className="product-body-live">
+                <img src="" style={{ width: "90%", height: "210px" }} className="rounded-like mx-auto d-block" />
+                <div className="body-pro-buy">
+                  <p className="fix-line-css"><b>Name</b></p>
+                  <p>SKU:</p>
+                  <h6 className="price"><b>100000</b> </h6>
+                </div>
               </div>
-            </div>
-          </nav>
-          <div className="product-body-favorite">
-            <div className="product-body-live">
-              <img src="" style={{ width: "90%", height: "210px" }} className="rounded-like mx-auto d-block" />
-              <div className="body-pro-buy">
-                <p className="fix-line-css"><b>Name</b></p>
-                <p>SKU:</p>
-                <h6 className="price"><b>100000</b> </h6>
+              <div className="product-body-live">
+                <img src="" style={{ width: "90%", height: "210px" }} className="rounded-like mx-auto d-block" />
+                <div className="body-pro-buy">
+                  <p className="fix-line-css"><b>Name</b></p>
+                  <p>SKU:</p>
+                  <h6 className="price"><b>100000</b> </h6>
+                </div>
               </div>
-            </div>
-            <div className="product-body-live">
-              <img src="" style={{ width: "90%", height: "210px" }} className="rounded-like mx-auto d-block" />
-              <div className="body-pro-buy">
-                <p className="fix-line-css"><b>Name</b></p>
-                <p>SKU:</p>
-                <h6 className="price"><b>100000</b> </h6>
-              </div>
-            </div>
-            <div className="product-body-live">
-              <img src="" style={{ width: "90%", height: "210px" }} className="rounded-like mx-auto d-block" />
-              <div className="body-pro-buy">
-                <p className="fix-line-css"><b>Name</b></p>
-                <p>SKU:</p>
-                <h6 className="price"><b>1000</b> </h6>
+              <div className="product-body-live">
+                <img src="" style={{ width: "90%", height: "210px" }} className="rounded-like mx-auto d-block" />
+                <div className="body-pro-buy">
+                  <p className="fix-line-css"><b>Name</b></p>
+                  <p>SKU:</p>
+                  <h6 className="price"><b>1000</b> </h6>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>}
+        </div>}
     </section>
   );
 }

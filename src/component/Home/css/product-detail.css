@@ -9,25 +9,41 @@
 .product-information {
     border: 2px solid #070707;
     overflow: hidden;
-    padding-bottom: 30px;
-    padding-left: 30px;
-    padding-top: 30px;
-    padding-right: 30px;
+    padding: 30px;
     position: relative;
-    width: 575px;
-    margin-left: 140px;
+    width: 100%;
 }
+
 .frames {
     width: 100%;
     height: 100%;
     border: 2px dashed #0a0a0a;
     border-radius: 5px;
-    padding: 0px 5px 5px 15px;
+    padding: 10px 5px 5px 15px;
 }
+
+.product-detail-body{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 10px;
+}
+
+#product-detail-image-main{
+    width: 100%;
+}
+
+.img-detail{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    margin-top: 10px;
+    grid-column-gap: 24px;
+}
+
 .quantity {
     display: flex;
     margin-top: 10px;
     margin-bottom: 10px;
+    align-items: center;
 }
 .product-information p {
     color: #696763;
@@ -39,10 +55,8 @@
 }
 .input-group1 {
     position: relative;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: stretch;
-    width: 33%;
+    display: grid;
+    grid-template-columns: 1fr 80px 1fr;
     margin-top: 10px;
     margin-left: 10px;
 }
@@ -52,7 +66,7 @@
     font-size: 16px;
     font-weight: normal;
 }
-
+s
 .nav-tabs{
     margin-top: 20px;
     border-bottom: none ;
@@ -60,6 +74,13 @@
 .frames-text{
     padding-left: 10px;
 }
+
+.button-pro-detai{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 15px;
+}
+
 .nav-tabs li.active a, .nav-tabs li.active a:hover, .nav-tabs li.active a:focus {
     -moz-border-bottom-colors: none;
     -moz-border-left-colors: none;
@@ -121,4 +142,44 @@
 }
 .body-second-pro{
     margin-top: 15px;
+}
+
+.button-pro-detai .btn-de{
+    font-size: 18px; 
+    width: 200px;
+    font-weight: 500;
+    padding: 10px 0; 
+}
+
+#product-detail-image-main-b{
+    width: 100%;
+    height: 120px;
+}
+
+.product-detail-image{
+    width: 100%;
+    height: 120px;
+}
+
+.pr-he{
+    margin-left: 30px;
+}
+
+@media (max-width: 991px) {
+    .product-detail-body{
+        grid-template-columns: 1fr;
+    }
+
+    .product-information{
+        padding: 5px;
+    }  
+
+}
+
+@media (max-width: 575px){
+    .button-pro-detai .btn-de{
+        padding: 5px 10px;
+        font-size: 15px;
+        width: 90%;
+    }
 }

@@ -29,16 +29,22 @@ function Head() {
   const emailc = CookieService.getCookie('email');
 
   // console.log(document.cookie)
-  const [username,setUsername] = useState(user_name)
+  const [username,setUsername] = useState(user_name);
   // biến load lại trang
   const [load, setLoad] = useState(false);
 
   let getStorage = localStorage.getItem('cart');
+
+  const [search, setSearch] = useState({
+    productname: ''
+  });
+
   const [demo, setDemo] = useState(JSON.parse(getStorage));
   useEffect(() => {
     const fetchList = async () => {
       try {
         const response = await CategoryApi.getAllCateCustomer();
+        console.log(response)
         if (customerId) {
           const numberOfCart = await CartApi.getNumberOfCart(customerId, emailc);
           // setItemSp(numberOfCart);
@@ -92,6 +98,17 @@ function Head() {
     }
   }
 
+  const searchProduct = (e) =>{
+    setSearch({
+      ...search,
+      productname: e.target.value
+    })
+  }
+
+  const submitform = ()=>{
+    history.push("/all-product/query="+search.productname+'/page=1&sort=1' );
+  }
+
   return (
     <header id="header">
       {/* <LinearProgress variant="determinate" value={progress} /> */}
@@ -99,57 +116,68 @@ function Head() {
       <div className="header_top">
         {/*header_top*/}
         <h6> Mở cửa: 8h30 - 22h00, thứ 2 - CN hàng tuần</h6>
-        {username ? (<span>
+        {username ? (<span style={{color:'white'}}>
           <a >{username}</a>
           <b>|</b>
           {/* <a onClick={logout}  >Đăng xuất</a> */}
           <a onClick={logout}  >Đăng xuất</a>
         </span>) : (<span>
-          <Link to="/login">Đăng nhập</Link>
+          <Link to="/login" style={{cursor: "pointer"}}>Đăng nhập</Link>
           <b>|</b>
-          <Link to="/register">Đăng ký</Link>
+          <Link to="/register" style={{cursor: "pointer"}}>Đăng ký</Link>
         </span>)}
       </div>
-
-
+      
       <div className="header-mid">
         <img />
-        <div className="header-mid-search">
-          <input />
-          <button><i class="fa fa-search" aria-hidden="true"></i></button>
+        <div className="header-mid-search ">
+          <input onChange={(e)=>searchProduct(e) } value={search.productname} type="search" className="form-control" placeholder="Bạn đang tìm sản phẩm nào ..." aria-label="Search" aria-describedby="search-addon" />
+          <button onClick={() => submitform()} className="btn btn-warning" type="button">
+            <i className="fa fa-search" />
+          </button>
         </div>
         <div className="head-cart_template">
-          <i className="icon-tow fa fa-shopping-cart" />
-          <Link to="/cart" className="head-midd-linkto-cart" >({itemSp}) Giỏ hàng</Link>
+          <div className="hotline">
+          <button type="button" className="border-one">
+          <i className="icon-one fa fa-phone" />
+        </button>
+        <div className="child">
+          <a className="phoneshop" >0123456789 </a>
+          <p className="hotline" >Hotline</p>
+        </div>
+        </div>
+          <div className="">
+            <i className="icon-tow fa fa-shopping-cart" />
+            <Link to="/cart" className="head-midd-linkto-cart" >({itemSp}) Giỏ hàng</Link>
+          </div>
         </div>
       </div>
 
       {/*header-bottom*/}
       <div className="header-bottom">
-        <ul className="header-menu-ul-main">
+      <ul className="header-menu-ul-main">
           <li className="head-dropdown">
-              <i className="fa fa-align-justify" style={{ margin: "0 5px 0 5px" }} />
-              Danh mục <span>sản phẩm</span>
+            <p className="cate"> <i className="fa fa-align-justify"/> Danh mục <span className="title-sp">sản phẩm</span></p> 
             <ul className="header-category-show" >
-                {
-                  result.map((result) =>
-                    <li className="head-parent-name" key={result} value={result} onMouseOver={(e) => getValue(e)} >
-                      <Link className="head-cate-parent" key={result} to={'/' + result + '/page=1/sort=0'}>{result}</Link>
-                      <i class="fa fa-angle-right viet-li-arrow-cate"></i>
-                    </li>
-                  )
-                }
-            </ul>   
+                  {
+                    result.map((result) =>
+                      <li className="head-parent-name" key={result} value={result} onMouseOver={(e) => getValue(e)} >
+                        <Link className="head-cate-parent" key={result} to={'/' + result + '/page=1/sort=0'}>{result}</Link>
+                        <i class="fa fa-angle-right viet-li-arrow-cate"></i>
+                      </li>
+                    )
+                  }
+            </ul>
             <ul className={active == true > 0 ? "head-menu-cate-all-child active" : "head-menu-cate-all-child" }>
-                {
-                  cate.map((result, index) =>
-                    <li key={index}><Link className="head-cate-name" key={result.id} to={'/' + result.name + '/' + result.id + '/page=1/sort=0'}>{result.name}</Link></li>
-                  )
-                }
-              </ul> 
+            {
+                            cate.map((result, index) =>
+                              <li key={index}><Link className="head-cate-name" key={result.id} to={'/' + result.name + '/' + result.id + '/page=1/sort=0'}>{result.name}</Link></li>
+                            )
+                          }
+            </ul>
           </li>
-          <li><Link className="head-menu-bottom">Trang chủ</Link></li>
-          <li><Link className="head-menu-bottom">Khiếu Nại</Link></li>
+          <li><Link className="head-menu-bottom" to="/home">Trang chủ</Link></li>
+<li><Link className="head-menu-bottom">Khiếu Nại</Link></li>
           <li><Link className="head-menu-bottom">Giới thiệu</Link></li>
           <li class="head-menu-huong-dan" style={{ position: "relative" }}>
             <a className="head-menu-bottom">Hướng dẫn</a>
@@ -160,14 +188,19 @@ function Head() {
             </ul>
           </li>
         </ul>
-        <span className="head-cong" onClick={openMobie} >+</span>
+        <span className="head-cong" onClick={openMobie} >
+          <button className="btn">
+          <i className="fa fa-plus fa 2x" style={{color:'white'}}></i>
+          </button>
+        </span>
         <ul className={acmobie == true ? "head-menu-hidden-bottom acitve" : "head-menu-hidden-bottom"}>
           <li><Link className="head-menu-bottom">Khiếu nại</Link></li>
-          <li><Link className="head-menu-bottom">Giới thiệu</Link></li>
+          <li><Link className="head-menu-bottom">Gfiới thiệu</Link></li>
           <li><Link className="head-menu-bottom">Hướng dẫn</Link></li>
         </ul>
       </div>
     </header>
+
   );
 }
 export default Head;

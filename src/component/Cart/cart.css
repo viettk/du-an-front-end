@@ -95,6 +95,12 @@ input::-webkit-inner-spin-button {
   }
 }
 
+@media (max-width: 767px){
+  .table-hover tr{
+    display: none;
+  }
+}
+
 @media (max-width: 360px) {
   #select-cart button{
     font-size: 12px;

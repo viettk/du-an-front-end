@@ -47,5 +47,16 @@ const HomeApi = {
         return axiosClient.get(url, {params});
     },
 
+    // getImage:(params) =>{
+    //     const url = ``;
+    //     return axiosClient.get(url);
+    // }
+
+    getAllProduct:(param, productName) =>{
+        console.log(param)
+        const url = '/all-product-customer?productName='+productName+'&_field='+param._field+'&_known='+param._known+'&_limit='+param._limit+'&_page='+param._page;
+        return axiosClient.get(url, {param});
+    }
+
 }
 export default HomeApi;

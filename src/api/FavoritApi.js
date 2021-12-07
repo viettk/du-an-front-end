@@ -6,14 +6,14 @@ const FavoriteApi = {
         return axiosClient.get(url);
     },
 
-    postYeuthich: (data)=>{
+    postYeuthich: (yt)=>{
         const url = '/yeu-thich';
-        return axiosClient.post(url, data);
+        return axiosClient.post(url, yt);
     },
 
-    deleteYeuthich: (data) => {
-        const url = '/yeu-thich';
-        return axiosClient.delete(url, data);
+    deleteYeuthich: (yt)=>{
+        const url = '/yeu-thich/y';
+        return axiosClient.post(url, yt);
     }
     
 }

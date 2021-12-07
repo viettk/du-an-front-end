@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
 import CategoryApi from "../../api/CategoryApi";
+import GiamgiaApi from "../../api/GiamgiaApi";
 import './giamgia.css';
 
 function Giamgia(){
@@ -24,14 +25,7 @@ function Giamgia(){
     }
     const giam =() =>{
         if(giamValue != "Chọn"){
-            axios({
-                url: 'http://localhost:8080/home/giamgia?value=' + giamValue ,
-                method: 'post',
-                type: 'application/json',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            })
+            GiamgiaApi.giamAll(giamValue);
         }
     }
 
@@ -42,25 +36,11 @@ function Giamgia(){
     }
 
     const giamm = (e) =>{
-            axios({
-                url: 'http://localhost:8080/home/giamgiabydm?value=' + giamdm + '&categoryId=' + iddm ,
-                method: 'post',
-                type: 'application/json',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            })
+            GiamgiaApi.giamTheoDanhMuc(giamdm, iddm);
     }
 
     const giampro = (e) =>{
-        axios({
-            url: 'http://localhost:8080/home/giamgia/' + a.idpro + '?value=' + giamdm + '&categoryId=' + iddm ,
-            method: 'post',
-            type: 'application/json',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
+        GiamgiaApi.giamTheoTungSP(a.idpro, giamdm, iddm);
 }
 
     useEffect(() => {
@@ -94,14 +74,7 @@ function Giamgia(){
         })
         setActive(true);
         if(input.productName != null){
-            axios({
-                url: 'http://localhost:8080/home/product?name='+ e.target.value,
-                method: 'GET',
-                type: 'application/json',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            }).then(resp => {
+            GiamgiaApi.laythongtin(e.target.value).then(resp => {
                setProduct(resp.data);   
                console.log(resp)
             });
@@ -119,14 +92,7 @@ function Giamgia(){
          });
      }
      const khoiphuc = () =>{
-        axios({
-            url: 'http://localhost:8080/home/giamgia',
-            method: 'put',
-            type: 'application/json',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
+        GiamgiaApi.khoiphuc();
      }
     return(
         <div>

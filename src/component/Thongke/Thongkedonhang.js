@@ -6,7 +6,7 @@ import {
   ArgumentAxis,
   ValueAxis,
   PieSeries
-} from "@devexpress/dx-react-chart-material-ui";
+} from '@devexpress/dx-react-chart-material-ui';
 import { Animation } from "@devexpress/dx-react-chart";
 import { useState, useEffect } from 'react';
 import ThongkeApi from '../../api/ThongkeApj';
@@ -59,6 +59,11 @@ function Thongkedonhang() {
     let index = e.target.value;
     setMonth(index);
   }
+
+  const changeYear = (e)=>{
+    let index = e.target.value;
+    setYear(index);
+  }
   return (
      <React.Fragment>
        <div style={{position: "relative"}}>
@@ -77,7 +82,7 @@ function Thongkedonhang() {
             <option value="11">Tháng 11</option>
             <option value="12">Tháng 12</option>
           </select>
-          <select value={year} style={{padding: "5px 10px"}}>
+          <select value={year} onChange={(e) => changeYear(e)} style={{padding: "5px 10px"}}>
             <option value="2021">2021</option>
             <option value="2022">2022</option>
             <option value="2023">2023</option>

@@ -69,22 +69,22 @@ const CategoryApi = {
 
 //thao tác cập nhật giỏ hàng
     tangSL: (id, email, data) =>{
-        const url = '/cart-detail/up/'+  id +'&email='+ email;
+        const url = '/cart-detail/up/'+  id +'?email='+ email;
         return axiosClient.put(url, data);
     },
 
     giamSL: (id, email, data) =>{
-        const url = '/cart-detail/down/'+  id +'&email='+ email;
+        const url = '/cart-detail/down/'+  id +'?email='+ email;
         return axiosClient.put(url, data);
     },
 
     xoaSP: (id, email, data) =>{
-        const url = '/cart-detail/delete/'+  id +'&email='+ email;
+        const url = '/cart-detail/delete/'+  id +'?email='+ email;
         return axiosClient.put(url, data);
     },
 
     checknumber: (id, email, data) =>{
-        const url = '/cart-detail/'+  id +'&email='+ email;
+        const url = '/cart-detail/'+  id +'?email='+ email;
         return axiosClient.put(url, data);
     },
 

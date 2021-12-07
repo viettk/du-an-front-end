@@ -66,7 +66,10 @@ function ListCart() {
             productId: idp,
             number: sl
         }
-        CartApi.tangSL(customerId, emailc, sp).catch((error) => {
+        CartApi.tangSL(customerId, emailc, sp).then(resp =>{
+            setResult(resp);
+            onReload();
+        }).catch((error) => {
             if (error.response) {
                 setLoi(error.response.data);
                 setMess(error.response.data);
@@ -76,9 +79,6 @@ function ListCart() {
             } else {
                 console.log('Error', error.message);
             }
-        }).then(resp =>{
-            setResult(resp.data);
-            onReload();
         })
       }
 
@@ -89,7 +89,7 @@ function ListCart() {
             number: sl
         }
         CartApi.giamSL(customerId, emailc, sp).then(resp =>{
-            setResult(resp.data)
+            setResult(resp)
             onReload();
         })
       }
