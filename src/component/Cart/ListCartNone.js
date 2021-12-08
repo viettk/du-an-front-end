@@ -149,7 +149,7 @@ function ListCartNone() {
                                                 <td>{result.product_id}</td>
                                                 <td>{result.photo}</td>
                                                 <td>{result.name}</td>
-                                                <td>{result.price}</td>
+                                                <td>{String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' đ'}</td>
                                                 <td key={result.number}>
                                                     <button className="button-sl" onClick={e => giamSl(e, result.product_id)} >-</button>
                                                     <input style={{ border: "1px solid #ddd", width: "60px", textAlign: "center", padding: "2px 0" }} type="number" defaultValue={result.number} onBlur={(e) => checkNumber(e, result.product_id)} />

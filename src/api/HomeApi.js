@@ -53,9 +53,15 @@ const HomeApi = {
     // }
 
     getAllProduct:(param, productName) =>{
-        console.log(param)
-        const url = '/all-product-customer?productName='+productName+'&_field='+param._field+'&_known='+param._known+'&_limit='+param._limit+'&_page='+param._page;
-        return axiosClient.get(url, {param});
+        if(productName === undefined){
+            const url = '/all-product-customer?productName='+'&_field='+param._field+'&_known='+param._known+'&_limit='+param._limit+'&_page='+param._page;
+            return axiosClient.get(url, {param});
+        }
+        else{
+            const url = '/all-product-customer?productName='+productName+'&_field='+param._field+'&_known='+param._known+'&_limit='+param._limit+'&_page='+param._page;
+            return axiosClient.get(url, {param});
+        }
+        
     }
 
 }

@@ -90,10 +90,13 @@ const CategoryApi = {
 
     //đặt hàng
     dathangnotlogin :(demo) =>{
-        const url = 'http://localhost:8080/check/checkcart';
+        const url = '/check/checkcart';
         return axiosClient.post(url, demo);
+    },
+
+    checkLoginCart:(emailc)=>{
+        const url = '/check/check?email=' + emailc;
+        return axiosClient.get(url);
     }
-
-
 }
 export default CategoryApi;

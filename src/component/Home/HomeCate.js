@@ -61,7 +61,7 @@ function HomeCate() {
             }
         }
         fetchList();
-    }, [params, search, page]);
+    }, [params, sanpham, xpage, sort, search, page]);
 
     const changeValueSelect = (e) => {
         var index = e.nativeEvent.target.selectedIndex;
@@ -104,6 +104,9 @@ function HomeCate() {
         }
         history.push('/' + sanpham + '/' + id + '/page=' + xpage + '/sort=' + ina);
     }
+    const chuyentrang = (id) =>{
+        history.push('/product/' + id );
+      }
     return (
         <section>
             {loading ?
@@ -123,15 +126,15 @@ function HomeCate() {
                     </div>
                     <div className="product-category list-product">
                         {
-                            result.map(result =>
-                                <div key={result.id} className="productinfo lst-pro-infor">
+                            result.length > 0 ? result.map(result =>
+                                <div key={result.id} className="productinfo lst-pro-infor" onClick={() => chuyentrang(result.id)}>
                                     <img src={'/images/' + result.photo} alt="" className="pr-img" width="206px" height="206px" />
                                     <p className="fix-line-css">{result.name}</p>
                                     <p style={{ margin: "0 0 5px 0", justifySelf: "start" }}>SKU: {result.sku}</p>
                                     <p style={{ fontSize: "16px", fontWeight: '550', color: result.price < result.price_extra ? "red" : "#080000" }}>{result.price} đ</p>
                                     <span>{result.price_extra}đ</span>
                                 </div>
-                            )
+                            ):<span>Không có sản phẩm nào</span>
                         }
                     </div>
                 </div>}

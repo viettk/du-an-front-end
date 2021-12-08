@@ -117,7 +117,7 @@ function Head() {
         {/*header_top*/}
         <h6> Mở cửa: 8h30 - 22h00, thứ 2 - CN hàng tuần</h6>
         {username ? (<span style={{color:'white'}}>
-          <a >{username}</a>
+          <Link to="/lich-su-mua-hang">{username}</Link>
           <b>|</b>
           {/* <a onClick={logout}  >Đăng xuất</a> */}
           <a onClick={logout}  >Đăng xuất</a>

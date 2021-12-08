@@ -8,12 +8,15 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import CartApi from "../../api/CartApi";
 import {Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { height } from "@mui/system";
 import axios from "axios";
 import './cart.css';
-import CookieService from  '../../cookie/CookieService'
+import CookieService from  '../../cookie/CookieService';
+import SyncLoader from "react-spinners/SyncLoader";
 
 function ListCart() {
+    const history = useHistory();
     const token = CookieService.getCookie('token');
     const customerId = CookieService.getCookie('id');
     const emailc = CookieService.getCookie('email');
@@ -36,7 +39,7 @@ function ListCart() {
     const [ params, setParams] = useState(initParams);
     const [ result, setResult] = useState(initValues);
     const [cartDetail, setCartDetail] = useState();
-
+    const [loading, setLoading] = useState(false);
     const [mess, setMess] = useState({
         errorMessage: ''
     });
@@ -47,12 +50,14 @@ function ListCart() {
         const fetchList = async () =>{
             if(customerId){
           try{
-            const response = await CartApi.getCartDetail(customerId, emailc);
-            setResult(response); 
-            
+            const response = await CartApi.getCartDetail(customerId, emailc);    
             const resp = await CartApi.getCart(customerId);
+            setResult(response); 
             SetThanhTien(resp.total);
-            
+            setLoading(true);
+                setTimeout(() => {
+                    setLoading(false);
+                }, 1000);
           }catch (error){
             console.log(error);
           }
@@ -73,7 +78,6 @@ function ListCart() {
             if (error.response) {
                 setLoi(error.response.data);
                 setMess(error.response.data);
-                alert(mess.errorMessage);
             } else if (error.request) {
                 console.log(error.request);
             } else {
@@ -125,6 +129,14 @@ function ListCart() {
                 }).then(respp =>{
                     setResult([])
                     onReload();
+                    setLoi({
+                        ...loi,
+                        number:''
+                    });
+                    setMess({
+                        ...mess,
+                        errorMessage:''
+                    })
                 })
           }
         
@@ -137,10 +149,37 @@ function ListCart() {
             setReload(true)
         }
     }
+    const returnAll = () => {
+        history.push('/all-product');
+    }
+
+    const thanhtoan =() =>{
+        CartApi.checkLoginCart(emailc).then(resp=>{
+            history.push('/order');
+        }).catch((error)=>{
+            if (error.response) {
+                setLoi(error.response.data);
+                setMess(error.response.data);
+            } else if (error.request) {
+                console.log(error.request);
+            } else {
+                console.log('Error', error.message);
+            }
+        })
+        
+    }
 
     return(
         <React.Fragment>
-        <h3 style={{marginTop: 10}}>Giỏ hàng của bạn</h3>
+        <h5 style={{marginTop: 10}}>Giỏ hàng của bạn</h5>
+        <div className="container">
+                    <nav aria-label="breadcrumb">
+                        <ol className="breadcrumb">
+                            <Link style={{ textDecoration: 'none' }} to='/home'>Home</Link>
+                            <span className="span-link"><i class="fa fa-angle-right"></i></span>
+                            <span>Giỏ hàng</span>
+                        </ol>
+                    </nav>
         <TableContainer component={Paper}>
         <table className="table table-striped">
                 <tbody>
@@ -162,29 +201,38 @@ function ListCart() {
                                     <td>{result.id}</td>
                                     <td>{result.product.photo}</td>
                                     <td>{result.product.name}</td>
-                                    <td>{result.product.price}</td>
+                                    <td>{String(Math.round(result.product.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' đ'}</td>
                                     <td>
-                                        <button className="btn btn-outline-primary btn-number" onClick={(e) => tangSL(e, result.product.id,result.number)}></button>
-                                        <input className="num" type="number" defaultValue={result.number} onBlur={(e)=>checkNumber(e,result.product.id, result.price)} />
+                                    <button className="button-sl" onClick={e => giamSl(e, result.product.id,result.number)} >-</button>
+                                        <input style={{ border: "1px solid #ddd", width: "60px", textAlign: "center", padding: "2px 0" }} type="number" className="num" type="number" defaultValue={result.number} onBlur={(e)=>checkNumber(e,result.product.id, result.price)} />
                                             {/* {result.number} */}
-                                        <button className="btn btn-outline-success btn-number" onClick={e=> giamSl(e, result.product.id,result.number)}></button>
+                                        <button className="button-sl1" onClick={e => tangSL(e, result.product.id,result.number)}>+</button>
                                     </td>
-                                    <td>{result.total}</td>
+                                    <td>{String(Math.round(result.total)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' đ'}</td>
                                     <td>
-                                        <button onClick={() => xoaSP( result.product.id)} >X</button>
+                                        <button style={{ border: "none" }} className="btn btn-outline-danger" onClick={() => xoaSP( result.product.id)} ><i class="fa fa-trash"></i></button>
                                     </td>
                                 </tr>
                         ) : <span style={{position: "absolute", left: " 48%"}}>Không có sản phẩm</span>             
                     }
                 </tfoot>
             </table>
+            <span style={{ color: "red", fontSize: "13px", marginLeft: "10px" }}>{loi.parent_name}</span>
+            <span style={{ color: "red", fontSize: "13px", marginLeft: "10px" }}>{mess.errorMessage}</span>
             <span style={{float: "right", margin: "0 65px 20px 0"}}>Tổng tiền: <span style={{fontWeight: " 500"}}>{thanhTien != undefined ? thanhTien : 0  } VNĐ</span> VNĐ</span>
             
             </TableContainer>
-            <div id="select-cart">
-                <Link to="/" style={{ backgroundColor: "#3d4356" }}>Tiếp tục mua hàng</Link>
-                <Link to="/order">Thực hiện thanh toán</Link>
-            </div>
+            {
+                        result.length > 0 ?
+                            <div id="select-cart">
+                                <div className="cart-hidden"></div>
+                                <div className="cart-contact">
+                                    <button onClick={returnAll} style={{ backgroundColor: "#3d4356" }} >Tiếp tục mua hàng</button>
+                                    <button onClick={()=>thanhtoan()} >Thực hiện thanh toán</button>
+                                </div>
+                            </div> : <div></div>
+                    }
+                    </div>
     </React.Fragment>
     );
 }

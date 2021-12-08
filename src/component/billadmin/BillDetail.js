@@ -4,8 +4,12 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Grid, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import BillAdminApi from '../../api/BillAdminApi';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
 
 export default function BillDetail({
     id,
@@ -39,27 +43,69 @@ export default function BillDetail({
         fetchListBillDetail();
     }, [id])
 
+    const EmlementDate = (props) => {
+        const date = new Date(props.date);
+        return (<>{date.getDate() - 1}/{date.getMonth() + 1}/{date.getFullYear()}</>);
+    }
     return (
         <React.Fragment>
-            <Button onClick={handleClickOpen}>
-                <i className="fas fa-eye"></i>
-            </Button>
+            <IconButton color="primary" onClick={handleClickOpen}>
+                <VisibilityIcon />
+            </IconButton>
             <Dialog
                 fullWidth={true}
-                maxWidth={"lg"}
+                maxWidth={"md"}
                 open={open}
                 onClose={handleClose}
             >
                 <DialogTitle>Chi tiết hóa đơn</DialogTitle>
                 <DialogContent>
-                    <p>Họ tên: {formDataBill.name}</p>
-                    <p>Email: {formDataBill.email}</p>
-                    <p>SĐT: {formDataBill.phone}</p>
-                    <p>Địa chỉ: {formDataBill.address + ', ' + formDataBill.district + ', ' + formDataBill.city}</p>
-                    <p>Mã hóa đơn: {formDataBill.id_code}</p>
-                    <p>Trạng thái giao hàng: {formDataBill.status_order}</p>
-                    <p>Trạng thái thanh toán: {formDataBill.status_pay}</p>
-                    <p>Tổng tiền: {formDataBill.total}</p>
+                    <Card sx={{ minWidth: 275 }}>
+                        <CardContent>
+                            <Grid container spacing={2}>
+                                <Grid item xs={6}>
+                                    <Typography variant="h5">
+                                        Khách hàng
+                                    </Typography>
+                                    <Typography variant="body1" mt={2}>
+                                        Họ tên: {formDataBill.name}
+                                    </Typography>
+                                    <Typography variant="body1" mt={2}>
+                                        Email: {formDataBill.email}
+                                    </Typography>
+                                    <Typography variant="body1" mt={2}>
+                                        SĐT: {formDataBill.phone}
+                                    </Typography>
+                                    <Typography variant="body1" mt={2}>
+                                        Địa chỉ: {formDataBill.address + ', ' + formDataBill.district + ', ' + formDataBill.city}
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Typography variant="h5">
+                                        Đơn hàng
+                                    </Typography>
+                                    <Typography variant="body2" mt={2}>
+                                        Ngày tạo: <EmlementDate date={formDataBill.create_date} />
+                                    </Typography>
+                                    <Typography variant="body2" mt={2}>
+                                        Ngày cập nhật: <EmlementDate date={formDataBill.update_date} />
+                                    </Typography>
+                                    <Typography variant="body2" mt={2}>
+                                        Mã hóa đơn: {formDataBill.id_code}
+                                    </Typography>
+                                    <Typography variant="body2" mt={2}>
+                                        Trạng thái giao hàng: {formDataBill.status_order}
+                                    </Typography>
+                                    <Typography variant="body2" mt={2}>
+                                        Trạng thái thanh toán: {formDataBill.status_pay}
+                                    </Typography>
+                                    <Typography variant="body2" mt={2}>
+                                        Tổng tiền: {formDataBill.total}VNĐ
+                                    </Typography>
+                                </Grid>
+                            </Grid>
+                        </CardContent>
+                    </Card>
                     <TableContainer>
                         <h4>Mặt hàng đã mua</h4>
                         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -89,14 +135,14 @@ export default function BillDetail({
                                         <TableCell>{row.total}</TableCell>
                                     </TableRow>
                                 ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={handleClose}>Close</Button>
-            </DialogActions>
-        </Dialog>
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Close</Button>
+                </DialogActions>
+            </Dialog>
         </React.Fragment >
     );
 }

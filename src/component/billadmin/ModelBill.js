@@ -1,5 +1,6 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from "@mui/material";
-import React, { Fragment, memo, useCallback } from "react";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from "@mui/material";
+import { Box } from "@mui/system";
+import React, { Fragment, memo } from "react";
 import BillAdminApi from "../../api/BillAdminApi";
 import BillDetail from "./BillDetail";
 
@@ -122,7 +123,7 @@ function ModelBill(
         }
         onReload();
     }
-    const onSwitchFunction = useCallback((value) => {
+    const onSwitchFunction = ((value) => {
         switch (value) {
             case 'Chờ xác nhận':
                 return (
@@ -152,8 +153,7 @@ function ModelBill(
             default:
                 return (<p>Không cập nhật được</p>);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [bill]);
+    });
 
     //dialog
     const [open, setOpen] = React.useState(false);
@@ -176,6 +176,7 @@ function ModelBill(
     };
     return (
         <Fragment>
+            {bill.length>0?(
             <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                 <TableContainer sx={{ maxHeight: 440 }}>
                     <Table stickyHeader aria-label="sticky table">
@@ -194,7 +195,7 @@ function ModelBill(
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {bill != null ? bill.map((row, index) => (
+                            {bill.map((row, index) => (
                                 <TableRow
                                     key={index}
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -215,11 +216,7 @@ function ModelBill(
                                     <TableCell>{row.id_code}</TableCell>
                                     <TableCell>{row.total}</TableCell>
                                     <TableCell>{onSwitchFunction(row.status_order)}</TableCell>
-                                    <TableCell><BillDetail id={row.id} formDataBill = {formDataBill}/></TableCell>
-                                </TableRow>
-                            )) : (() => (
-                                < TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                    <TableCell>không có dữ liệu!</TableCell>
+                                    <TableCell><BillDetail id={row.id} formDataBill={formDataBill} /></TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
@@ -233,7 +230,11 @@ function ModelBill(
                     rowsPerPage={rowsPerPage}
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />
-            </Paper>
+            </Paper>):(
+                <Box sx={{textAlign: "center", marginTop: "50px"}}>
+                    <Typography variant="subtitle1">Không có dữ liệu!</Typography>
+                </Box>
+            )}
             {/* confirm */}
             <Dialog
                 open={open}

@@ -65,7 +65,7 @@ function HomeCateParentName() {
             }
         }
         fetchList();
-    }, [params, search, page]);
+    }, [params, sanpham, sort,search, page]);
 
     const changeValueSelect = (e) => {
         var index = e.nativeEvent.target.selectedIndex;
@@ -108,6 +108,9 @@ function HomeCateParentName() {
         }
         history.push('/' + sanpham + '/page=' + xpage + '/sort=' + ina);
     }
+    const chuyentrang = (id) =>{
+        history.push('/product/' + id );
+      }
     return (
         <section>
             {loading ?
@@ -129,7 +132,7 @@ function HomeCateParentName() {
                     <div className="product-category list-product">
                         {
                             result.map(result =>
-                                <div key={result.id} className="productinfo lst-pro-infor">
+                                <div key={result.id} className="productinfo lst-pro-infor" onClick={() => chuyentrang(result.id)}>
                                     <img src={'/images/' + result.photo} alt="" className="pr-img" width="206px" height="206px" />
                                     <p className="fix-line-css">{result.name}</p>
                                     <p style={{ margin: "0 0 5px 0", justifySelf: "start" }}>SKU: {result.sku}</p>

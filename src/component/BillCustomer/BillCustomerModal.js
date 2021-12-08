@@ -51,11 +51,11 @@ function BillCustomerModal({show, setShow, ma, setMa}){
                         result.map(
                             (result) =>
                                 <tr key={result.id}>
-                                    <td>{result.product.photo}</td>
+                                    <td><img style={{width: "90px", height: "90px"}} className="body-new-img-pro" src={'/images/'+result.product.photo} alt="" /></td>
                                     <td>{result.product.name}</td>
-                                    <td>{result.price}  </td>
+                                    <td>{String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' đ'}</td>
                                     <td>{result.number}</td>
-                                    <td>{result.total} VNĐ</td>
+                                    <td>{String(Math.round(result.total)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' đ'} VNĐ</td>
                                 </tr>
                         )              
                     }

@@ -42,18 +42,19 @@ function Bill() {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [reload, setReload] = React.useState(true);
+    const [filter, setFilter] = React.useState([]);
     useEffect(() => {
         const fetchListBill = async () => {
+            const param = {
+                ...params,
+                ...filter,
+            }
             try {
-                if (params.order) {
-                    const response = await BillAdminApi.getByStatus(params);
-                    setBill(response.content);
-                    setCount(response.totalElements);
-                } else {
-                    const response = await BillAdminApi.getAll(params);
-                    setBill(response.content);
-                    setCount(response.totalElements);
-                }
+
+
+                const response = await BillAdminApi.getAll(param);
+                setBill(response.content);
+                setCount(response.totalElements);
             } catch (error) {
                 console.error(error);
             }
@@ -62,40 +63,29 @@ function Bill() {
     }, [params, reload]);
     return (
         <Fragment>
-            <div className="container-fluid">
-                <nav aria-label="breadcrumb">
-                    <ol className="breadcrumb">
-                        <li className="breadcrumb-item"><a href="Bill.html">Hóa đơn</a></li>
-                        <li className="breadcrumb-item active" aria-current="page">Tất cả hóa đơn</li>
-                    </ol>
-                </nav>
-                <div className="card shadow mb-4">
-                    <div className="card-body">
-                        <StatusOrder
-                            params={params}
-                            setParams={setParams}
-                        />
-                        <ModelBill
-                            bill={bill}
-                            setBill={setBill}
-                            formDataBill={formDataBill}
-                            setFormDataBill={setFormDataBill}
-                            params={params}
-                            setParams={setParams}
-                            clicked={clicked}
-                            setClicked={setClicked}
-                            count={count}
-                            setCount={setCount}
-                            page={page}
-                            setPage={setPage}
-                            rowsPerPage={rowsPerPage}
-                            setRowsPerPage={setRowsPerPage}
-                            reload={reload}
-                            setReload={setReload}
-                        />
-                    </div>
-                </div>
-            </div>
+
+            <StatusOrder
+                params={params}
+                setParams={setParams}
+            />
+            <ModelBill
+                bill={bill}
+                setBill={setBill}
+                formDataBill={formDataBill}
+                setFormDataBill={setFormDataBill}
+                params={params}
+                setParams={setParams}
+                clicked={clicked}
+                setClicked={setClicked}
+                count={count}
+                setCount={setCount}
+                page={page}
+                setPage={setPage}
+                rowsPerPage={rowsPerPage}
+                setRowsPerPage={setRowsPerPage}
+                reload={reload}
+                setReload={setReload}
+            />
         </Fragment>
     );
 }
