@@ -172,7 +172,7 @@ function ReceiptDetail({ show, setShow, ma, setMa, reload, setReload }) {
         setActive(true);
         if(input.productId != null){
             axios({
-                url: 'http://localhost:8080/receiptDetail/product?name='+ e.target.value,
+                url: 'https://tranhoangmaianh.herokuapp.com/receiptDetail/product?name='+ e.target.value,
                 method: 'GET',
                 type: 'application/json',
                 headers: {
@@ -213,7 +213,7 @@ function ReceiptDetail({ show, setShow, ma, setMa, reload, setReload }) {
     })
     const edit = (e, id)=>{
         axios({
-            url: 'http://localhost:8080/receiptDetail/get/'+ id,
+            url: 'https://tranhoangmaianh.herokuapp.com/receiptDetail/get/'+ id,
             method: 'GET',
             type: 'application/json',
             headers: {

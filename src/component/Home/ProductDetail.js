@@ -102,7 +102,7 @@ function ProductDetail() {
 
     if (customerId) {
       axios({
-        url: 'http://localhost:8080/cart-detail/' + customerId + '?email=' + emailc,
+        url: 'https://tranhoangmaianh.herokuapp.com/cart-detail/' + customerId + '?email=' + emailc,
         method: 'post',
         type: 'application/json',
         data: detail,
@@ -161,7 +161,7 @@ function ProductDetail() {
     if (customerId) {
 
       axios({
-        url: 'http://localhost:8080/cart-detail/' + customerId + '?email=' + emailc,
+        url: 'https://tranhoangmaianh.herokuapp.com/cart-detail/' + customerId + '?email=' + emailc,
         method: 'post',
         type: 'application/json',
         data: detail,
