@@ -15,13 +15,14 @@ import {
 import { LinearProgress } from '@mui/material';
 import CartApi from '../api/CartApi';
 
-function Head() {
+function Head({reload}) {
   const history = useHistory();
   const [result, setResult] = useState([]);
   const [cate, setCate] = useState([]);
   // const [username, setUsername] = useState(name);
   const [number, setNumber] = useState(0);
   const [active, setActive] = useState(false);
+  
   const [itemSp, setItemSp] = useState(0);
 
   const user_name = CookieService.getCookie('name');
@@ -33,38 +34,34 @@ function Head() {
   // biến load lại trang
   const [load, setLoad] = useState(false);
 
-  let getStorage = localStorage.getItem('cart');
-
   const [search, setSearch] = useState({
     productname: ''
   });
 
-  const [demo, setDemo] = useState(JSON.parse(getStorage));
+  
   useEffect(() => {
     const fetchList = async () => {
       try {
         const response = await CategoryApi.getAllCateCustomer();
-        console.log(response)
         if (customerId) {
-          const numberOfCart = await CartApi.getNumberOfCart(customerId, emailc);
-          // setItemSp(numberOfCart);
-
+          CartApi.getNumberOfCart(customerId, emailc).then(reps =>{
+            setItemSp(reps);
+          });
         } else{
-          setItemSp(demo.length);
+          setItemSp(JSON.parse(localStorage.getItem('cart')).length);
         }
-        
         setResult(response);
       } catch (error) {
         console.log(error);
       }
     }
     fetchList();
-  }, []);
+  }, [reload]);
+
   const logout = () => {
     CookieService.removeCookie();
     window.location.replace('http://localhost:3000/login')
   }
-
 
   const getValue = (e) => {
 

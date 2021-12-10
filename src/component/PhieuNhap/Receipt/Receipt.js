@@ -191,7 +191,7 @@ function Receipt() {
                                         <td><input name="describe" defaultValue={result.describe} onChange={(e) => updateDescripbe(e, result.id)} /></td>
                                         <td>{String(Math.round(result.total)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' VNĐ'}</td>
                                         <td>
-                                            <button type="button" className="xem-receipt" onClick={() => getMa(result.id)} ><i className="fa fa-eye eye-receipt"></i></button>
+                                            <button type="button" className="xem-receipt" onClick={() => getMa(result.id)} ><i class="fa fa-edit eye-receipt"></i></button>
                                         </td>
                                     </tr>
 

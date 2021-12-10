@@ -1,0 +1,122 @@
+.yeuthich-table{
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+    padding: 20px 0;
+}
+
+.yeuthich-pro-body{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 20px;
+    padding: 10px 0;
+    border-bottom: 1px solid lightgrey;
+}
+
+.yeuthich-infor-product{
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    grid-column-gap: 20px;
+}
+
+.yeuthich-first p:first-child{
+    font-size: 20px;
+    font-weight: 500;
+    color: black;
+}
+
+.yeuthich-first p:nth-last-child(2){
+    font-size: 13px;
+    font-weight: normal;
+    color: gray;
+}
+
+.yeuthich-first p:nth-last-child(2){
+    font-size: 14px;
+    font-weight: normal;
+    color: black;
+}
+
+.yeuthich-second p:first-child{
+    color: #f15e2c;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.yeuthich-second{
+    justify-self: end;
+}
+
+.f-img{
+    width: 180px;
+    height: 180px;
+}
+
+.yeuthich-second button{
+    border: none;
+    width: 30px;
+    margin-top: 10px;
+}
+
+.yeuthich-second button:hover{
+    border: 1px solid lightskyblue;
+}
+
+.yeuthich-second button:last-child:hover{
+    border: 1px solid red;
+}
+
+.input-group2{
+    display: grid;
+    grid-template-columns: 50px 60px 50px;
+    margin-top: 30px;
+}
+
+.yeuthich-first p a{
+    text-decoration: none;
+    color: black;
+    font-size: 20px;
+}
+
+.yeuthich-first p a:hover{
+    color: lightskyblue;
+}
+
+.input-group2 i{
+    font-size: 10px;
+}
+
+.input-group2 input{
+    border-radius: unset;
+    text-align: center;
+}
+
+.input-group2 .btn-number-yt{
+    width: 50px;
+    border: 1px solid lightgrey;
+}
+
+@media (max-width: 767px){
+    .yeuthich-pro-body{
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-row-gap: 20px;
+    }
+
+    .yeuthich-second{
+        display: grid;
+        grid-template-columns: 1fr 1fr 30px 30px;
+        justify-self: unset;
+    }
+
+    .yeuthich-second br{
+        display: none;
+    }
+
+    .yeuthich-second button{
+        border: none;
+        width: 30px;
+        margin: 0;
+    }
+
+    
+}

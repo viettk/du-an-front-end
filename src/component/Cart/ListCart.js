@@ -201,14 +201,14 @@ function ListCart() {
                                     <td>{result.id}</td>
                                     <td>{result.product.photo}</td>
                                     <td>{result.product.name}</td>
-                                    <td>{String(Math.round(result.product.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' đ'}</td>
+                                    <td>{String(Math.round(result.product.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.') }</td>
                                     <td>
                                     <button className="button-sl" onClick={e => giamSl(e, result.product.id,result.number)} >-</button>
                                         <input style={{ border: "1px solid #ddd", width: "60px", textAlign: "center", padding: "2px 0" }} type="number" className="num" type="number" defaultValue={result.number} onBlur={(e)=>checkNumber(e,result.product.id, result.price)} />
                                             {/* {result.number} */}
                                         <button className="button-sl1" onClick={e => tangSL(e, result.product.id,result.number)}>+</button>
                                     </td>
-                                    <td>{String(Math.round(result.total)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' đ'}</td>
+                                    <td>{String(Math.round(result.total)).replace(/(.)(?=(\d{3})+$)/g, '$1.')}</td>
                                     <td>
                                         <button style={{ border: "none" }} className="btn btn-outline-danger" onClick={() => xoaSP( result.product.id)} ><i class="fa fa-trash"></i></button>
                                     </td>
@@ -219,7 +219,7 @@ function ListCart() {
             </table>
             <span style={{ color: "red", fontSize: "13px", marginLeft: "10px" }}>{loi.parent_name}</span>
             <span style={{ color: "red", fontSize: "13px", marginLeft: "10px" }}>{mess.errorMessage}</span>
-            <span style={{float: "right", margin: "0 65px 20px 0"}}>Tổng tiền: <span style={{fontWeight: " 500"}}>{thanhTien != undefined ? thanhTien : 0  } VNĐ</span> VNĐ</span>
+            <span style={{float: "right", margin: "0 65px 20px 0"}}>Tổng tiền: <span style={{fontWeight: " 500"}}>{thanhTien != undefined ? String(Math.round(thanhTien)).replace(/(.)(?=(\d{3})+$)/g, '$1.') : 0  } VNĐ</span> VNĐ</span>
             
             </TableContainer>
             {

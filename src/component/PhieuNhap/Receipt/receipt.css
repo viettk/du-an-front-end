@@ -44,11 +44,7 @@
     border-radius: 50%;
 }
 
-.xem-receipt:hover{
-    background-color: lightgray;
-}
-
 .xem-receipt:hover .eye-receipt{
-    color: white;
+    color: #8A2BE2;
 }
 

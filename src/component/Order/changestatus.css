@@ -1,0 +1,41 @@
+.c-thongtinnhanhang{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-row-gap: 20px;
+    grid-column-gap: 20px;
+}
+
+.thanhcong-product{
+    padding: 5px 0;
+    border-bottom: 1px solid lightslategrey;
+}
+
+.thanhcong-detail-sp-m{
+    height: 250px;
+    overflow-y: scroll;
+}
+
+.c-infor{
+    border: 1px solid lightslategrey;
+    padding: 5px 10px;
+}
+
+.thanhcong-second h5{
+    font-size: 18px;
+}
+
+.c-select h5{
+    font-size: 18px;
+}
+
+.changeStatus_btn{
+    border: none;
+    color: white;
+    background-color: lightskyblue;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.changeStatus_btn:hover{
+    background-color: #357ebd;
+}

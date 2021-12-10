@@ -6,21 +6,21 @@ function Bodyfooter(){
                 <image />
                 <span>
                     <p className="vmo-p">Dịch vụ hàng đầu</p>
-                    <p>Chất lượng dịch vụ được đặt lên hàng đầu</p>
+                    <p className="vmo-p2">Chất lượng dịch vụ được đặt lên hàng đầu</p>
                 </span>
             </div>
             <div className="vmo-item">
             <image />
                 <span>
                     <p className="vmo-p">Chất lượng tuyệt đối 100%</p>
-                    <p>Cam kết sản phẩm chính hãng từ Bandai</p>
+                    <p className="vmo-p2">Cam kết sản phẩm chính hãng từ Bandai</p>
                 </span>
             </div>
             <div className="vmo-item">
             <image />
                 <span>
                     <p className="vmo-p">Thanh toán dễ dàng</p>
-                    <p>Thanh toán đa dạng và cực kì tiện lợi</p>
+                    <p className="vmo-p2">Thanh toán đa dạng và cực kì tiện lợi</p>
                 </span>
             </div>
         </div>

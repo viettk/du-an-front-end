@@ -7,16 +7,16 @@ import Paper from '@mui/material/Paper';
 import ProductApi from "../../api/ProductApi";
 import axios from "axios";
 import FavoriteApi from "../../api/FavoritApi";
-
+import CookieService from "../../cookie/CookieService";
+import './favorite.css';
 
 function Favorite(){
-    const {xpage}= useParams();
-    let history = useHistory();
+    const customerid = CookieService.getCookie('id');
 
     const initValues = [];
     const initParams= {
         _limit : '5',
-        _page : (xpage-1),
+        _page : 0,
         _field: 'id',
         _known: 'up'
     };
@@ -36,7 +36,7 @@ function Favorite(){
     useEffect(() => {
         const fetchList = async () =>{
           try{
-            const response = await ProductApi.getFavorite(1, params);
+            const response = await ProductApi.getFavorite(customerid, params);
             setResult(response.content);    
           }catch (error){
             console.log(error);
@@ -46,7 +46,6 @@ function Favorite(){
       }, [params, reload]);
 
       const handleChange = (event, value) => {
-        history.push("/danh-muc/" + value);
         setPage(value);
         setParams(
             {
@@ -75,43 +74,46 @@ function Favorite(){
           }
       }
 
-    return(
-        <React.Fragment>
-        <h3 style={{marginTop: 10}}>Danh sách Sản phẩm yêu thích</h3>
-        <TableContainer component={Paper}>
-        <table className="table table-striped">
-                <tbody>
-                    <tr>
-                        <td scope="col">STT</td>
-                        <td scope="col">Hình ảnh</td>
-                        <td scope="col">Tên Sản phảm</td>
-                        <td scope="col">Giá</td>
-                        <td scope="col">Sửa</td>
-                    </tr>
-                </tbody>
-                <tfoot style={{height: "10px"}}>
-                    {
-                        result.map(
-                            (result, index) =>
-                                <tr key={result.id}>
-                                    <td>{index + 1}</td>
-                                    <td>{result.product.image}</td>
-                                    <td>{result.product.name}</td>
-                                    <td>{result.product.price}</td>
-                                    <td>
-                                        <button onClick={(e) => xoa(result.product.id)} >Xóa</button>
-                                    </td>
-                                </tr>
+      const addToCart = (idsp, price, photo, name, weight) => {
+        const detail = {
+            productId: idsp,
+            number: 1,
+          }
+      }
 
-                        )              
-                    }
-                </tfoot>
-            </table>
-            </TableContainer>
+    return(
+        <div className="yeu-thich-product">
+            <h3 style={{ marginTop: 10 }}>Danh sách Sản phẩm yêu thích</h3>
+            <div className="container">
+                <div className="yeuthich-table">
+                {
+                    result.map((result, index) =>
+                        <div className="yeuthich-pro-body" key={index}>
+                            
+                            <div className="yeuthich-infor-product">
+                            <img src={'/images/' + result.photo} className="f-img" />
+                                <div className="yeuthich-first">
+                                    <p>{result.name}</p>
+                                    <p>Giá <span>{String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.')} VNĐ</span></p>
+                                </div>
+                            </div>
+                            <div className="yeuthich-second">
+                                    <p>{String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.')} VNĐ</p>
+                                    <p>{result.number > 0 && result.staus == true ? "Còn hàng" : "Hết hàng" }</p>
+                                    <button type="button" onClick={() => addToCart(result.id, result.price, result.photo, result.name, result.weight)} ><i class="fa fa-shopping-cart"></i></button>
+                                    {/* disabled={result.number <= 0 && result.staus == false ? false : true } */}
+                                    <br/>
+                                    <button onClick={(e) => xoa(e, result.product_id)} type="button"><i class="fa fa-trash"></i></button>
+                            </div>
+                        </div>
+                    )
+                }
+                </div>
+            </div>
             <Stack spacing={2}>
                 <Pagination className="d-flex justify-content-center" count={count}  page={page} onChange={handleChange}  color="secondary"/>
             </Stack>
-    </React.Fragment>
+        </div>
     );
 }
 export default Favorite; 

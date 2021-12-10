@@ -149,13 +149,13 @@ function ListCartNone() {
                                                 <td>{result.product_id}</td>
                                                 <td>{result.photo}</td>
                                                 <td>{result.name}</td>
-                                                <td>{String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' đ'}</td>
+                                                <td>{String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.') }</td>
                                                 <td key={result.number}>
                                                     <button className="button-sl" onClick={e => giamSl(e, result.product_id)} >-</button>
                                                     <input style={{ border: "1px solid #ddd", width: "60px", textAlign: "center", padding: "2px 0" }} type="number" defaultValue={result.number} onBlur={(e) => checkNumber(e, result.product_id)} />
                                                     <button className="button-sl1" onClick={e => tangSl(e, result.product_id)}>+</button>
                                                 </td>
-                                                <td>{result.total}</td>
+                                                <td>{String(Math.round(result.total)).replace(/(.)(?=(\d{3})+$)/g, '$1.') }</td>
                                                 <td>
                                                     <button style={{ border: "none" }} className="btn btn-outline-danger" onClick={(e) => xoa(e, result.product_id)} ><i class="fa fa-trash"></i></button>
                                                 </td>
@@ -166,7 +166,7 @@ function ListCartNone() {
                         </table>
                         <span style={{ color: "red", fontSize: "13px", marginLeft: "10px" }}>{loi.parent_name}</span>
                         <span style={{ color: "red", fontSize: "13px", marginLeft: "10px" }}>{mess.errorMessage}</span>
-                        <span style={{ float: "right", margin: "0 65px 20px 0" }}>Tổng tiền: <span style={{ fontWeight: " 500" }}>{totalf}</span> VNĐ</span>
+                        <span style={{ float: "right", margin: "0 65px 20px 0" }}>Tổng tiền: <span style={{ fontWeight: " 500" }}>{String(Math.round(totalf)).replace(/(.)(?=(\d{3})+$)/g, '$1.') }</span> VNĐ</span>
                     </TableContainer>
                     {
                         result.length > 0 ?

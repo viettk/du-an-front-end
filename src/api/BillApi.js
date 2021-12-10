@@ -29,6 +29,31 @@ const BillApi = {
     datHangKhachhangkoLogin: (id, data) =>{
         const url = `/order/detail/date/${id}`;
         return axiosClient.post(url, data);
+    },
+
+    getMahoadonThanhCong:(id)=>{
+        const url = '/order/dathangthanhcong/'+id;
+        return axiosClient.get(url);
+    },
+
+    getListBillDetailthanhcong:(id)=>{
+        const url = '/hoa-don-chi-tiet-thanh-cong/'+id;
+        return axiosClient.get(url);
+    },
+
+    getTongCanNang:(id)=>{
+        const url = '/order/tongcannag/' + id;
+        return axiosClient.get(url);
+    },
+
+    getTongTotalSp:(id)=>{
+        const url = '/order/tongtienhang/'+id;
+        return axiosClient.get(url);
+    },
+
+    changeStatus_pay:(id, input)=>{
+        const url = '/order/changeStatus_pay/'+id+'?status_pay='+input;
+        return axiosClient.put(url);
     }
 }
 export default BillApi;

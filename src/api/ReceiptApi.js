@@ -39,6 +39,12 @@ const ReceiptApi = {
     deleteReceiptDetail: (id, ma )=>{
         const url = '/receiptDetail/'+ id +'?receiptId=' + ma;
         return axiosClient.delete(url);
+    },
+
+    getProductNameOfReceiptDetail:(productName)=>{
+        console.log(productName)
+        const url = '/receiptDetail/product?name='+productName;
+        return axiosClient.get(url);
     }
     
 }

@@ -14,6 +14,11 @@ const FavoriteApi = {
     deleteYeuthich: (yt)=>{
         const url = '/yeu-thich/y';
         return axiosClient.post(url, yt);
+    },
+
+    goiYsanPham: (priceProduct)=>{
+        const url = '/detail/goi-y?priceProduct='+priceProduct;
+        return axiosClient.get(url);
     }
     
 }

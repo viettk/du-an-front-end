@@ -12,6 +12,7 @@ import Head from "../Layout/Head";
 import Order from "../component/Order/Order";
 import Address from "../component/Adress/Adress";
 import Favorite from "../component/Favorite/Favorite";
+import FavoriteNotLogin from "../component/Favorite/FavoriteNotLogin";
 import Receipt from "../component/PhieuNhap/Receipt/Receipt";
 import SignInSide from "../component/Login/Login";
 import SignUp from "../component/Login/Register";
@@ -32,8 +33,10 @@ import Bill from "../component/billadmin/Bill";
 import CookieService from '../cookie/CookieService';
 import CreatePdf from '../component/CreatePdf/CreatePdf'
 import AllProduct from "../component/Home/AllProduct";
+import Thanhcong from "../component/Order/Thanhcong";
+import ChangeStatus_pay from "../component/Order/ChangeStatus_pay";
 
-function ListRoute(){
+function ListRoute({reload, setReload}){
   const customerId = CookieService.getCookie('id');
     return(
         
@@ -54,13 +57,15 @@ function ListRoute(){
 
         <Route path={["/all-product/query=:query/page=:xpage&sort=:sort", "/all-product"]} component={AllProduct} />
 
-        <Route path= "/dia-chi" component={Address } />
+        <Route path= "/dia-chi" component={ customerId ? Address : PageNotFound } />
 
         <Route path="/head" component={Head} />
 
-        <Route path="/product/:id" component={ProductDetail} />
+        <Route path="/product/:id" >
+          <ProductDetail reload={reload} setReload={setReload} />
+        </Route>
     
-        <Route path="/danh-muc/:xpage?" component={ListCategory} />
+        <Route path="/api/danh-muc" component={ListCategory} />
 
         {/* <Route path="/admin/san-pham" component={ProductAd} /> */}
 
@@ -68,7 +73,9 @@ function ListRoute(){
 
         <Route path="/order" component={Order} />
 
-        <Route path="/yeu-thich" component={Favorite} />
+        <Route path="/yeu-thich" >
+          <FavoriteNotLogin reload={reload} setReload={setReload} />
+        </Route>
 
         <Route path="/api/receipt" component={Receipt} />
 
@@ -93,6 +100,10 @@ function ListRoute(){
         <Route path="/admin/bill" component={Bill} />
 
         <Route path="/pdfff" component={CreatePdf} />
+
+        <Route path="/dat-hang-thanh-cong" component={Thanhcong} />
+
+        <Route path="/checkout" component={ChangeStatus_pay} />
 
         {/* <PrivateRoutes component={ListDanhmuc} authed={false} path='/admin'  /> */}
         {/* component PageNotFound phải để cuối cùng */}

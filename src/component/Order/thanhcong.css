@@ -1,0 +1,92 @@
+.cam-on-da-dat{
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    grid-column-gap: 20px;
+}
+
+.thanhcong-icon{
+    font-size: 120px !important;
+    color: lightgreen;
+}
+
+.thanh-cong-email p{
+    font-size: 15px;
+}
+
+.dat-hang-infor-cus p{
+    font-size: 15px;
+}
+
+.thanhcong-adress p{
+    font-size: 15px;
+}
+
+.dat-hang-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 20px;
+    border: 1px solid lightgray;
+    padding: 10px;
+}
+
+.thanhcong-body{
+    display: grid;
+}
+
+.dat-thang-infor{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-row-gap: 20px;
+    border: 1px solid lightgray;
+    padding: 5px;
+}
+
+.thanhcong-btn{
+    border: none;
+    color: white;
+    background-color: #357ebd;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-top: 10px;
+    justify-self: end;
+}
+
+.thanhcong-detail-sp{
+    height: 305px;
+    overflow-y: scroll;
+}
+
+.thanhcong-product{
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    grid-column-gap: 20px;
+}
+
+.thanhcong-product-infor{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.thanhcong-product-img{
+    width: 110px;
+    height: 110px;
+}
+
+.thanhcong-product-infor span{
+    font-size: 15px;
+}
+
+.second-btn-tc{display: none;}
+
+@media (max-width: 991px){
+    .dat-hang-container{
+        grid-template-columns: 1fr;
+        grid-row-gap: 20px;
+    }
+
+    .first-btn-tc{display: none;}
+
+    .second-btn-tc{display: block;}
+}

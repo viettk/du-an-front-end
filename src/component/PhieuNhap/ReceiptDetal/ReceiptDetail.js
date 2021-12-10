@@ -19,6 +19,7 @@ function ReceiptDetail({ show, setShow, ma, setMa, reload, setReload }) {
         }
     }
     const [load, setLoad] = useState(true);
+
     const onLoad = () =>{
         if(load == false){
             setLoad(true);
@@ -171,24 +172,23 @@ function ReceiptDetail({ show, setShow, ma, setMa, reload, setReload }) {
         })
         setActive(true);
         if(input.productId != null){
-            axios({
-                url: 'https://tranhoangmaianh.herokuapp.com/receiptDetail/product?name='+ e.target.value,
-                method: 'GET',
-                type: 'application/json',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            }).then(resp => {
-               setProduct(resp.data);   
-            })
-        }
+            ReceiptApi.getProductNameOfReceiptDetail(e.target.value).then(resp => {
+               setProduct(resp);   
+            });
+        } 
     }
+    
     const clearForm = () =>{
         document.getElementById("form-receipt-submit").reset();
         setInput({
             ...input,
             price: '',
             number: ''
+        });
+
+        setImgpro({
+            ...imgpro,
+            img: ''
         })
         setClick(false);
     }
@@ -319,7 +319,7 @@ function ReceiptDetail({ show, setShow, ma, setMa, reload, setReload }) {
                                     <input id="namesp" type="text" name="productId" autoComplete = "off" onChange={getInputname} required />
                                     <label>Sản phẩm</label>
                                 </div>
-                                <div className={ active == true ? "receipt-hiddent-show active" : "receipt-hiddent-show"} >
+                                <div className={ active == true ? "receipt-hiddent-show-m active" : "receipt-hiddent-show-m"} >
                                     <ul className="receipt-product-name" >
                                     {
                                         product.length != 0 ? product.map(pr =>
@@ -352,6 +352,11 @@ function ReceiptDetail({ show, setShow, ma, setMa, reload, setReload }) {
                         <button type="button" className="button-them" onClick={() => addToReceiptDetail()} >Thêm</button>
                         <button type="button" className="button-them" onClick={clearForm}>Clear</button>
                     </form>
+
+                    <div>
+                        <p>Hình ảnh</p>
+                        {imgpro.img === '' ? <span>Không có hình ảnh</span> : <img src={'/images/' + imgpro.img} className='img-goi-y-product' /> }
+                    </div>
                     </div>
                     <div className="table-receipt">
                         <table className="table table-striped">

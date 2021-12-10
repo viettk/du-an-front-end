@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import CookieService from "../../cookie/CookieService";
 import { Alert, Snackbar } from "@mui/material";
 import AddressApi from "../../api/AddressApi";
+import { useHistory } from "react-router-dom";
 
 function Order() {
 
@@ -46,10 +47,7 @@ function Order() {
   const [quan, setQuan] = useState([]);
   const [xa, setXa] = useState([]);
   const [activeIndex, setActiveIndex] = useState(false);
-  const handleOnClick = () => {
-    activeIndex ? setActiveIndex(false) : setActiveIndex(true)
-  };
-
+  const history = useHistory();
   const [selectTinh, setSelectTinh] = useState({
     tinh: '',
     code: ''
@@ -247,7 +245,8 @@ function Order() {
     }
     if (customerId) {
       BillApi.dathangKhachLogin(customerId, result.input).then(r => {
-        setOpen(true);
+        localStorage.setItem('mahoadon', r.id);
+        history.push('/dat-hang-thanh-cong');
       }).catch((error) => {
         if (error.response) {
           setLoi(error.response.data);
@@ -261,9 +260,10 @@ function Order() {
     } else {  
       const cart = [];
       BillApi.dathang(result.input).then(resp => {
+        localStorage.setItem('mahoadon', resp.id);
         BillApi.datHangKhachhangkoLogin(resp.id, demo).then(r => {
           localStorage.setItem('cart', JSON.stringify(cart));
-          setOpen(true);
+          history.push('/dat-hang-thanh-cong');
         }).catch((error) => {
           if (error.response) {
             setLoi(error.response.data);

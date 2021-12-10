@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import './css/home.css';
 import logoa from './b.jpg';
 import { border } from "@mui/system";
-import Carousel from 'react-grid-carousel'
+import Carousel from 'react-grid-carousel';
 import axios from "axios";
 import Head from "../../Layout/Head";
 import ThongkeApi from "../../api/ThongkeApj";
@@ -126,7 +126,7 @@ function Home() {
           <div className="title-pro-favorite" style={{marginBottom: "30px"}}>
             <h5>Top Sản phẩm bán chạy</h5>
           </div>
-          <div className="product-body-favorite">
+          <div className="product-body-favorite-m">
           <Carousel  cols={5} rows={1} gap={15} >
             {
               favorite.map(result =>

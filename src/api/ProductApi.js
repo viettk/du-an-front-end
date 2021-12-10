@@ -27,7 +27,7 @@ const ProductApi = {
     },
 
     getFavorite: (id, params) =>{
-        const url =  '/yeu-thich/1?known=up&field=id';
+        const url =  '/yeu-thich/'+id +'?known=up&field=id';
         return axiosClient.get(url, {params});
     },
 

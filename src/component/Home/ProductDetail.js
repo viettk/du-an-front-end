@@ -14,12 +14,14 @@ import FavoriteApi from "../../api/FavoritApi";
 import SyncLoader from "react-spinners/SyncLoader";
 import Carousel from 'react-grid-carousel'
 
-function ProductDetail() {
+function ProductDetail({reload, setReload}) {
   const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
   const customerId = CookieService.getCookie('id');
   const emailc = CookieService.getCookie('email');
   const [loading, setLoading] = useState(false);
   const [imagep, setImagep] = useState([]);
+  let storage = localStorage.getItem('yeuthich');
+  const [notloginyt, setNotloginyt] = useState(JSON.parse(storage));
 
   const token = localStorage.token;
   const idpage = useParams();
@@ -32,20 +34,28 @@ function ProductDetail() {
   });
   const history = useHistory();
   const [y, setY] = useState(false);
+  const [goiysp, setGoiysp] = useState([]);
 
   useEffect(() => {
     const fetchList = async () => {
       try {
         const response = await HomeApi.getDetail(idpage.id);
-        const resp = await FavoriteApi.getOne(customerId, idpage.id);
-        console.log(resp)
+        if(customerId){
+          const resp = await FavoriteApi.getOne(customerId, idpage.id);
+          setY(resp);
+        } else{
+          let item = notloginyt.find(c => c.product_id == idpage.id)
+          if (item) {
+            setY(true);
+          }
+        }
+        
+
+        const goiy = await FavoriteApi.goiYsanPham(response.price);
+
         setResult(response);
-        setY(resp);
-        setLoading(true);
         setImagep(response.photos)
-        setTimeout(() => {
-          setLoading(false);
-        }, 1000);
+        setGoiysp(goiy);
 
       } catch (error) {
         console.log(error);
@@ -67,7 +77,6 @@ function ProductDetail() {
         ...count,
         num: 1
       })
-      alert('Số lượng phải lớn hơn 1')
     }
     else {
       setCount({
@@ -110,9 +119,10 @@ function ProductDetail() {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         }
-      }).then(
+      }).then(r =>{
+        onLoad();
         history.push('/cart')
-      ).catch((error) => {
+        }).catch((error) => {
         if (error.response) {
           setMess(error.response.data);
           console.log(mess.errorMessage);
@@ -134,8 +144,9 @@ function ProductDetail() {
       } else {
         cart.push(localDetail);
       }
-      localStorage.setItem('cart', JSON.stringify(cart))
-      history.push('/cart')
+      localStorage.setItem('cart', JSON.stringify(cart));
+      onLoad();
+      history.push('/cart');
     }
   }
 
@@ -169,6 +180,8 @@ function ProductDetail() {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         }
+      }).then(r=>{
+        onLoad();
       }).catch((error) => {
         if (error.response) {
           setMess(error.response.data);
@@ -193,24 +206,51 @@ function ProductDetail() {
         cart.push(localDetail);
       }
       localStorage.setItem('cart', JSON.stringify(cart));
+      onLoad();
     }
   }
 
-  const yeuThich = (idsp) => {
+  let localyt = [];
+  const yeuThich = (idsp, price, photo, name, weight) => {
     const yt = {
       productId: idsp,
       customerId: customerId
+    };
+
+    const localyeuthich ={
+      product_id: idsp,
+      price: price,
+      photo: photo,
+      name: name,
+      weight: weight,
+      total: price,
+      number: count.num,
     }
+    if(customerId){
+      if (y) {
+        FavoriteApi.deleteYeuthich(yt).then(resp => {
+          setY(false);
+        })
+      } else {
+        FavoriteApi.postYeuthich(yt).then(resp => {
+          setY(true);
+        })
+      }
+    } else{
+      let storageYt = localStorage.getItem('yeuthich');
+      if (storageYt) {
+        localyt = JSON.parse(storageYt);
+      }      
 
-    if (y) {
-      FavoriteApi.deleteYeuthich(yt).then(resp => {
-        setY(false);
-      })
-
-    } else {
-      FavoriteApi.postYeuthich(yt).then(resp => {
-        setY(true);
-      })
+      if(y){
+        localyt = localyt.filter(c => c.product_id != idsp);
+        localStorage.setItem('yeuthich', JSON.stringify(localyt));
+        setY(false)
+      } else{
+        localyt.push(localyeuthich);
+        setY(true)
+      }  
+      localStorage.setItem('yeuthich', JSON.stringify(localyt));
     }
   }
 
@@ -227,6 +267,14 @@ function ProductDetail() {
     } else {
       var d = document.getElementById('product-detail-image-main-b').src;
       document.getElementById('product-detail-image-main').src = d;
+    }
+  }
+
+  const onLoad = () =>{
+    if(reload === true){
+      setReload(false);
+    } else{
+      setReload(true);
     }
   }
 
@@ -293,7 +341,7 @@ function ProductDetail() {
                         +
                       </button>
                     </div>
-                    {customerId ? <i onClick={() => yeuThich(result.id)} style={{color: y ? "red" : "lightgray", cursor: "pointer"}} class="fa fa-heart pr-he"></i> : <span></span>}
+                    <i onClick={() => yeuThich(result.id, result.price, result.photo, result.name, result.weight)} style={{color: y ? "red" : "lightgray", cursor: "pointer"}} class="fa fa-heart pr-he"></i>
                   </div>
 
                   <div className="button-pro-detai">
@@ -336,65 +384,28 @@ function ProductDetail() {
           <div className="product-name-title">
             <nav className="navbar navbar-expand-sm navbar-dark bg-light">
               <div className="container-fluid">
-                <a className="brand" href>FIGMA &amp; S.H.F</a>
+                <a className="brand" href>Sản phẩm Yêu thích</a>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
                   <span className="navbar-toggler">
                     <i className="fa fa-bars fa-3x" />
                   </span>
                 </button>
-                <div className="collapse navbar-collapse" id="mynavbar">
-                  <div className="navbar-nav me-auto" />
-                  <div className="d-flex">
-                    <ul className="navbar-nav me-auto text">
-                      <div className="correction">
-                        <a className="nav-link" href>Marvel</a>
-                      </div>
-                      <div className="correction">
-                        <a className="nav-link" href>Marvel</a>
-                      </div>
-                      <div className="correction">
-                        <a className="nav-link" href>Marvel</a>
-                      </div>
-                      <div className="correction">
-                        <a className="nav-link" href>Marvel</a>
-                      </div>
-                      <div className="correction">
-                        <a className="nav-link" href>Xem tất cả</a>
-                      </div>
-                    </ul>
-                  </div>
-                </div>
-                <div className="icon">
-                  <a href><i className="fa fa-angle-left fa-2x" style={{ marginRight: '5px' }} /></a>
-                  <a href><i className="fa fa-angle-right fa-2x" /></a>
-                </div>
               </div>
             </nav>
+
             <div className="product-body-favorite">
-              <div className="product-body-live">
-                <img src="" style={{ width: "90%", height: "210px" }} className="rounded-like mx-auto d-block" />
-                <div className="body-pro-buy">
-                  <p className="fix-line-css"><b>Name</b></p>
-                  <p>SKU:</p>
-                  <h6 className="price"><b>100000</b> </h6>
-                </div>
-              </div>
-              <div className="product-body-live">
-                <img src="" style={{ width: "90%", height: "210px" }} className="rounded-like mx-auto d-block" />
-                <div className="body-pro-buy">
-                  <p className="fix-line-css"><b>Name</b></p>
-                  <p>SKU:</p>
-                  <h6 className="price"><b>100000</b> </h6>
-                </div>
-              </div>
-              <div className="product-body-live">
-                <img src="" style={{ width: "90%", height: "210px" }} className="rounded-like mx-auto d-block" />
-                <div className="body-pro-buy">
-                  <p className="fix-line-css"><b>Name</b></p>
-                  <p>SKU:</p>
-                  <h6 className="price"><b>1000</b> </h6>
-                </div>
-              </div>
+                {
+                  goiysp.map((goiysp, index) =>
+                    <div className="product-body-live" key={index}>
+                      <img src={'/images/'+goiysp.photo} className="rounded-like mx-auto d-block goiysp" />
+                      <div className="body-pro-buy">
+                        <p className="fix-line-css"><b>{goiysp.name}</b></p>
+                        <p>SKU: {goiysp.sku}</p>
+                        <h6 className="price"><b>{goiysp.price}</b> </h6>
+                      </div>
+                    </div>
+                  )
+                }
             </div>
           </div>
         </div>}
