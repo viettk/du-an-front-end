@@ -172,7 +172,7 @@ function ProductDetail({reload, setReload}) {
     if (customerId) {
 
       axios({
-        url: 'https://tranhoangmaianh.herokuapp.com/cart-detail/' + customerId + '?email=' + emailc,
+        url: 'http://tranhoangmaianh.herokuapp.com/cart-detail/' + customerId + '?email=' + emailc,
         method: 'post',
         type: 'application/json',
         data: detail,

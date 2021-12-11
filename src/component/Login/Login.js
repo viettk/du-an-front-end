@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField';
 import CookieService from  '../../cookie/CookieService'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import {GoogleLogin} from 'react-google-login';
+import GoogleApi from '../../api/GoogleApi';
 import {
   BrowserRouter as Router,
   Switch,
@@ -63,14 +64,14 @@ function SignInSide() {
   const handleSubmit =  (event) => {
     event.preventDefault();
     axios({
-        url: 'https://tranhoangmaianh.herokuapp.com/api/login',
+        url: 'http://localhost:8080/api/login',
         method: 'post',
         data: result,
         headers:{
           'Content-Type':'application/json',
         }
       }).then(resp=>{
-        // CookieService.removeCookie();
+        CookieService.removeCookie();
         CookieService.setCookie('token',resp.data.token,7);
         CookieService.setCookie('name',resp.data.name,7);
         CookieService.setCookie('role',resp.data.role,7);
@@ -92,6 +93,22 @@ function SignInSide() {
       }
       });
   };
+  
+  const responseGoogle = async (response) => {
+    const resp  = await GoogleApi.login(response.accessToken);
+    CookieService.setCookie('token',resp.token,7);
+        CookieService.setCookie('name',resp.name,7);
+        CookieService.setCookie('role',resp.role,7);
+        CookieService.setCookie('id',resp.id,7);
+        CookieService.setCookie('email',resp.email,7);
+        CookieService.setCookie('accessToken',response.accessToken,7);
+        if(location.state){
+          window.location.replace('http://localhost:3000'+location.state.from)
+        }else{
+        window.location.replace('http://localhost:3000')
+        }
+    // setAccess(response.accessToken)
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -152,6 +169,7 @@ function SignInSide() {
                 id="password"
                 autoComplete="current-password"
               />
+                <span style={{ color: "red", fontSize: "13px" }}>{loi.password}</span>
               <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span> 
               <Button
                 type="submit"
@@ -163,10 +181,10 @@ function SignInSide() {
               </Button>
               <Grid container sx={{display:'block', textAlign:'center',mb: 2 }} >
               <GoogleLogin 
-    clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
+    clientId="382955501052-7jfv4o89irqn0e4pvi842p1vhs5mrevu.apps.googleusercontent.com"
     buttonText="Login"
-    // onSuccess={responseGoogle}
-    // onFailure={responseGoogle}
+    onSuccess={responseGoogle}
+    onFailure={responseGoogle}
     cookiePolicy={'single_host_origin'}>Sign in with google</GoogleLogin></Grid>
               <Grid container>
                 <Grid item xs>

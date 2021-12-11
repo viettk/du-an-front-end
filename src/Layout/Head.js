@@ -5,6 +5,7 @@ import CategoryApi from '../api/CategoryApi';
 import axios from 'axios';
 import CookieService from '../cookie/CookieService';
 import { useHistory } from 'react-router-dom';
+import GoogleApi from '../api/GoogleApi';
 import {
   BrowserRouter as Router,
   Switch,
@@ -14,6 +15,7 @@ import {
 } from "react-router-dom";
 import { LinearProgress } from '@mui/material';
 import CartApi from '../api/CartApi';
+import logo from './Team_7_Logo.png';
 
 function Head({reload}) {
   const history = useHistory();
@@ -28,7 +30,7 @@ function Head({reload}) {
   const user_name = CookieService.getCookie('name');
   const customerId = CookieService.getCookie('id');
   const emailc = CookieService.getCookie('email');
-
+  console.log(CookieService.getCookie('role'))
   // console.log(document.cookie)
   const [username,setUsername] = useState(user_name);
   // biến load lại trang
@@ -45,7 +47,8 @@ function Head({reload}) {
         const response = await CategoryApi.getAllCateCustomer();
         if (customerId) {
           CartApi.getNumberOfCart(customerId, emailc).then(reps =>{
-            setItemSp(reps);
+            // setItemSp(reps);
+            console.log(reps)
           });
         } else{
           setItemSp(JSON.parse(localStorage.getItem('cart')).length);
@@ -59,7 +62,11 @@ function Head({reload}) {
   }, [reload]);
 
   const logout = () => {
+    if(CookieService.getCookie('accessToken')){
+      GoogleApi.logout(CookieService.getCookie("accessToken"))
+    }
     CookieService.removeCookie();
+    alert('Logout !')
     window.location.replace('http://localhost:3000/login')
   }
 
@@ -67,7 +74,7 @@ function Head({reload}) {
 
     try {
       CategoryApi.getAllCateCustomerByParent_name(e.currentTarget.textContent).then(reps => {
-        setCate(reps)
+        setCate(reps);
         if(reps.length > 0){
           setActive(true)
         } else{
@@ -114,7 +121,12 @@ function Head({reload}) {
         {/*header_top*/}
         <h6> Mở cửa: 8h30 - 22h00, thứ 2 - CN hàng tuần</h6>
         {username ? (<span style={{color:'white'}}>
-          <Link to="/lich-su-mua-hang">{username}</Link>
+        <a className="login-item" >{username}
+          <ul className="hover-login">
+            <li  className="login-item"><Link to=""> Lịch sử <span  className='an-di'> mua hàng</span></Link></li>
+            </ul>
+          </a>
+          
           <b>|</b>
           {/* <a onClick={logout}  >Đăng xuất</a> */}
           <a onClick={logout}  >Đăng xuất</a>
@@ -124,26 +136,18 @@ function Head({reload}) {
           <Link to="/register" style={{cursor: "pointer"}}>Đăng ký</Link>
         </span>)}
       </div>
-      
+
       <div className="header-mid">
-        <img />
+        <img className='logo-header' src={logo} style={{width:"100px", height:"80px", margin:"auto"}}/>
         <div className="header-mid-search ">
-          <input onChange={(e)=>searchProduct(e) } value={search.productname} type="search" className="form-control" placeholder="Bạn đang tìm sản phẩm nào ..." aria-label="Search" aria-describedby="search-addon" />
+          <input onChange={(e)=>searchProduct(e) } type="search" className="input-search form-control" placeholder="Bạn đang tìm sản phẩm nào ..." aria-label="Search" aria-describedby="search-addon" />
           <button onClick={() => submitform()} className="btn btn-warning" type="button">
             <i className="fa fa-search" />
           </button>
         </div>
         <div className="head-cart_template">
-          <div className="hotline">
-          <button type="button" className="border-one">
-          <i className="icon-one fa fa-phone" />
-        </button>
-        <div className="child">
-          <a className="phoneshop" >0123456789 </a>
-          <p className="hotline" >Hotline</p>
-        </div>
-        </div>
-          <div className="">
+          
+          <div className="cart-view">
             <i className="icon-tow fa fa-shopping-cart" />
             <Link to="/cart" className="head-midd-linkto-cart" >({itemSp}) Giỏ hàng</Link>
           </div>
@@ -152,50 +156,47 @@ function Head({reload}) {
 
       {/*header-bottom*/}
       <div className="header-bottom">
-      <ul className="header-menu-ul-main">
-          <li className="head-dropdown">
+      <ul className="header-menu-ul-main" style={{width:'1px'}}>
+          <li className="head-dropdown" style={{margin:'0'}}>
             <p className="cate"> <i className="fa fa-align-justify"/> Danh mục <span className="title-sp">sản phẩm</span></p> 
             <ul className="header-category-show" >
-                  {
-                    result.map((result) =>
-                      <li className="head-parent-name" key={result} value={result} onMouseOver={(e) => getValue(e)} >
-                        <Link className="head-cate-parent" key={result} to={'/' + result + '/page=1/sort=0'}>{result}</Link>
-                        <i class="fa fa-angle-right viet-li-arrow-cate"></i>
-                      </li>
-                    )
-                  }
+              {
+                result.map((result) =>
+                  <li className="head-parent-name" key={result} value={result} onMouseOver={(e) => getValue(e)} >
+                    <Link className="head-cate-parent" key={result} to={'/' + result + '/page=1/sort=0'}>{result}</Link>
+                    <i class="fa fa-angle-right viet-li-arrow-cate"></i>
+                  </li>
+                )
+              }
             </ul>
-            <ul className={active == true > 0 ? "head-menu-cate-all-child active" : "head-menu-cate-all-child" }>
-            {
-                            cate.map((result, index) =>
-                              <li key={index}><Link className="head-cate-name" key={result.id} to={'/' + result.name + '/' + result.id + '/page=1/sort=0'}>{result.name}</Link></li>
-                            )
-                          }
+            <ul className={active == true > 0 ? "head-menu-cate-all-child active" : "head-menu-cate-all-child"}>
+              {
+                cate.map((result, index) =>
+                  <li key={index}><Link className="head-cate-name" key={result.id} to={'/' + result.name + '/' + result.id + '/page=1/sort=0'}>{result.name}</Link></li>
+                )
+              }
             </ul>
           </li>
-          <li><Link className="head-menu-bottom" to="/home">Trang chủ</Link></li>
-<li><Link className="head-menu-bottom">Khiếu Nại</Link></li>
-          <li><Link className="head-menu-bottom">Giới thiệu</Link></li>
-          <li class="head-menu-huong-dan" style={{ position: "relative" }}>
-            <a className="head-menu-bottom">Hướng dẫn</a>
-            <ul className="drop-menu-hidden-vi">
-              <li><Link>hahah</Link></li>
-              <li><Link>csdv</Link></li>
-              <li><Link>vndskhk</Link></li>
+      </ul>
+      <nav className="menu">
+        <ul>
+          <li className="menu-item"><Link>Trang chủ</Link></li>
+          <li className="menu-item"><Link to="/gioi-thieu">Yêu thích</Link></li>
+          <li className="menu-item"><Link to="/chinh-sach-doi-tra-hoan-tien">Chính sách</Link></li>
+          <li className="menu-item"><Link to="/gioi-thieu">Giới thiệu</Link></li>
+          <li className="menu-item">
+            <a href="#">Hướng dẫn</a>
+            <ul className="sub-menu">
+            <li className="menu-item"><Link to="/huong-dan-mua-hang"><span className='an-di'>Hướng dẫn </span> mua hàng</Link></li>
+              <li className="menu-item"><Link><span className='an-di'>Hướng dẫn </span> thanh toán</Link></li>
+              <li className="menu-item"><Link to="/huong-dan-doi-tra"><span className='an-di'>Hướng dẫn </span> đổi trả</Link></li>
             </ul>
           </li>
         </ul>
-        <span className="head-cong" onClick={openMobie} >
-          <button className="btn">
-          <i className="fa fa-plus fa 2x" style={{color:'white'}}></i>
-          </button>
-        </span>
-        <ul className={acmobie == true ? "head-menu-hidden-bottom acitve" : "head-menu-hidden-bottom"}>
-          <li><Link className="head-menu-bottom">Khiếu nại</Link></li>
-          <li><Link className="head-menu-bottom">Gfiới thiệu</Link></li>
-          <li><Link className="head-menu-bottom">Hướng dẫn</Link></li>
-        </ul>
+      </nav>
+        
       </div>
+
     </header>
 
   );

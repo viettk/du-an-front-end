@@ -17,6 +17,7 @@ import Receipt from "../component/PhieuNhap/Receipt/Receipt";
 import SignInSide from "../component/Login/Login";
 import SignUp from "../component/Login/Register";
 import  Forgot from "../component/Login/Forgot";
+import ResetPassword from "../component/Login/ResetPassword";
 import ChangePassword from "../component/Login/ChangePassword";
 import ListCartNone from "../component/Cart/ListCartNone";
 import BillCustomer from "../component/BillCustomer/BillCustomer";
@@ -35,6 +36,10 @@ import CreatePdf from '../component/CreatePdf/CreatePdf'
 import AllProduct from "../component/Home/AllProduct";
 import Thanhcong from "../component/Order/Thanhcong";
 import ChangeStatus_pay from "../component/Order/ChangeStatus_pay";
+import Introduce from "../Layout/headchild/Introduce";
+import Instruct from "../Layout/headchild/Hdmua";
+import Hddt from "../Layout/headchild/Hddt";
+import Admin from "../Layout/admin/Admin";
 
 function ListRoute({reload, setReload}){
   const customerId = CookieService.getCookie('id');
@@ -49,7 +54,9 @@ function ListRoute({reload, setReload}){
 
         <Route exact path="/forgot" component={Forgot} />
 
-        <Route path="/changepassword/:token?" component={ChangePassword} />
+        <Route path="/resetpassword/:token?" component={ResetPassword} />
+
+        <Route path="/changepassword" component={ChangePassword} />
 
         <Route path= "/:sanpham/:id/page=:xpage/sort=:sort" component={HomeCate } />
 
@@ -64,8 +71,6 @@ function ListRoute({reload, setReload}){
         <Route path="/product/:id" >
           <ProductDetail reload={reload} setReload={setReload} />
         </Route>
-    
-        <Route path="/api/danh-muc" component={ListCategory} />
 
         {/* <Route path="/admin/san-pham" component={ProductAd} /> */}
 
@@ -77,15 +82,11 @@ function ListRoute({reload, setReload}){
           <FavoriteNotLogin reload={reload} setReload={setReload} />
         </Route>
 
-        <Route path="/api/receipt" component={Receipt} />
-
         <Route path="/cart" component={customerId ? ListCart : ListCartNone} />
 
         {/* <Route path="/cart_none" component={ListCartNone} /> */}
 
         <Route path="/lich-su-mua-hang" component={BillCustomer} />
-
-        <Route path="/api/thong-ke" component={Thongkedonhang} />
 
         <Route path="/chinh-sach-doi-tra-hoan-tien" component={Chinhsachtra} />
 
@@ -97,17 +98,22 @@ function ListRoute({reload, setReload}){
 
         <Route path="/giam-gia" component={Giamgia} />
 
-        <Route path="/admin/bill" component={Bill} />
-
         <Route path="/pdfff" component={CreatePdf} />
 
         <Route path="/dat-hang-thanh-cong" component={Thanhcong} />
 
         <Route path="/checkout" component={ChangeStatus_pay} />
 
+        <Route path="/gioi-thieu" component={Introduce} />
+
+        <Route path="/huong-dan-doi-tra" component={Hddt} />
+        <Route path="/huong-dan-mua-hang" component={Instruct} />
+
         {/* <PrivateRoutes component={ListDanhmuc} authed={false} path='/admin'  /> */}
         {/* component PageNotFound phải để cuối cùng */}
         <Route path="*" component={PageNotFound} />
+
+        
 
         <Route path="/404" component={PageNotFound} />
 

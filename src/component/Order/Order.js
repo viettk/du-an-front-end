@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import CookieService from "../../cookie/CookieService";
 import { Alert, Snackbar } from "@mui/material";
 import AddressApi from "../../api/AddressApi";
+import VnPayApi from "../../api/VnPayApi";
 import { useHistory } from "react-router-dom";
 
 function Order() {
@@ -26,7 +27,7 @@ function Order() {
     email: '',
     name: '',
     phone: '',
-    status_pay: 'Thanh toán khi nhận nhà',
+    status_pay: 'Chưa thanh toán',
     address: '',
     city: '',
     district: '',
@@ -37,7 +38,8 @@ function Order() {
     themb: '',
     themc: '',
     discountName: '',
-    total: 0
+    total: 0,
+    type_pay:false,
   });
 
 
@@ -246,7 +248,14 @@ function Order() {
     if (customerId) {
       BillApi.dathangKhachLogin(customerId, result.input).then(r => {
         localStorage.setItem('mahoadon', r.id);
-        history.push('/dat-hang-thanh-cong');
+        //kiểm tra kiểu thanh toán
+        if(bill.type_pay){
+          VnPayApi.createUrl(r).then((url)=>{
+            window.location.replace(url)
+          })
+        }else{
+          history.push('/dat-hang-thanh-cong');
+        } 
       }).catch((error) => {
         if (error.response) {
           setLoi(error.response.data);
@@ -263,7 +272,14 @@ function Order() {
         localStorage.setItem('mahoadon', resp.id);
         BillApi.datHangKhachhangkoLogin(resp.id, demo).then(r => {
           localStorage.setItem('cart', JSON.stringify(cart));
-          history.push('/dat-hang-thanh-cong');
+          //kiểm tra kiểu thnah toán
+          if(bill.type_pay){
+            VnPayApi.createUrl(resp).then((url)=>{
+              window.location.replace(url)
+            })
+          }else{
+            history.push('/dat-hang-thanh-cong');
+          } 
         }).catch((error) => {
           if (error.response) {
             setLoi(error.response.data);
@@ -362,19 +378,13 @@ function Order() {
   }
 
 
-  //Lấy input loại thanh toán-------------------------------------------------------------------------------------------------
-  const cod = () => {
+  //Lấy input loại thanh toán------------------------------------------------------------------------------------------------
+  const typePay = (type) => {
     setBill({
       ...bill,
-      status_pay: 'Thanh toán khi nhận nhà'
+      type_pay: type
     })
-  }
-
-  const momo = () => {
-    setBill({
-      ...bill,
-      status_pay: 'Thanh toán online'
-    })
+    console.log(bill)
   }
 
   const handleClose = () =>{
@@ -460,7 +470,7 @@ function Order() {
 
               <div className="form-group">
                 <label htmlFor="exampleFormControlTextarea1">Ghi chú</label>
-                <textarea className="form-control" id="exampleFormControlTextarea1" rows={3} defaultValue={""} onChange={getInputValue} />
+                <textarea className="form-control" id="exampleFormControlTextarea1" name="describe" rows={3} defaultValue={""} onChange={getInputValue} />
               </div>
             </div>
 
@@ -469,14 +479,14 @@ function Order() {
               <h6>Phương thức thanh toán</h6>
               <div style={{ border: "1px solid #cecdcd", height: "105px", padding: " 10px 0 5px 10px", borderRadius: "5px" }}>
                 <div className="form-check">
-                  <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" defaultChecked onClick={cod} />
+                  <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" defaultChecked onClick={()=>typePay(false)} />
                   <label className="form-check-label" htmlFor="flexRadioDefault1">
                     Thanh toán khhi giao hàng
                   </label>
                 </div>
                 <hr />
                 <div className="form-check">
-                  <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" onClick={momo} />
+                  <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" onClick={()=>typePay(true)} />
                   <label className="form-check-label" htmlFor="flexRadioDefault1">
                     Thanh toán online
                   </label>
@@ -540,7 +550,9 @@ function Order() {
               </span>
               <span style={{ display: "grid", gridTemplateColumns: "1fr 1fr", alignItems: "center" }}>
                 <Link to='/cart' id="viet-back-cart"><i class="fa fa-angle-left viet-order-arrow"></i>Quay lại giỏ hàng</Link>
-                <button type="button" id="btn-order" onClick={datHang} >Đặt hàng</button>
+                {
+                  bill.type_pay ? <button type="button" id="btn-order" onClick={datHang} >Thanh toán</button> : <button type="button" id="btn-order" onClick={datHang} >Đặt hàng</button>
+                }
               </span>
             </div>
           </div>

@@ -9,6 +9,7 @@ import { create } from "@mui/material/styles/createTransitions";
 import axios from "axios";
 import ReceiptDetail from "../ReceiptDetal/ReceiptDetail";
 import './receipt.css';
+import Dialog from '@mui/material/Dialog';
 
 function Receipt() {
     const history = useHistory();
@@ -137,7 +138,11 @@ function Receipt() {
     return (
         <React.Fragment>
             <h3 style={{ marginTop: 10 }}>Danh sách Phiếu nhập</h3>
+            
+            <div style={{display: "none"}}>
             <ReceiptDetail show={show} setShow={setShow} ma={ma} setMa={setMa} reload={reload} setReload={setReload} />
+            </div>
+            
             <TableContainer component={Paper}>
                 <div style={{position: "relative"}}>
                     <div className="receipt-create">

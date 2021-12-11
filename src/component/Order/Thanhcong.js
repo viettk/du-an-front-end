@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import BillApi from '../../api/BillApi';
+import VnPayApi from '../../api/VnPayApi';
 import './thanhcong.css';
 
 function Thanhcong() {
@@ -11,6 +12,15 @@ function Thanhcong() {
     useEffect(() => {
         const fetchList = async () => {
           try {
+            //check lần 1
+            let url = window.location.href;
+            let data =url.slice(url.indexOf('?'));
+            VnPayApi.checkSum(data).then(v=>{
+                if(v){
+                    VnPayApi.checkBill()
+                }
+            })
+           
             const responseBill = await BillApi.getMahoadonThanhCong(mahoadon);
             const responseBillDetail = await BillApi.getListBillDetailthanhcong(mahoadon);
             setBill(responseBill);

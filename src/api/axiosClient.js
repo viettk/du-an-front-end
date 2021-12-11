@@ -25,10 +25,10 @@ axiosClient.interceptors.response.use((response) => {
     }
     return response;
 }, (error) => {
-if(error.response.status===403){
-    CookieService.removeCookie();
-    window.location.replace('http://localhost:3000/login')
-  } 
+// if(error.response.status===403){
+//     CookieService.removeCookie();
+//     window.location.replace('http://localhost:3000/login')
+//   } 
     throw error;
 });
 

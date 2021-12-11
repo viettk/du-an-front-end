@@ -1,7 +1,7 @@
 function Chinhsachtra(){
     return(
-        <div style={{margin: "30px 0 30px 30px"}}>
-            <h3>CHÍNH SÁCH ĐỔI TRẢ & HOÀN TIỀN</h3>
+        <div className="container">
+            <h3 style={{textAlign:'center' , margin:'15px'}}>CHÍNH SÁCH ĐỔI TRẢ & HOÀN TIỀN</h3>
 
             <h4>Điều kiện chung để áp dụng đổi trả hoặc hoàn tiền</h4>
 

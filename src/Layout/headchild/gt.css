@@ -1,0 +1,15 @@
+.gt-a p {
+    text-align: center;
+    font-size: 23px !important;
+    margin: 31px;
+}
+.gt-b{
+    margin: 15px;
+    font-size: 19px !important;
+}
+.gt-c{
+    font-size: 18px;
+}
+.gt-c ul li {
+    margin: 20px 0px;
+}

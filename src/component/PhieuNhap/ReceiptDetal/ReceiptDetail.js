@@ -303,7 +303,7 @@ function ReceiptDetail({ show, setShow, ma, setMa, reload, setReload }) {
     }
     
     return (
-        <div className="ok" style={{zIndex: "999"}}>         
+        <div className="ok" >         
             <Modal show={show} onHide={() => dong()} fullscreen={true} >
                 <Modal.Header>
                     <span className="titele-name">Phiếu nhập chi tiết</span>

@@ -14,24 +14,28 @@ import CartApi from './api/CartApi';
 function App() {
 
   const [reload, setReload] = useState(false);
-  
+
   return (
     <div>
       <BrowserRouter>
-      {/* <Head />
-      <ListRoute />
-      <Bodyfooter/>
-      <Footer/> */}
-      <Switch>
-        {/* <Route path='/admin' component={LayoutAdmin}/> */}
-        <Route path='/' >
-        <Head reload={reload} />
-      <ListRoute reload={reload} setReload={setReload} />
-      <Bodyfooter/>
-      <Footer/>
-        </Route>
-        </Switch> 
-       </BrowserRouter>
+        <Switch>
+
+          {/* admin */}
+          <Route path='/admin'>
+            <LayoutAdmin />
+          </Route>
+
+          {/* Khách hàng */}
+          <Route path='/' >
+            <Head reload={reload} />
+            <ListRoute reload={reload} setReload={setReload} />
+            <Bodyfooter />
+            <Footer />
+          </Route>
+
+          
+        </Switch>
+      </BrowserRouter>
     </div>
   );
 }

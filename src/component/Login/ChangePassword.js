@@ -13,6 +13,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import { useParams, useHistory } from "react-router-dom";
+import CookieService from '../../cookie/CookieService';
 function Copyright(props) {
     return (
       <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -29,67 +30,54 @@ function Copyright(props) {
 
 function ChangePassword(){
     const history = useHistory();
-    const {token}= useParams();
-    const [result, setResult] = useState({});
-      const onChangeHandler = (event) => {
-        const { name, value } = event.target;
-        setResult({
-          ...result,
-          [name]:value,token:token
-        })
-      }
-      const [user, setUser] = useState({});
-      //lỗi
-      const [mess, setMess] = useState({
-        errorMessage: ''
+    const token = CookieService.getCookie('token');
+    const [result, setResult] = useState({
+        token:token
+    });
+    const onChangeHandler = (event) => {
+      const { name, value } = event.target;
+      setResult({
+        ...result,
+        [name]: value,
+      })
+    }
+    const [user, setUser] = useState({});
+    //lỗi
+    const [mess, setMess] = useState({
+      errorMessage: ''
     });
     const [loi, setLoi] = useState({
-        name: '',
-        parent_name: ''
+      name: '',
+      parent_name: ''
     });
-      
-      useEffect(() => {
-        const fetchList = () => {axios({
-            url: 'https://tranhoangmaianh.herokuapp.com/forgot/check/'+token,
-            method: 'get',
-            headers:{
-              'Content-Type':'application/json',
-            }
-          }).then(resp=>{
-            setUser({email :resp.data})
-            console.log(result)
-          }).catch(e=>{
-            history.push("/ádsa")
-          });}
-            fetchList();
-      }, []);
-
-const handleSubmit = (event) => {
-    event.preventDefault();
-        axios({
-          url: 'https://tranhoangmaianh.herokuapp.com/forgot/changepassword',
-          method: 'post',
-          data: result,
-          headers:{
-            'Content-Type':'application/json',
-          }
-        }).then(resp=>{
-          alert('Đổi mật khẩu thành công !')
-          history.push("/login");
-        }).catch(error=>{
-          if (error.response) {
-            setLoi(error.response.data);
-            setMess(error.response.data);
-        } else if (error.request) {
-            console.log(error.request);
-        } else {
-            console.log('Error', error.message);
+  
+    const handleSubmit = (event) => {
+      event.preventDefault();
+      axios({
+        url: 'http://localhost:8080/change-password',
+        method: 'post',
+        data: result,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         }
-        });;
-        
-      }
+      }).then(resp => {
+        alert('Đổi mật khẩu thành công !')
+        history.push("/home");
+      }).catch(error => {
+        if (error.response) {
+          setLoi(error.response.data);
+          setMess(error.response.data);
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          console.log('Error', error.message);
+        }
+      });;
+  
+    }
     return (
-        <ThemeProvider theme={theme}>
+      <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="xs">
           <CssBaseline />
           <Box
@@ -103,41 +91,55 @@ const handleSubmit = (event) => {
             <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
               <AccountCircleIcon />
             </Avatar>
-            <Typography component="h2" variant="h6" style={{color : 'blue'}}>
-                {user.email}
+            <Typography component="h2" variant="h6" style={{ color: 'blue' }}>
+              {user.email}
             </Typography>
             <Typography component="h2" variant="h4" >
-           Đổi Mật Khẩu
+              Đổi Mật Khẩu
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
-                <TextField
+                  <TextField
                     required
                     fullWidth
                     name="password"
-                    label="Mật khẩu"
+                    label="Mật khẩu cũ"
                     type="password"
                     id="password"
-                    onChange={ onChangeHandler }
+                    onChange={onChangeHandler}
                     autoComplete="new-password"
                   />
-                       <span style={{ color: "red", fontSize: "13px" }}>{loi.password}</span>
-                    <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span>
+                  <span style={{ color: "red", fontSize: "13px" }}>{loi.password}</span>
+                  <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span>
                 </Grid>
                 <Grid item xs={12}>
-                <TextField
+                  <TextField
                     required
                     fullWidth
-                    name="repeatPassword"
-                    label="Nhập lại mật khẩu"
+                    name="newPassword"
+                    label="Mật khẩu mới"
                     type="password"
-                    id="repeatPassword"
-                    onChange={ onChangeHandler }
-                    autoComplete="Repeat password"
+                    id="newPassword"
+                    onChange={onChangeHandler}
+                    autoComplete="new-password"
                   />
-                   <span style={{ color: "red", fontSize: "13px" }}>{loi.repeatPassword}</span>
-                <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span>
+                  <span style={{ color: "red", fontSize: "13px" }}>{loi.newPassword}</span>
+                  <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span>
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    required
+                    fullWidth
+                    name="repeatNewPassword"
+                    label="Nhập lại mật khẩu mới" 
+                    type="password"
+                    id="repeatNewPassword"
+                    onChange={onChangeHandler}
+                    autoComplete="new-password"
+                  />
+                  <span style={{ color: "red", fontSize: "13px" }}>{loi.repeatNewPassword}</span>
+                  <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span>
                 </Grid>
               </Grid>
               <Button
@@ -153,6 +155,6 @@ const handleSubmit = (event) => {
           <Copyright sx={{ mt: 5 }} />
         </Container>
       </ThemeProvider>
-      );
+    );
 }
 export default ChangePassword;
