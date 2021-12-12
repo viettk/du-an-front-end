@@ -1,25 +1,25 @@
 import axiosClient from "./axiosClient";
 
 const StaffApi = {
-    getAll : (params) => {
-        const url = "/staff";
+    getAll: (params) => {
+        const url = "/admin/staff";
         return axiosClient.get(url, { params });
     },
-    getById : (id) => {
-        const url = `/staff/${id}`;
+    getById: (id) => {
+        const url = `/admin/staff/${id}`;
         return axiosClient.get(url);
     },
-    createAccount : () => {
-        const url = "/staff";
-        return axiosClient.post(url);
+    createAccount: (data) => {
+        const url = "/admin/staff";
+        return axiosClient.post(url, data);
     },
-    updateAccount : (params, id) => {
-        const url = `/staff/${id}`;
-        return axiosClient.put(url, { params });
+    updateAccount: (values) => {
+        const url = `/admin/staff/${values.id}`;
+        return axiosClient.put(url, values.data);
     },
-    deleteAccount : (params) => {
-        const url = `/staff/${id}`;
-        return axiosClient.delete(url);
-    },
+    rePassword: (values) =>{
+        const url = `/admin/staff/reset-password/${values.id}`;
+        return axiosClient.put(url, values.data);
+    }
 }
 export default StaffApi;

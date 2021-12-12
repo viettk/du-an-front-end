@@ -24,17 +24,16 @@ const SlideBar = () => {
         {
             text: 'Thống kê',
             icon: <BarChartIcon />,
-            path: "/admin/chart",
             iconOpen: <ExpandLess />,
             iconClose: <ExpandMore />,
             chiren: [
                 {
                     text: 'Doanh thu',
-                    path: "/admin/chart/bill",
+                    path: "/admin/chart/all",
                 },
                 {
-                    text: 'Nhân viên',
-                    path: "/admin/chart/staff",
+                    text: 'Mã giảm giá',
+                    path: "/admin/chart/discount",
                 },
             ]
         },
@@ -49,9 +48,13 @@ const SlideBar = () => {
             path: "/admin/category",
         },
         {
+            text: 'Giảm giá',
+            icon: <CategoryIcon />,
+            path: "/admin/giam-gia",
+        },
+        {
             text: 'Hóa đơn',
             icon: <CardMembershipIcon />,
-            path: "/admin/bill",
             iconOpen: <ExpandLess />,
             iconClose: <ExpandMore />,
             chiren: [
@@ -60,8 +63,7 @@ const SlideBar = () => {
                     path: "/admin/bill/managerbill",
                 },
                 {
-                    text: 'Hoàn trả',
-                    path: "/admin/bill/returnbill",
+                    text: 'Hoàn trả(Chưa xong)',
                 },
             ]
         },

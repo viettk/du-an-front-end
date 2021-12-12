@@ -10,6 +10,11 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import LayoutAdmin from './Layout/admin/LayoutAdmin';
 import CookieService from './cookie/CookieService';
 import CartApi from './api/CartApi';
+import SignInSide from './component/Login/Login';
+import SignUp from './component/Login/Register';
+import Forgot from './component/Login/Forgot';
+import ResetPassword from './component/Login/ResetPassword';
+import ChangePassword from './component/Login/ChangePassword';
 
 function App() {
 
@@ -33,7 +38,6 @@ function App() {
             <Footer />
           </Route>
 
-          
         </Switch>
       </BrowserRouter>
     </div>

@@ -9,6 +9,11 @@
     color: lightgreen;
 }
 
+.thatbai-icon{
+    font-size: 120px !important;
+    color: rgb(255, 174, 6);
+}
+
 .thanh-cong-email p{
     font-size: 15px;
 }

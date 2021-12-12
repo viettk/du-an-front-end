@@ -1,64 +1,38 @@
-
-.form-receipt{
+.giam-gia-discount{
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-column-gap: 50px;
-    margin-bottom: 30px;
-}
-.receipt-detail-img .receipt-detail-image{
-    border: 1px solid black;
-    width: 65%;
-    height: 90%;
-}
-.receipt-hiddent-show{
-    position: absolute;
-    overflow: hidden;
-    height: 0;
+    grid-row-gap: 30px;
 }
 
-.receipt-hiddent-show.active{
-    height: 250px;
-    z-index: 99;
-    border: 1px solid gray;
-    margin-top: -20px;
-    width: 100%;
-    background-color: white;
-    overflow-y: auto;
+.giam-gia-discount label{
+    width: 230px;
 }
-.receipt-product-name{
-    list-style: none;
-    margin: 0;
-    padding: 5px 0 5px 0;
+
+.giam-gia-discount span{
+    font-size: 17px;
+    color: black;
 }
-.receipt-product-name li{
-    padding: 3px 0 0 10px;
-    margin: 0;
-    cursor: pointer;
-    height: 28px;
+
+.giam-gia-discount select{
+    text-align: center;
+    padding: 5px 10px;
 }
-.receipt-product-name li:hover{
-    background-color: gray;
+
+.giam-gia-discount select option{
+    padding: 5px 0;
 }
-.button-them{
-    background-color:#2769de ;
+
+.giam-gia-discount .gg-btn{
+    border: none;
+    background-color: lightskyblue;
+    padding: 5px 10px;
     border-radius: 5px;
-    padding: 10px 20px;
 }
-.button-them:hover{
-    background-color: #579fe1 ;
+
+.giam-gia-discount .gg-btn:hover{
+    background-color: #5488c7;
 }
-.titele-name{
-    font-weight: 500;
-    color: black;
-    font-size: 18px;
-}
-.table-striped td{
-    padding: 20px 0 18px 0;
-}
-.table-striped tbody tr{
-    color: black;
-    font-weight: 500;
-}
-.table-striped tbody td{
-    padding: 5px 0 6px 0;
+
+.gg-btn-kp{
+    border: none;
+    padding: 5px 10px;
 }

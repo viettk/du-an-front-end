@@ -1,6 +1,4 @@
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import App from "../App";
-import ListCategory from "../component/Category/ListCategory";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PageNotFound from "../component/PageError/PageNotFound";
 import ProductAd from "../component/ProductAdmin/ProductAd";
@@ -13,7 +11,6 @@ import Order from "../component/Order/Order";
 import Address from "../component/Adress/Adress";
 import Favorite from "../component/Favorite/Favorite";
 import FavoriteNotLogin from "../component/Favorite/FavoriteNotLogin";
-import Receipt from "../component/PhieuNhap/Receipt/Receipt";
 import SignInSide from "../component/Login/Login";
 import SignUp from "../component/Login/Register";
 import  Forgot from "../component/Login/Forgot";
@@ -21,16 +18,10 @@ import ResetPassword from "../component/Login/ResetPassword";
 import ChangePassword from "../component/Login/ChangePassword";
 import ListCartNone from "../component/Cart/ListCartNone";
 import BillCustomer from "../component/BillCustomer/BillCustomer";
-import Thongkedonhang from "../component/Thongke/Thongkedonhang";
 import Chinhsachtra from "../Layout/Chinhsachtra";
 import Sidebar from "../Layout/Sidebar/Sidebar";
-import CustomerAd from "../component/CustomerAd/CustomerAd";
-import ListDiscount from "../component/Discount/ListDiscount";
-import Giamgia from "../component/Giamgia/Giamgia";
 import HomeCateParentName from "../component/Home/HomeCateParentName.";
 import PrivateRoute from "./PrivateRouter";
-import { useState } from "react";
-import Bill from "../component/billadmin/Bill";
 import CookieService from '../cookie/CookieService';
 import CreatePdf from '../component/CreatePdf/CreatePdf'
 import AllProduct from "../component/Home/AllProduct";
@@ -39,7 +30,6 @@ import ChangeStatus_pay from "../component/Order/ChangeStatus_pay";
 import Introduce from "../Layout/headchild/Introduce";
 import Instruct from "../Layout/headchild/Hdmua";
 import Hddt from "../Layout/headchild/Hddt";
-import Admin from "../Layout/admin/Admin";
 
 function ListRoute({reload, setReload}){
   const customerId = CookieService.getCookie('id');
@@ -92,12 +82,6 @@ function ListRoute({reload, setReload}){
 
         <Route path="/sidebar" component={Sidebar} />
 
-        <Route path="/customer" component={CustomerAd} />
-
-        <Route path="/discount" component={ListDiscount} />
-
-        <Route path="/giam-gia" component={Giamgia} />
-
         <Route path="/pdfff" component={CreatePdf} />
 
         <Route path="/dat-hang-thanh-cong" component={Thanhcong} />
@@ -107,13 +91,12 @@ function ListRoute({reload, setReload}){
         <Route path="/gioi-thieu" component={Introduce} />
 
         <Route path="/huong-dan-doi-tra" component={Hddt} />
+
         <Route path="/huong-dan-mua-hang" component={Instruct} />
 
         {/* <PrivateRoutes component={ListDanhmuc} authed={false} path='/admin'  /> */}
         {/* component PageNotFound phải để cuối cùng */}
         <Route path="*" component={PageNotFound} />
-
-        
 
         <Route path="/404" component={PageNotFound} />
 

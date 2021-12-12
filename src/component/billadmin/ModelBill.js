@@ -1,29 +1,44 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { Fragment, memo } from "react";
-import BillAdminApi from "../../api/BillAdminApi";
+import React, { Fragment, memo, useState } from "react";
+import { useDispatch } from "react-redux";
 import BillDetail from "./BillDetail";
+import * as type from '../../redux/const/type';
 
 function ModelBill(
     {
         bill,
-        formDataBill,
-        setFormDataBill,
         params,
         setParams,
-        clicked,
-        setClicked,
         count,
-        page,
-        setPage,
-        rowsPerPage,
-        setRowsPerPage,
-        reload,
-        setReload,
     }
 ) {
-
+    const initBill = {
+        id: null,
+        email: '',
+        create_date: '',
+        update_date: '',
+        name: '',
+        phone: '',
+        total: '',
+        status_pay: '',
+        address: '',
+        city: '',
+        district: '',
+        status_order: '',
+        thema: '',
+        themb: '',
+        themc: '',
+        staff_id: '',
+        discount_id: '',
+        id_code: '',
+    }
+    const dispatch = useDispatch();
+    const [formDataBill, setFormDataBill] = useState(initBill);
+    const [clicked, setClicked] = useState(-1);
     //phan trang
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
         setParams({
@@ -34,19 +49,13 @@ function ModelBill(
 
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
         setParams({
             ...params,
             _page: '0',
             _limit: parseInt(event.target.value, 10),
         })
+        console.log(parseInt(event.target.value, 10));
     };
-
-    const onReload = () => {
-        if (reload) {
-            setReload(false);
-        } else { setReload(true) }
-    }
     //handler
     const onClickHandler = (event, value, index) => {
         setClicked(index);
@@ -60,25 +69,25 @@ function ModelBill(
         let order_pay = '';
         switch (value) {
             case 'Chờ xác nhận':
-                order = 'Xác nhận';
+                order = 'Đã xác nhận';
                 break;
             case 'Đã xác nhận':
-                order = 'Chuẩn bị hàng';
+                order = 'Đang chuẩn bị hàng';
                 break;
             case 'Đang chuẩn bị hàng':
-                order = 'Giao hàng';
+                order = 'Đang giao hàng';
                 break;
             case 'Đang giao hàng':
+                order = 'Giao hàng thành công';
+                order_pay = 'Đã thanh toán';
+                break;
+            case 'Giao hàng thành công':
                 order = 'Hoàn thành';
                 order_pay = 'Đã thanh toán';
                 break;
-            case 'Hoàn thành':
+            case 'Đơn hoàn trả':
                 order = 'Hoàn thành';
                 order_pay = 'Đã thanh toán';
-                break;
-            case 'Đang hoàn trả':
-                order = 'Đã hoàn trả';
-                order_pay = 'Đã hoàn trả';
                 break;
             default:
                 break;
@@ -88,13 +97,8 @@ function ModelBill(
             status_order: order,
             status_pay: order_pay,
         }
-        try {
-            await BillAdminApi.updateStatusOrder(id, data);
-            handleClose();
-        } catch (error) {
-            console.error(error)
-        }
-        onReload();
+        dispatch({ type: type.UPDATE_BILL_STATUS_ORDER_ACTION, payload: { id, data } });
+        handleClose();
     }
     // hủy giao hàng chờ giao lại
     const onCanceBill = async (id, data) => {
@@ -115,13 +119,8 @@ function ModelBill(
             ...formDataBill,
             status_order: order,
         }
-        try {
-            await BillAdminApi.updateStatusOrder(id, data);
-            handleCloseCB();
-        } catch (error) {
-            console.error(error)
-        }
-        onReload();
+        dispatch({ type: type.UPDATE_BILL_STATUS_ORDER_ACTION, payload: { id, data } });
+        handleCloseCB();
     }
     const onSwitchFunction = ((value) => {
         switch (value) {
@@ -141,15 +140,15 @@ function ModelBill(
                 return (<div>
                     <Button size="small" variant="text" onClick={handleClickOpen}>Nhận hàng</Button>
                     <Button size="small" variant="text" onClick={handleClickOpenCB}>Hủy</Button>
-                </div>);
+                        </div>);
             case 'Thất bại':
                 return (<p>Thất bại</p>);
             case 'Hoàn thành':
                 return (<p>Hoàn thành</p>);
-            case 'Đang hoàn trả':
-                return (<Button size="small" variant="text" onClick={handleClickOpen}>Xác nhận</Button>);
-            case 'Đã hoàn trả':
-                return (<p>Đã hoàn trả</p>);
+            case 'Giao hàng thành công':
+                return (<p>Giao hàng thành công</p>);
+            case 'Đơn hoàn trả':
+                return (<p>Đơn hoàn trả</p>);
             default:
                 return (<p>Không cập nhật được</p>);
         }
@@ -176,62 +175,62 @@ function ModelBill(
     };
     return (
         <Fragment>
-            {bill.length>0?(
-            <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                <TableContainer sx={{ maxHeight: 440 }}>
-                    <Table stickyHeader aria-label="sticky table">
-                        <TableHead style={{ background: "#ccc" }}>
-                            <TableRow>
-                                <TableCell>STT</TableCell>
-                                <TableCell>Họ và tên</TableCell>
-                                <TableCell>Số điện thoại</TableCell>
-                                <TableCell>Địa chỉ</TableCell>
-                                <TableCell>Trạng thái hóa đơn</TableCell>
-                                <TableCell>Trạng thái thanh toán</TableCell>
-                                <TableCell>Mã hóa đơn</TableCell>
-                                <TableCell>Tổng tiền</TableCell>
-                                <TableCell>Hoạt động</TableCell>
-                                <TableCell></TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {bill.map((row, index) => (
-                                <TableRow
-                                    key={index}
-                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                    onClick={
-                                        (event) => {
-                                            onClickHandler(event, row, index);
-                                        }
-                                    }
-                                >
-                                    <TableCell>{index + 1}</TableCell>
-                                    <TableCell component="th" scope="row">
-                                        {row.name}
-                                    </TableCell>
-                                    <TableCell>{row.phone}</TableCell>
-                                    <TableCell>{row.address}</TableCell>
-                                    <TableCell>{row.status_order}</TableCell>
-                                    <TableCell>{row.status_pay}</TableCell>
-                                    <TableCell>{row.id_code}</TableCell>
-                                    <TableCell>{row.total}</TableCell>
-                                    <TableCell>{onSwitchFunction(row.status_order)}</TableCell>
-                                    <TableCell><BillDetail id={row.id} formDataBill={formDataBill} /></TableCell>
+            {bill ? (
+                <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+                    <TableContainer sx={{ minHeight: 440 }}>
+                        <Table stickyHeader aria-label="sticky table">
+                            <TableHead style={{ background: "#ccc" }}>
+                                <TableRow>
+                                    <TableCell>STT</TableCell>
+                                    <TableCell>Họ và tên</TableCell>
+                                    <TableCell>Số điện thoại</TableCell>
+                                    <TableCell>Địa chỉ</TableCell>
+                                    <TableCell>Trạng thái hóa đơn</TableCell>
+                                    <TableCell>Trạng thái thanh toán</TableCell>
+                                    <TableCell>Mã hóa đơn</TableCell>
+                                    <TableCell>Tổng tiền</TableCell>
+                                    <TableCell>Hoạt động</TableCell>
+                                    <TableCell></TableCell>
                                 </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <TablePagination
-                    component="div"
-                    count={count}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    rowsPerPage={rowsPerPage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-            </Paper>):(
-                <Box sx={{textAlign: "center", marginTop: "50px"}}>
+                            </TableHead>
+                            <TableBody>
+                                {bill.map((row, index) => (
+                                    <TableRow
+                                        key={index}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                        onClick={
+                                            (event) => {
+                                                onClickHandler(event, row, index);
+                                            }
+                                        }
+                                    >
+                                        <TableCell>{index + 1}</TableCell>
+                                        <TableCell component="th" scope="row">
+                                            {row.name}
+                                        </TableCell>
+                                        <TableCell>{row.phone}</TableCell>
+                                        <TableCell>{row.address}</TableCell>
+                                        <TableCell>{row.status_order}</TableCell>
+                                        <TableCell>{row.status_pay}</TableCell>
+                                        <TableCell>{row.id_code}</TableCell>
+                                        <TableCell>{row.total}</TableCell>
+                                        <TableCell>{onSwitchFunction(row.status_order)}</TableCell>
+                                        <TableCell><BillDetail id={row.id} formDataBill={formDataBill} /></TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                    <TablePagination
+                        component="div"
+                        count={count}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        rowsPerPage={rowsPerPage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                </Paper>) : (
+                <Box sx={{ textAlign: "center", marginTop: "50px" }}>
                     <Typography variant="subtitle1">Không có dữ liệu!</Typography>
                 </Box>
             )}

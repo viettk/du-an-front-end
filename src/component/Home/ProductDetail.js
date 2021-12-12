@@ -354,29 +354,15 @@ function ProductDetail({reload, setReload}) {
           </div>
           <div className="category-tab shop-details-tab" style={{ marginTop: "40px" }}>
             {/*category-tab*/}
-            <ul className="nav nav-tabs">
+            <ul style={{display: "grid"}} className="nav nav-tabs">
               <li className="active"><a className="nav-title" data-toggle="tab">Mô tả sản phẩm</a></li>
               <span className="descriptio">
                 <p>
                   <i className="fa fa-angellist " />
-                  <span>
-                    Khi nhận hàng các bạn nên kiểm tra từ bên ngoài, không bóc túi runner, nếu có vấn đề gì thì báo cho shop. Các vấn đề phát sinh sau khi đã bóc túi ra, shop sẽ không chịu trách nhiệm.
-                  </span>
+                  <span>{result.describe}</span>
                 </p>
                 <p><i className="fa fa-angellist " />
-                  <span>Tỷ lệ: 1/100</span>
-                </p>
-                <p><i className="fa fa-angellist " />
-                  <span>Dòng: Master Grade (MG)</span>
-                </p>
-                <p><i className="fa fa-angellist " />
-                  <span>Chiều cao sản phẩm: 16cm</span>
-                </p>
-                <p><i className="fa fa-angellist " />
-                  <span>Có base đi kèm: Không</span>
-                </p>
-                <p><i className="fa fa-angellist " />
-                  <span>Cement và Paint (keo và sơn): Không yêu cầu</span>
+                  <span>{result.trait}</span>
                 </p>
               </span>
             </ul>

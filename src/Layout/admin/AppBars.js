@@ -16,6 +16,8 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { Divider } from '@mui/material';
 import { Logout } from '@mui/icons-material';
+import CookieService from '../../cookie/CookieService';
+import GoogleApi from '../../api/GoogleApi';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -80,6 +82,15 @@ function AppBars() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const logout = () => {
+    if(CookieService.getCookie('accessToken')){
+      GoogleApi.logout(CookieService.getCookie("accessToken"))
+    }
+    CookieService.removeCookie();
+    alert('Logout !')
+    window.location.replace('/home')
+  }
+
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
@@ -92,7 +103,7 @@ function AppBars() {
       <MenuItem onClick={handleMenuClose}><AccountCircleIcon/>Profile</MenuItem>
       <MenuItem onClick={handleMenuClose}><SettingsIcon/>Setting</MenuItem>
       <Divider />
-      <MenuItem onClick={handleMenuClose}>
+      <MenuItem onClick={logout}>
         <Logout fontSize="small" />
         Logout
       </MenuItem>

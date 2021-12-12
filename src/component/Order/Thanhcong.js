@@ -2,25 +2,33 @@ import { useEffect, useState } from 'react';
 import BillApi from '../../api/BillApi';
 import VnPayApi from '../../api/VnPayApi';
 import './thanhcong.css';
+import {
+    Link
+  } from "react-router-dom";
 
 function Thanhcong() {
 
     const mahoadon = localStorage.getItem('mahoadon');
     const [bill, setBill] = useState({});
     const [bdt, setBdt] = useState([]);
+    const [statusOrder,setStatsusOrder] = useState(true); 
 
     useEffect(() => {
         const fetchList = async () => {
           try {
-            //check lần 1
+            //check và cập nhật hóa đơn
             let url = window.location.href;
+            const urlParam = new URLSearchParams(window.location.search);
+            if(urlParam.get('vnp_ResponseCode')){
             let data =url.slice(url.indexOf('?'));
-            VnPayApi.checkSum(data).then(v=>{
-                if(v){
-                    VnPayApi.checkBill()
-                }
-            })
-           
+             VnPayApi.checkSum(data).then(s =>{
+                 if(s.data==false){
+                    setStatsusOrder(s.data)
+                 }else{
+                    setStatsusOrder(s)
+                 }
+             });}
+            
             const responseBill = await BillApi.getMahoadonThanhCong(mahoadon);
             const responseBillDetail = await BillApi.getListBillDetailthanhcong(mahoadon);
             setBill(responseBill);
@@ -39,14 +47,22 @@ function Thanhcong() {
                     <div className='thanh-cong-first'>
                         <img />
                         <div class="thanhcong-body">
-                            <div class="cam-on-da-dat">
+                            {statusOrder===true ? (<div class="cam-on-da-dat">
                                 <i class="fa fa-check-circle thanhcong-icon"></i>
                                 <div class="thanh-cong-email">
                                     <p>Cảm ơn bạn đã đặt hàng</p>
                                     <p>Một email xác nhận đã được gửi tới <span style={{fontWeight: "500"}}>{bill.email}</span></p>
                                     <p>Xin vui lòng kiểm tra email của bạn</p>
                                 </div>
-                            </div>
+                            </div>) : (<div class="cam-on-da-dat">
+                                <i class="fa fa-info-circle thatbai-icon" ></i>
+                                <div class="thanh-cong-email">
+                                    <p>THANH TOÁN THẤT BẠI</p>
+                                    <p>Giao dịch không thành công, xin vui lòng thử lại.</p>
+                                    <p>Lỗi thanh toán bên VNPAY: Giao dịch thất bại. unexpect error status</p>
+                                </div>
+                            </div>) }
+                            
 
                             <div className="dat-thang-infor">
                                 <div className="dat-hang-infor-cus">
@@ -65,7 +81,8 @@ function Thanhcong() {
                                 <span style={{fontWeight: "500"}}>Phương thức thanh toán:</span>
                                 <span>{bill.status_pay}</span>
                             </div>
-                            <button className='thanhcong-btn first-btn-tc'>Tiếp tục mua hàng</button>
+                            {statusOrder===true ? <button className='thanhcong-btn first-btn-tc'><Link to="/">Tiếp tục mua hàng</Link></button>:
+                                <button className='thanhcong-btn first-btn-tc'>Thanh toán lại</button>}
                         </div>
                     </div>
                     <div className='thanhcong-second'>
@@ -88,7 +105,7 @@ function Thanhcong() {
                         <hr></hr>
                         <p style={{fontWeight: "500"}}>Thành tiền: {String(Math.round(bill.total)).replace(/(.)(?=(\d{3})+$)/g, '$1.') } VNĐ</p>
                     </div>
-                    <button className='thanhcong-btn second-btn-tc'>Tiếp tục mua hàng</button>
+                    {/* <button className='thanhcong-btn second-btn-tc'>Tiếp tục mua hàng</button> */}
                 </div>
             </div>
         </div>

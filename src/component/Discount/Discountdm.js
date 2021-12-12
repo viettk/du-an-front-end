@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Alert, Modal } from 'react-bootstrap';
 import DiscountApi from '../../api/DiscountApi';
 import { Snackbar } from '@mui/material';
+import { display } from '@mui/system';
 
 
 function Discountdm({ show, setShow, ma, setMa , reload , setReload}) {
@@ -170,7 +171,7 @@ function Discountdm({ show, setShow, ma, setMa , reload , setReload}) {
                             <input className="form-control" type="text" onChange={(e) => updateName(e)} value={detail.name} />
                             <span style={{ color: "red", fontSize: "13px" }}>{loi.name}</span> 
                         </div>
-                        <div className="form-group">
+                        <div className="form-group" style={{ display:  ma==0 || ma==undefined ? "block" : "none" }}>
                             <label>Giá giảm</label>
                             <input className="form-control" type="text" onChange={(e) => updatevalueDiscount(e)} value={detail.valueDiscount} />
                             <span style={{ color: "red", fontSize: "13px" }}>{loi.valueDiscount}</span>

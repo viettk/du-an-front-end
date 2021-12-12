@@ -19,10 +19,10 @@ import { height } from "@mui/system";
 function ListCategory() {
     const initValues = [];
     const initParams= {
+        _field: 'name',
+        _known: 'up',
         _limit : '5',
         _page : 0,
-        _field: 'name',
-        _known: 'up'
     };
 
     const [ params, setParams] = useState(initParams);
@@ -56,12 +56,11 @@ function ListCategory() {
 
       const handleChange = (event, value) => {
         setPage(value);
-        setParams(
-            {
+        setParams({
+                ...params,
                 _limit : '5',
                 _page : value-1,
-            }
-        );       
+            });       
       };
       
       const getMa = (id) =>{

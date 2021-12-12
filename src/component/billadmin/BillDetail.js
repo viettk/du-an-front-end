@@ -5,48 +5,40 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Grid, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
-import BillAdminApi from '../../api/BillAdminApi';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
+import { useDispatch, useSelector } from 'react-redux';
+import * as type from '../../redux/const/type';
+import './bill.css';
 
 export default function BillDetail({
     id,
     formDataBill,
 }) {
 
-    const [billDetail, setBillDetail] = React.useState([]);
+    const param = {
+        _field: 'id',
+        _known: 'up',
+    };
+    const dispatch = useDispatch();
+    const response = useSelector((state) => state.bill.detail);
     const [open, setOpen] = React.useState(false);
-
     const handleClickOpen = () => {
         setOpen(true);
+        dispatch({ type: type.FETCH_BILL_DETAIL_ACTION, payload: { id, param } });
     };
 
     const handleClose = () => {
         setOpen(false);
     };
 
-    React.useEffect(() => {
-        const fetchListBillDetail = async () => {
-            const params = {
-                _field: 'id',
-                _known: 'up',
-            };
-            try {
-                const respose = await BillAdminApi.getBillDetailByBill(id, params);
-                setBillDetail(respose);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        fetchListBillDetail();
-    }, [id])
-
     const EmlementDate = (props) => {
         const date = new Date(props.date);
         return (<>{date.getDate() - 1}/{date.getMonth() + 1}/{date.getFullYear()}</>);
     }
+console.log(response.product)
     return (
         <React.Fragment>
             <IconButton color="primary" onClick={handleClickOpen}>
@@ -120,7 +112,7 @@ export default function BillDetail({
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {billDetail.map((row, index) => (
+                                {response.length > 0 ? response.map((row, index) => (
                                     <TableRow
                                         key={index}
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -129,12 +121,12 @@ export default function BillDetail({
                                             {index + 1}
                                         </TableCell>
                                         <TableCell>{row.product.name}</TableCell>
-                                        <TableCell><img src={`url/${row.product.photo}`} alt="ảnh"></img></TableCell>
+                                        <TableCell><img src={'/images/'+row.product.photo} className='bdt-img-pro' /></TableCell>
                                         <TableCell>{row.number}</TableCell>
                                         <TableCell>{row.price}</TableCell>
                                         <TableCell>{row.total}</TableCell>
                                     </TableRow>
-                                ))}
+                                )) : (<div>Không có Sản phẩm</div>)}
                             </TableBody>
                         </Table>
                     </TableContainer>

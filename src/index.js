@@ -6,11 +6,11 @@ import reportWebVitals from './reportWebVitals';
 import 'font-awesome/css/font-awesome.min.css';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import rootReducer from './redux_user/root-reducer';
+import store from './redux/store/store';
 
 ReactDOM.render(
   <React.StrictMode>
-     <Provider store= {createStore(rootReducer)}>
+     <Provider store= {store}>
         <App/>
     </Provider>
   </React.StrictMode>,

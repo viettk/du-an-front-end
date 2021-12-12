@@ -61,6 +61,9 @@ function HomeCate() {
     const changeValueSelect = (e) => {
         var index = e.nativeEvent.target.selectedIndex;
         var ina = e.target.value;
+        if(query==""){
+            
+        }
         setSele({
             ...sele,
             optionValue: index + 1

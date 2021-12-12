@@ -75,7 +75,7 @@ function Giamgia(){
         setActive(true);
         if(input.productName != null){
             GiamgiaApi.laythongtin(e.target.value).then(resp => {
-               setProduct(resp.data);   
+               setProduct(resp);   
                console.log(resp)
             });
         }
@@ -95,66 +95,69 @@ function Giamgia(){
         GiamgiaApi.khoiphuc();
      }
     return(
-        <div>
-
+        <div className="giam-gia-discount">
             {/* Giảm giá toàn bộ sản phẩm */}
-            <label>Giảm giá toàn bộ sản phẩm</label>
-            <select onChange={(e)=>changeGiamValue(e)} >
-                <option value="0">Chọn</option>
-                <option value="10">10%</option>
-                <option value="15">15%</option>
-                <option value="20">20%</option>
-                <option value="25">25%</option>
-                <option value="30">30%</option>
-            </select>
-            <button type="button" onClick={giam} >Giảm</button>
-            <br />
+            <div>
+                <label>Giảm giá toàn bộ sản phẩm:</label>
+                <select onChange={(e) => changeGiamValue(e)} >
+                    <option value="0">Chọn</option>
+                    <option value="10">10%</option>
+                    <option value="15">15%</option>
+                    <option value="20">20%</option>
+                    <option value="25">25%</option>
+                    <option value="30">30%</option>
+                </select>
+                <button className="gg-btn" type="button" onClick={giam} >Giảm</button>
+            </div>
 
-            Giảm giá theo danh mục sản phẩm
-            <label>Giảm giá theo danh mục</label>
-            <input onChange={(e) => changeparam(e)} />
-            <select onChange={(e)=>changeDmid(e)}>
-                {
-                    result.map((result, index) =>
-                        <option key={index} value={result.id}>Danh mục: {result.name} - Danh mục cha: {result.parent_name}</option>
+            <div>
+                <label>Giảm giá theo danh mục:</label>
+                <input onChange={(e) => changeparam(e)} />
+                <select onChange={(e) => changeDmid(e)}>
+                    {
+                        result.map((result, index) =>
+                            <option key={index} value={result.id}>Danh mục: {result.name} - Danh mục cha: {result.parent_name}</option>
                         )
-                }
-            </select>
-            <select onChange={(e)=>changeDm(e)} >
-                <option value="10">10%</option>
-                <option value="15">15%</option>
-                <option value="20">20%</option>
-                <option value="25">25%</option>
-                <option value="30">30%</option>
-            </select>
-            <button type="button" onClick={giamm} >Giảm</button>
+                    }
+                </select>
+                <select onChange={(e) => changeDm(e)} >
+                    <option value="10">10%</option>
+                    <option value="15">15%</option>
+                    <option value="20">20%</option>
+                    <option value="25">25%</option>
+                    <option value="30">30%</option>
+                </select>
+                <button className="gg-btn" type="button" onClick={giamm} >Giảm</button>
+            </div>
 
 
             {/* Giảm giá theo từng sản phẩm */}
             <div>
+                <label>Giảm giá Sản phẩm:</label>
                 <input id="namesp" onChange={(e) => getInputname(e)} />
-                <div className={ active == true ? "receipt-hiddent-show active" : "receipt-hiddent-show"}>
+                <div className={active == true ? "receipt-hiddent-show active" : "receipt-hiddent-show"}>
                     <ul className="receipt-product-name" >
                         {
                             product.length != 0 ? product.map(pr =>
-                                <li key={pr.id} defaultValue={pr.id}  onClick={(e) => layId(e, pr.id)}>{pr.name}-Danh mục: {pr.category.name}-Danh mục cha: {pr.category.parent_name}</li>
+                                <li key={pr.id} defaultValue={pr.id} onClick={(e) => layId(e, pr.id)}>{pr.name}-Danh mục: {pr.category.name}-Danh mục cha: {pr.category.parent_name}</li>
                             ) : <li>Không có Sản phẩm</li>
 
                         }
                     </ul>
                 </div>
-                <select onChange={(e)=>changeDm(e)} >
-                <option value="10">10%</option>
-                <option value="15">15%</option>
-                <option value="20">20%</option>
-                <option value="25">25%</option>
-                <option value="30">30%</option>
-            </select>
-            <button type="button" onClick={giampro} >Giảm</button>
+                <select onChange={(e) => changeDm(e)} >
+                    <option value="10">10%</option>
+                    <option value="15">15%</option>
+                    <option value="20">20%</option>
+                    <option value="25">25%</option>
+                    <option value="30">30%</option>
+                </select>
+                <button className="gg-btn" type="button" onClick={giampro} >Giảm</button>
             </div>
 
-
-            <button type="button" onClick={khoiphuc} >Khôi phục lại giá</button>
+            <div>
+            <button className="gg-btn-kp" type="button" onClick={khoiphuc} >Khôi phục lại giá</button>
+            </div>
         </div>
     );
 }

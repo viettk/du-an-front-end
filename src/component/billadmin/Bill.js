@@ -1,91 +1,45 @@
-import React, { Fragment, memo, useEffect } from "react";
-import BillAdminApi from "../../api/BillAdminApi";
+import { Box } from "@mui/system";
+import React, { Fragment, memo, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import ModelBill from "./ModelBill";
 import StatusOrder from "./StatusOrder";
+import * as type from '../../redux/const/type';
 
 function Bill() {
-    const initBill = {
-        id: null,
-        email: '',
-        create_date: '',
-        update_date: '',
-        name: '',
-        phone: '',
-        total: '',
-        status_pay: '',
-        address: '',
-        city: '',
-        district: '',
-        status_order: '',
-        describe: '',
-        wards: '',
-        thema: '',
-        themb: '',
-        themc: '',
-        staff_id: '',
-        discount_id: '',
-        id_code: '',
-    }
     const initParams = {
-        pay: true,
-        order: null,
         _limit: 10,
         _page: 0,
-        _field: 'id',
+        _field: 'create_date',
         _known: 'up',
     };
-    const [bill, setBill] = React.useState([]);
-    const [formDataBill, setFormDataBill] = React.useState(initBill)
-    const [params, setParams] = React.useState(initParams);
-    const [clicked, setClicked] = React.useState(-1);
-    const [count, setCount] = React.useState(0);
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
-    const [reload, setReload] = React.useState(true);
-    const [filter, setFilter] = React.useState([]);
+    const dispatch = useDispatch();
+    const response = useSelector((state) => state.bill.data);
+    const data = response.content;
+    const s = useSelector((state) => state.bill.s);
+    const [params, setParams] = useState(initParams);
+    const [filter, setFilter] = useState([]);
     useEffect(() => {
-        const fetchListBill = async () => {
-            const param = {
-                ...params,
-                ...filter,
-            }
-            try {
-
-
-                const response = await BillAdminApi.getAll(param);
-                setBill(response.content);
-                setCount(response.totalElements);
-            } catch (error) {
-                console.error(error);
-            }
+        const param = {
+            ...params,
+            ...filter,
         }
-        fetchListBill();
-    }, [params, reload]);
+        dispatch({ type: type.FETCH_BILL_ACTION, payload: param });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [params, filter, s]);
     return (
         <Fragment>
-
-            <StatusOrder
-                params={params}
-                setParams={setParams}
-            />
-            <ModelBill
-                bill={bill}
-                setBill={setBill}
-                formDataBill={formDataBill}
-                setFormDataBill={setFormDataBill}
-                params={params}
-                setParams={setParams}
-                clicked={clicked}
-                setClicked={setClicked}
-                count={count}
-                setCount={setCount}
-                page={page}
-                setPage={setPage}
-                rowsPerPage={rowsPerPage}
-                setRowsPerPage={setRowsPerPage}
-                reload={reload}
-                setReload={setReload}
-            />
+            <Box>
+                <StatusOrder
+                    filter={filter}
+                    setFilter={setFilter}
+                />
+                <ModelBill
+                    bill={data}
+                    params={params}
+                    setParams={setParams}
+                    count={response.totalElements}
+                />
+            </Box>
         </Fragment>
     );
 }

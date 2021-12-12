@@ -67,7 +67,7 @@ function Head({reload}) {
     }
     CookieService.removeCookie();
     alert('Logout !')
-    window.location.replace('http://localhost:3000/login')
+    window.location.replace('/home')
   }
 
   const getValue = (e) => {
@@ -180,8 +180,8 @@ function Head({reload}) {
       </ul>
       <nav className="menu">
         <ul>
-          <li className="menu-item"><Link>Trang chủ</Link></li>
-          <li className="menu-item"><Link to="/gioi-thieu">Yêu thích</Link></li>
+          <li className="menu-item"><Link to="/home">Trang chủ</Link></li>
+          <li className="menu-item"><Link to="/yeu-thich">Yêu thích</Link></li>
           <li className="menu-item"><Link to="/chinh-sach-doi-tra-hoan-tien">Chính sách</Link></li>
           <li className="menu-item"><Link to="/gioi-thieu">Giới thiệu</Link></li>
           <li className="menu-item">

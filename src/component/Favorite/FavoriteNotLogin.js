@@ -237,7 +237,6 @@ function FavoriteNotLogin({reload, setReload}){
                                 <p>{String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.')} VNĐ</p>
                                 <p>{result.number > 0 && result.staus == true ? "Còn hàng" : "Hết hàng" }</p>
                                 <button type="button" onClick={() => addToCart(index, result.product_id, result.price, result.photo, result.name, result.weight)} ><i class="fa fa-shopping-cart"></i></button>
-                                {/* disabled={result.number <= 0 && result.staus == false ? false : true } */}
                                 <br/>
                                 <button onClick={(e) => xoa(e, result.product_id)} type="button"><i class="fa fa-trash"></i></button>
                         </div>
