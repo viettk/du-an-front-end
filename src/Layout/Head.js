@@ -47,8 +47,7 @@ function Head({reload}) {
         const response = await CategoryApi.getAllCateCustomer();
         if (customerId) {
           CartApi.getNumberOfCart(customerId, emailc).then(reps =>{
-            // setItemSp(reps);
-            console.log(reps)
+            setItemSp(reps);
           });
         } else{
           setItemSp(JSON.parse(localStorage.getItem('cart')).length);
@@ -121,9 +120,10 @@ function Head({reload}) {
         {/*header_top*/}
         <h6> Mở cửa: 8h30 - 22h00, thứ 2 - CN hàng tuần</h6>
         {username ? (<span style={{color:'white'}}>
-        <a className="login-item" >{username}
-          <ul className="hover-login">
-            <li  className="login-item"><Link to=""> Lịch sử <span  className='an-di'> mua hàng</span></Link></li>
+          <a className="login-item" >{username}
+            <ul className="hover-login">
+              <li className="login-item"><Link to="/lich-su-mua-hang"> Lịch sử <span className='an-di'> mua hàng</span></Link></li>
+              <li className="login-item"><Link to="/dia-chi"> Địa chỉ</Link></li>
             </ul>
           </a>
           

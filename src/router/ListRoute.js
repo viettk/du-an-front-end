@@ -30,6 +30,7 @@ import ChangeStatus_pay from "../component/Order/ChangeStatus_pay";
 import Introduce from "../Layout/headchild/Introduce";
 import Instruct from "../Layout/headchild/Hdmua";
 import Hddt from "../Layout/headchild/Hddt";
+import Hdtt from "../Layout/headchild/Hdtt";
 
 function ListRoute({reload, setReload}){
   const customerId = CookieService.getCookie('id');
@@ -74,6 +75,8 @@ function ListRoute({reload, setReload}){
 
         <Route path="/cart" component={customerId ? ListCart : ListCartNone} />
 
+        <Route path="/dia-chi" component={Address} />
+
         {/* <Route path="/cart_none" component={ListCartNone} /> */}
 
         <Route path="/lich-su-mua-hang" component={BillCustomer} />
@@ -93,6 +96,8 @@ function ListRoute({reload, setReload}){
         <Route path="/huong-dan-doi-tra" component={Hddt} />
 
         <Route path="/huong-dan-mua-hang" component={Instruct} />
+
+        <Route path="/huong-dan-thanh-toan" component={Hdtt} />
 
         {/* <PrivateRoutes component={ListDanhmuc} authed={false} path='/admin'  /> */}
         {/* component PageNotFound phải để cuối cùng */}

@@ -90,7 +90,6 @@ function ModalAddress({ show, setShow, ma, setMa, reload, setReload}) {
                 setDetail(resp);
                 dong();
                 onReload();
-                console.log(resp)
             }).catch((error) => {
                 if (error.response) {
                     setLoi(error.response.data);

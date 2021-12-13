@@ -97,6 +97,11 @@ const CategoryApi = {
     checkLoginCart:(emailc)=>{
         const url = '/check/check?email=' + emailc;
         return axiosClient.get(url);
-    }
+    },
+
+    addToCartByUserLogin:(customerId, emailc, detail)=>{
+        const url = '/cart-detail/' + customerId + '?email=' + emailc;
+        return axiosClient.post(url, detail);
+    },
 }
 export default CategoryApi;

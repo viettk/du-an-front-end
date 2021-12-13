@@ -59,7 +59,7 @@ function SignUp() {
   const handleSubmit = (event) => {
     event.preventDefault();
     axios({
-        url: 'http://localhost:8080/account/register',
+        url: 'https://tranhoangmaianh.herokuapp.com/account/register',
         method: 'post',
         data: result,
         headers:{

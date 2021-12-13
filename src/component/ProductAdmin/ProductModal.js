@@ -100,7 +100,7 @@ function ProductModal({ show, setShow, ma, setMa, onLoad ,setOpen}) {
                     setImages(photos);
                     for (var k in photos) {
                         if (photos[k] !== null) {
-                            document.getElementById(k).src = '/images/' + photos[k];
+                            document.getElementById(k).src = 'https://tranhoangmaianh.herokuapp.com/images/' + photos[k];
                             document.getElementById(k).style.display = 'block';
                         }
                     }

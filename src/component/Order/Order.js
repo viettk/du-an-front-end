@@ -500,7 +500,34 @@ function Order() {
                 <h2 style={{fontSize: "17px"}}>Đơn hàng ({slsp} sản phẩm)</h2>
                 <div className id="father">
                   <table className="table table-hover">
-                    <tbody>
+                    {
+                      customerId ? (<tbody>
+                        {
+                          cart.map(cart =>
+                            <tr key={cart.id}>
+                              <td>
+                                <div className="img-order">
+                                  <img src="images/demo2.png" className="rounded mx-auto d-block" alt="" />
+                                </div>
+                              </td>
+                              <td>
+                                <p style={{ fontSize: '16px' }}><b>Tên SP:{cart.name}</b></p>
+                                <p>Giá tiền: {cart.price} VND</p>
+                                <p>Số lượng: {cart.number}</p>
+                              </td>
+                              <td>
+                                <p style={{ fontSize: '16px' }}>
+                                  <b>{cart.total}<u>đ</u></b>
+                                </p>
+                              </td>
+                              <td />
+                              <td />
+                            </tr>
+                          )
+                        }
+                      </tbody>):
+                      (
+                        <tbody>
                       {
                         cart.map(cart =>
                           <tr key={cart.id}>
@@ -510,8 +537,8 @@ function Order() {
                               </div>
                             </td>
                             <td>
-                              <p style={{ fontSize: '16px' }}><b>Tên SP:{cart.name}</b></p>
-                              <p>Giá tiền: {cart.price} VND</p>
+                              <p style={{ fontSize: '16px' }}><b>Tên SP:{cart.product.name}</b></p>
+                              <p>Giá tiền: {cart.product.price} VND</p>
                               <p>Số lượng: {cart.number}</p>
                             </td>
                             <td>
@@ -525,6 +552,8 @@ function Order() {
                         )
                       }
                     </tbody>
+                      )
+                    }
                   </table>
                 </div>
               </div>

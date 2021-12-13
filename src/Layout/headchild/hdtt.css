@@ -1,0 +1,25 @@
+.hd p{
+    font-size: 18px !important;
+    margin-left: 10px;
+}
+.hddt-b p {
+    margin-left: 10px;
+}
+.hddt-a p{
+    margin: 0;
+    padding: 15px;
+}
+.hinh-anh{
+    display: grid;
+    grid-template-columns: auto auto;
+}
+@media only screen  and (max-width: 1255px){
+    .hddt-a .img-chil{
+        width: 100% !important;
+    }
+}
+@media only screen  and (max-width: 767px){
+    .text-hd{
+        font-size: 16px !important;
+    }
+}

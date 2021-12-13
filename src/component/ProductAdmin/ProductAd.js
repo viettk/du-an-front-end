@@ -293,8 +293,8 @@ function ProductAd() {
                             result.length > 0 ? result.map(
                                 (result, index) =>
                                     <tr className="sp" key={result.id} >
-                                        <td>{(index + 1)*Number(page)}</td>
-                                        <td><img src={'/images/' + result.photo} style={{ width: 100 }} /></td>
+                                        <td>{(index + 1)+Number(page-1)*5}</td>
+                                        <td><img src={'https://tranhoangmaianh.herokuapp.com/images/' + result.photo} style={{ width: 100 }} /></td>
                                         <td>{result.name}</td>
                                         <td>{result.category.name}</td>
                                         <td>{String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' đ'}</td>

@@ -12,6 +12,9 @@ import { Alert, Snackbar } from "@mui/material";
 import { Link } from 'react-router-dom';
 
 function FavoriteNotLogin({reload, setReload}){
+  if (localStorage.getItem("yeu-thich") === null) {
+    localStorage.setItem("yeu-thich");
+  }
     const history = useHistory();
     const [mess, setMess] = useState({
         errorMessage: ''

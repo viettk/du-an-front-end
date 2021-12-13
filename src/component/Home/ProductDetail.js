@@ -12,7 +12,8 @@ import CookieService from "../../cookie/CookieService";
 import './css/product-detail.css'
 import FavoriteApi from "../../api/FavoritApi";
 import SyncLoader from "react-spinners/SyncLoader";
-import Carousel from 'react-grid-carousel'
+import Carousel from 'react-grid-carousel';
+import CartApi from '../../api/CartApi';
 
 function ProductDetail({reload, setReload}) {
   const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
@@ -114,16 +115,7 @@ function ProductDetail({reload, setReload}) {
     }
 
     if (customerId) {
-      axios({
-        url: 'https://tranhoangmaianh.herokuapp.com/cart-detail/' + customerId + '?email=' + emailc,
-        method: 'post',
-        type: 'application/json',
-        data: detail,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        }
-      }).then(r =>{
+      CartApi.addToCartByUserLogin(customerId, emailc, detail).then(r =>{
         onLoad();
         history.push('/cart')
         }).catch((error) => {
@@ -174,17 +166,7 @@ function ProductDetail({reload, setReload}) {
     }
 
     if (customerId) {
-
-      axios({
-        url: 'http://tranhoangmaianh.herokuapp.com/cart-detail/' + customerId + '?email=' + emailc,
-        method: 'post',
-        type: 'application/json',
-        data: detail,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        }
-      }).then(r=>{
+      CartApi.addToCartByUserLogin(customerId, emailc, detail).then(r=>{
         onLoad();
       }).catch((error) => {
         if (error.response) {
