@@ -90,7 +90,6 @@ const SlideBar = () => {
         {
             text: 'Đăng xuất',
             icon: <PermIdentityIcon />,
-            onclick={logout}
         },
 
     ];
