@@ -104,9 +104,9 @@ function SignInSide() {
     CookieService.setCookie('email', resp.email, 7);
     CookieService.setCookie('accessToken', response.accessToken, 7);
     if (location.state) {
-      window.location.replace('https://nguyenthianhtuyet.herokuapp.com/' + location.state.from)
+      window.location.replace('https://nguyenthianhtuyet.herokuapp.com' + location.state.from)
     } else {
-      window.location.replace('http://localhost:3000')
+      window.location.replace('https://nguyenthianhtuyet.herokuapp.com/home')
     }
     // setAccess(response.accessToken)
   }

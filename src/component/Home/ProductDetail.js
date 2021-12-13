@@ -301,7 +301,7 @@ function ProductDetail({reload, setReload}) {
 
                   <div style={{ margin: "10px 0" }}>
                     <span style={{ fontWeight: 'bold', marginRight: " 20px", fontSize: "25px" }}>
-                      {result.price}
+                    {String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' đ'}
                       <u>đ</u>
                     </span>
                     <span style={result.price != result.price_extra ? { display: "inline-block" } : { display: "none" }}>

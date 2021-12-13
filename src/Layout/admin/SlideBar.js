@@ -15,6 +15,14 @@ import SubMenu from "./SubMenu";
 import './headadmin.css';
 
 const SlideBar = () => {
+    const logout = () => {
+        if(CookieService.getCookie('accessToken')){
+          GoogleApi.logout(CookieService.getCookie("accessToken"))
+        }
+        CookieService.removeCookie();
+        alert('Logout !')
+        window.location.replace('/home')
+      }
     // danh sách router
     const menuItems = [
         {
@@ -82,6 +90,7 @@ const SlideBar = () => {
         {
             text: 'Đăng xuất',
             icon: <PermIdentityIcon />,
+            onclick={logout}
         },
 
     ];
