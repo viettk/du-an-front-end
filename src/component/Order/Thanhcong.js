@@ -81,7 +81,7 @@ function Thanhcong() {
                                 <span style={{fontWeight: "500"}}>Phương thức thanh toán:</span>
                                 <span>{bill.status_pay}</span>
                             </div>
-                            {statusOrder===true ? <button className='thanhcong-btn first-btn-tc'><Link to="/">Tiếp tục mua hàng</Link></button>:
+                            {statusOrder===true ? <button className='thanhcong-btn first-btn-tc'><Link to="/home" className='thanhcong-ttmh'>Tiếp tục mua hàng</Link></button>:
                                 <button className='thanhcong-btn first-btn-tc'>Thanh toán lại</button>}
                         </div>
                     </div>

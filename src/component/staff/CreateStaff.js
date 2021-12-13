@@ -20,7 +20,6 @@ function CreateStaff({
         data = {
             ...formDataStaff,
         };
-        console.log(data);
         dispatch({ type: type.CREATE_STAFF_ACTION, payload: data });
         handleClose();
     }

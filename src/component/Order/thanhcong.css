@@ -48,14 +48,26 @@
 
 .thanhcong-btn{
     border: none;
-    color: white;
-    background-color: #357ebd;
-    font-size: 16px;
-    font-weight: 500;
+    background-color: lightgray;  
     padding: 10px 20px;
     border-radius: 5px;
     margin-top: 10px;
     justify-self: end;
+}
+
+.thanhcong-btn:hover{
+    background-color: lightskyblue;
+}
+
+.thanhcong-btn:hover .thanhcong-ttmh{
+    color: white;
+}
+
+.thanhcong-btn .thanhcong-ttmh{
+    color: black !important;
+    text-decoration: none !important;
+    font-size: 16px;
+    font-weight: 500;
 }
 
 .thanhcong-detail-sp{
