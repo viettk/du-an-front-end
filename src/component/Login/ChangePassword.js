@@ -54,7 +54,7 @@ function ChangePassword(){
     const handleSubmit = (event) => {
       event.preventDefault();
       axios({
-        url: 'http://localhost:8080/change-password',
+        url: 'https://tranhoangmaianh.herokuapp.com/change-password',
         method: 'post',
         data: result,
         headers: {

@@ -276,13 +276,13 @@ function ProductAd() {
                     </thead>
                     <tbody>
                         <tr style={{ textAlign: "center" }}>
-                            <th scope="col"><Button variant="text" onClick={() => upDown("id")}>STT {params._field === 'id' ? (params._known === 'up' ? <ArrowDownwardIcon color="primary" /> : <ArrowUpwardIcon color="primary" />) : ''}</Button></th>
+                            <th scope="col">STT</th>
                             <th scope="col">Ảnh</th>
                             <th scope="col">Tên Sản phẩm</th>
                             <th scope="col">Danh mục</th>
-                            <th scope="col"><Button variant="text" onClick={() => upDown("price")} >Giá {params._field === 'price' ? (params._known === 'up' ? <ArrowDownwardIcon color="primary" /> : <ArrowUpwardIcon color="primary" />) : ''}</Button></th>
+                            <th scope="col"><Button variant="text" onClick={() => upDown("price")} >Giá{params._field === 'price' ? (params._known === 'up' ? <ArrowDownwardIcon color="primary" /> : <ArrowUpwardIcon color="primary" />) : ''}</Button></th>
                             <th scope="col">Giám giá</th>
-                            <th scope="col">Ngày tạo</th>
+                            <th scope="col"><Button variant="text" onClick={() => upDown("id")}>Ngày tạo{params._field === 'id' ? (params._known === 'up' ? <ArrowDownwardIcon color="primary" /> : <ArrowUpwardIcon color="primary" />) : ''}</Button></th>
                             <th scope="col">Số lượng</th>
                             <th scope="col">Trạng thái</th>
                             <th scope="col">Thao tác nhanh {search.status !== '' ? <Button variant="contained" color={search.status ? 'error' : 'warning'} onClick={() => dialog('', 'đã chọn', search.status)}>{search.status ? 'Vô hiệu' : 'Hoạt động'}</Button> : ''}</th>
@@ -293,7 +293,7 @@ function ProductAd() {
                             result.length > 0 ? result.map(
                                 (result, index) =>
                                     <tr className="sp" key={result.id} >
-                                        <td>{index + 1}</td>
+                                        <td>{(index + 1)*Number(page)}</td>
                                         <td><img src={'/images/' + result.photo} style={{ width: 100 }} /></td>
                                         <td>{result.name}</td>
                                         <td>{result.category.name}</td>

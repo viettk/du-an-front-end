@@ -15,6 +15,7 @@ import SignUp from './component/Login/Register';
 import Forgot from './component/Login/Forgot';
 import ResetPassword from './component/Login/ResetPassword';
 import ChangePassword from './component/Login/ChangePassword';
+import PrivateRoute from "./router/PrivateRouter";
 
 function App() {
 
@@ -27,7 +28,8 @@ function App() {
 
           {/* admin */}
           <Route path='/admin'>
-            <LayoutAdmin />
+          <PrivateRoute component={LayoutAdmin} role='ADMIN'/>
+            {/* <LayoutAdmin /> */}
           </Route>
 
           {/* Khách hàng */}

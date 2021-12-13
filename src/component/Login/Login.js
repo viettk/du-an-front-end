@@ -169,7 +169,8 @@ function SignInSide() {
               </Button>
               <Grid container sx={{ display: 'block', textAlign: 'center', mb: 2, marginTop: "15px" }} >
                 <GoogleLogin
-                  clientId="382955501052-7jfv4o89irqn0e4pvi842p1vhs5mrevu.apps.googleusercontent.com"
+                  // clientId="382955501052-7jfv4o89irqn0e4pvi842p1vhs5mrevu.apps.googleusercontent.com"
+                  clientId = "382955501052-omhippp71e5qmdicns0dei9vt75f39u0.apps.googleusercontent.com"
                   buttonText="Login"
                   onSuccess={responseGoogle}
                   onFailure={responseGoogle}
