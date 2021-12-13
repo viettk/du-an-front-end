@@ -82,11 +82,12 @@ function Receipt() {
                     ...describe,
                     mota: ''
                 });
+                onReload();
             });
         } catch (error) {
             console.error(error)
         }
-        onReload();
+        
     }
     
     const update = (e) => {

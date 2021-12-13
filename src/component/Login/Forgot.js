@@ -65,7 +65,7 @@ function Forgot(){
         setSuccess(false);
         setLoading(true);
         axios({
-            url: `http://localhost:8080/forgot?email=`+result.email,
+            url: `https://tranhoangmaianh.herokuapp.com//forgot?email=`+result.email,
             method: 'get',
             data: result,
             headers:{

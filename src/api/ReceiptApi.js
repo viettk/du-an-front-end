@@ -2,7 +2,7 @@ import axiosClient from "./axiosClient";
 
 const ReceiptApi = {
     getReceipt: (params, month, year) =>{
-        const url = `/api/receipt?&month=` + month + `&year=` + year;
+        const url = `/api/receipt?month=` + month + `&year=` + year;
         return axiosClient.get(url, {params});
     },
 

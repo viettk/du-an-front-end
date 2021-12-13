@@ -88,6 +88,7 @@ function Modaldm({ show, setShow, ma, setMa , reload, setReload}) {
                     setDetail(resp);          
                     dong(); 
                     setOpen(true);
+                    onReload();
                 }).catch((error) => {
                     console.log(error.response.data)
                     if (error.response) {
@@ -101,8 +102,7 @@ function Modaldm({ show, setShow, ma, setMa , reload, setReload}) {
                 });
             } catch (error) {
                 console.error(error)
-            }
-            onReload();
+            }            
         }
         else{
             try {
@@ -114,6 +114,7 @@ function Modaldm({ show, setShow, ma, setMa , reload, setReload}) {
                     });
                     dong(); 
                     setOpen(true);
+                    onReload();
                 }).catch((error) => {
                     if (error.response) {
                         setLoi(error.response.data);
@@ -128,8 +129,6 @@ function Modaldm({ show, setShow, ma, setMa , reload, setReload}) {
                 console.error(error)
             }
         }
-        
-        onReload();
     }
 
     const handleClose = () =>{
