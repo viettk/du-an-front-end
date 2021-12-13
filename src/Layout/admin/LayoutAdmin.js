@@ -1,5 +1,4 @@
 import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import Drawer from '@mui/material/Drawer';
@@ -7,10 +6,10 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import SlideBar from './SlideBar';
-import AppBars from './AppBars';
 import Routes from './Routes';
 import Breadcrumbss from './Breadcrumbss';
 import Divider from '@mui/material/Divider';
+import './headadmin.css';
 
 const drawerWidth = 240;
 
@@ -32,28 +31,7 @@ function LayoutAdmin(props) {
 
   return (
     <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      <AppBar
-        position="fixed"
-        color="inherit"
-        sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-        }}
-      >
-        <Toolbar style={{zIndex: "1"}}>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <AppBars />
-        </Toolbar>
-      </AppBar>
+
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
@@ -69,7 +47,7 @@ function LayoutAdmin(props) {
             keepMounted: true,
           }}
           sx={{
-            display: { xs: 'block', sm: 'none' },
+            display: { xs: 'block', sm: 'none', height: "30px" },
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
           }}
         >
@@ -86,12 +64,11 @@ function LayoutAdmin(props) {
           {drawer}
         </Drawer>
       </Box>
-      
+
       <Box
         component="main"
         sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
       >
-        <Toolbar />
         <Breadcrumbss />
         <Divider />
         <Routes />

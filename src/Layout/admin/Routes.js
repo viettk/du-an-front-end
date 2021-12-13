@@ -12,6 +12,7 @@ import Discount from "../../component/Discount/ListDiscount";
 import Giamgia from "../../component/Giamgia/Giamgia";
 import Bill from "../../component/billadmin/Bill";
 import Staff from "../../component/staff/Staff";
+import './headadmin.css';
 
 const Routes = () => {
     return (

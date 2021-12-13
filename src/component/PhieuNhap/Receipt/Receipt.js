@@ -51,6 +51,7 @@ function Receipt() {
                 const response = await ReceiptApi.getReceipt(params, month, year);
                 setResult(response.content);
                 setCount(response.totalPages);
+                console.log(response.content)
             } catch (error) {
                 console.log(error);
                 // history.push('/404');

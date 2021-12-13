@@ -15,6 +15,7 @@ import './Category.css';
 import { useParams, useLocation, useHistory } from "react-router-dom";
 import Modaldm from "./Modaldm";
 import { height } from "@mui/system";
+import { Add } from "@mui/icons-material";
 
 function ListCategory() {
     const initValues = [];
@@ -115,7 +116,7 @@ function ListCategory() {
              <Modaldm show={show} setShow={setShow} ma={ma} setMa={setMa} reload={reload} setReload={setReload} />
         <h3 style={{marginTop: 10}}>Danh sách Danh mục Sản phẩm</h3>
         <TableContainer component={Paper}>
-        <button className="btn btn-primary" onClick={() => them()} >Thêm mới</button>
+        <Add style={{color: "#1976d2"}} onClick={() => them()} />
         <table className="table table-striped dm">
             <thead>
                 <tr>

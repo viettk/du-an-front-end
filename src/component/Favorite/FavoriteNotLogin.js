@@ -12,9 +12,7 @@ import { Alert, Snackbar } from "@mui/material";
 import { Link } from 'react-router-dom';
 
 function FavoriteNotLogin({reload, setReload}){
-  if (localStorage.getItem("yeu-thich") === null) {
-    localStorage.setItem("yeu-thich");
-  }
+
     const history = useHistory();
     const [mess, setMess] = useState({
         errorMessage: ''
@@ -65,7 +63,12 @@ function FavoriteNotLogin({reload, setReload}){
                 const response = await ProductApi.getFavorite(customerId, params);
                 setResult(response.content); 
             } else{
+              if (localStorage.getItem("yeuthich") === null) {
+                setResult([]);
+              } else{
                 setResult(JSON.parse(localStorage.getItem('yeuthich')));
+              }
+                
             }
             
           }catch (error){

@@ -4,6 +4,7 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import { Route } from 'react-router-dom';
 import FollowTheSignsIcon from '@mui/icons-material/FollowTheSigns';
 import { Box } from '@mui/system';
+import './headadmin.css';
 
 function Breadcrumbss() {
   return (

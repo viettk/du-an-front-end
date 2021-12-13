@@ -1,4 +1,4 @@
-import { AppBar, Button, Dialog, IconButton, Paper, Slide, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Toolbar, Typography } from "@mui/material";
+import { Button, Dialog, IconButton, Paper, Slide, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Toolbar, Typography } from "@mui/material";
 import React, { Fragment, memo } from "react";
 import ReturnProduct from "./ReturnProduct";
 import CloseIcon from '@mui/icons-material/Close';
@@ -128,21 +128,7 @@ function ModelBillReturn(
                 onClose={handleClose}
                 TransitionComponent={Transition}
             >
-                <AppBar sx={{ position: 'relative' }}>
-                    <Toolbar>
-                        <IconButton
-                            edge="start"
-                            color="inherit"
-                            onClick={handleClose}
-                            aria-label="close"
-                        >
-                            <CloseIcon />
-                        </IconButton>
-                        <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                            Chi tiết hóa đơn
-                        </Typography>
-                    </Toolbar>
-                </AppBar>
+                
                 <ReturnProduct
                     open={open}
                     setOpen={setOpen}

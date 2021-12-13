@@ -15,7 +15,7 @@ import SyncLoader from "react-spinners/SyncLoader";
 function ListCartNone() {
     const history = useHistory();
     let storage = localStorage.getItem('cart');
-    const [result, setResult] = useState(JSON.parse(storage));
+    const [result, setResult] = useState([]);
     const [totalf, setTotalf] = useState((result.reduce((a, v) => a = a + v.total, 0)));
     const [loading, setLoading] = useState(false);
     const [mess, setMess] = useState({
@@ -29,6 +29,9 @@ function ListCartNone() {
     useEffect(() => {
         const fetchList = async () => {
             try {
+                if(storage){
+                    setResult(JSON.parse(storage));
+                }
                 setLoading(true);
                 setTimeout(() => {
                     setLoading(false);

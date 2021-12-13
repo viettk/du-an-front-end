@@ -14,6 +14,7 @@ import './discount.css';
 import { useParams, useLocation, useHistory } from "react-router-dom";
 import { height } from "@mui/system";
 import Discountdm from "./Discountdm";
+import { Add } from "@mui/icons-material";
 
 function ListDiscount() {
     
@@ -121,7 +122,7 @@ function ListDiscount() {
              <Discountdm show={show} setShow={setShow} ma={ma} setMa={setMa} reload={reload} setReload={setReload} />
         <h3 style={{marginTop: 10}}>Danh sách phiếu giảm giá</h3>
         <TableContainer component={Paper}>
-<button className="btn btn-primary" onClick={() => getMa(ma)} >Thêm mới</button>
+        <Add style={{color: "#1976d2"}} onClick={() => getMa()} />
         <table className="table table-striped">
             <thead>
                 <tr>

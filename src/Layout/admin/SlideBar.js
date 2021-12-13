@@ -12,6 +12,7 @@ import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
 import SubMenu from "./SubMenu";
+import './headadmin.css';
 
 const SlideBar = () => {
     // danh sách router
@@ -19,24 +20,20 @@ const SlideBar = () => {
         {
             text: 'Trang chủ',
             icon: <CardMembershipIcon />,
-            path: "/",
+            path: "/admin/chart/all",
         },
         {
             text: 'Thống kê',
             icon: <BarChartIcon />,
-            iconOpen: <ExpandLess />,
-            iconClose: <ExpandMore />,
-            chiren: [
-                {
-                    text: 'Doanh thu',
-                    path: "/admin/chart/all",
-                },
-                {
-                    text: 'Mã giảm giá',
-                    path: "/admin/chart/discount",
-                },
-            ]
+            path: "/admin/chart/all",
         },
+
+        {
+            text: 'Mã giảm giá',
+            icon: <ProductionQuantityLimitsIcon />,
+            path: "/admin/chart/discount",
+        },
+
         {
             text: 'Sản phẩm',
             icon: <ProductionQuantityLimitsIcon />,

@@ -31,8 +31,12 @@ function ProductModal({ show, setShow, ma, setMa, onLoad ,setOpen}) {
     const [detail, setDetail] = useState({ 'status': true });
 
     const imagesNull = { photo1: null, photo2: null, photo3: null, photo4: null }
+    // biến lưu danh sách ảnh
+    const [images, setImages] = useState(imagesNull);
+    const [imagesUpdate, setImagesUpdate] = useState(imagesNull);
 
     const dong = () => {
+        setImagesUpdate(imagesNull);
         setDetail({ 'status': true });
         setLoi({});
         setMess({});
@@ -57,9 +61,7 @@ function ProductModal({ show, setShow, ma, setMa, onLoad ,setOpen}) {
         value === '0' ? setDetail({ ...detail, [name]: false }) : setDetail({ ...detail, [name]: true })
     }
 
-    // biến lưu danh sách ảnh
-    const [images, setImages] = useState(imagesNull);
-    const [imagesUpdate, setImagesUpdate] = useState(imagesNull);
+    
     // hiển thị ảnh và thêm ảnh vào result
     const onChangeImage = (event) => {
         const { name } = event.target;

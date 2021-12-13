@@ -25,6 +25,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import Box from '@mui/material/Box';
+import { Add } from "@mui/icons-material";
 
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -229,8 +230,8 @@ function ProductAd() {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Disagree</Button>
-                    <Button onClick={thongBao.id === '' ? anHienNSP : anHienSP}>Agree</Button>
+                    <Button onClick={handleClose}>Không</Button>
+                    <Button onClick={thongBao.id === '' ? anHienNSP : anHienSP}>Đồng ý</Button>
                 </DialogActions>
             </Dialog>
             {/* snackbar thành công */}
@@ -243,7 +244,7 @@ function ProductAd() {
             <ProductModal show={show} setShow={setShow} ma={ma} setMa={setMa} onLoad={onLoad} setOpen={setOpen} />
             <h3 style={{ marginTop: 10 }}>Danh sách Danh mục Sản phẩm</h3>
             <TableContainer component={Paper}>
-                <button className="btn btn-primary" onClick={() => create()} >Thêm mới</button>
+                <Add style={{color: "#1976d2"}} onClick={() => create()} />
                 <table className="table table-striped">
                     <thead>
                         <tr>
@@ -280,9 +281,9 @@ function ProductAd() {
                             <th scope="col">Ảnh</th>
                             <th scope="col">Tên Sản phẩm</th>
                             <th scope="col">Danh mục</th>
-                            <th scope="col"><Button variant="text" onClick={() => upDown("price")} >Giá{params._field === 'price' ? (params._known === 'up' ? <ArrowDownwardIcon color="primary" /> : <ArrowUpwardIcon color="primary" />) : ''}</Button></th>
+                            <th scope="col"><Button variant="text" onClick={() => upDown("price")} >Giá{params._field === 'price' ? (params._known === 'up' ?  <ArrowUpwardIcon color="primary" />:<ArrowDownwardIcon color="primary" /> ) : ''}</Button></th>
                             <th scope="col">Giám giá</th>
-                            <th scope="col"><Button variant="text" onClick={() => upDown("id")}>Ngày tạo{params._field === 'id' ? (params._known === 'up' ? <ArrowDownwardIcon color="primary" /> : <ArrowUpwardIcon color="primary" />) : ''}</Button></th>
+                            <th scope="col"><Button variant="text" onClick={() => upDown("id")}>Ngày tạo{params._field === 'id' ? (params._known === 'up' ? <ArrowUpwardIcon color="primary" />:<ArrowDownwardIcon color="primary" />) : ''}</Button></th>
                             <th scope="col">Số lượng</th>
                             <th scope="col">Trạng thái</th>
                             <th scope="col">Thao tác nhanh {search.status !== '' ? <Button variant="contained" color={search.status ? 'error' : 'warning'} onClick={() => dialog('', 'đã chọn', search.status)}>{search.status ? 'Vô hiệu' : 'Hoạt động'}</Button> : ''}</th>

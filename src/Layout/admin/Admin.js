@@ -4,6 +4,7 @@ import {
   Route,
 } from "react-router-dom";
 import LayoutAdmin from "./LayoutAdmin";
+import './headadmin.css';
 
 function Admin() {
   return (
