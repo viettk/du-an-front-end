@@ -79,9 +79,9 @@ function SignInSide() {
       CookieService.setCookie('id', resp.data.id, 7);
       CookieService.setCookie('email', resp.data.email, 7);
       if (location.state) {
-        window.location.replace('https://tranhoangmaianh.herokuapp.com' + location.state.from)
+        window.location.replace('https://nguyenthianhtuyet.herokuapp.com/' + location.state.from)
       } else {
-        window.location.replace('https://tranhoangmaianh.herokuapp.com')
+        window.location.replace('https://nguyenthianhtuyet.herokuapp.com/login')
       }
     }).catch(error => {
       if (error.response) {
@@ -104,7 +104,7 @@ function SignInSide() {
     CookieService.setCookie('email', resp.email, 7);
     CookieService.setCookie('accessToken', response.accessToken, 7);
     if (location.state) {
-      window.location.replace('http://localhost:3000' + location.state.from)
+      window.location.replace('https://nguyenthianhtuyet.herokuapp.com/' + location.state.from)
     } else {
       window.location.replace('http://localhost:3000')
     }
