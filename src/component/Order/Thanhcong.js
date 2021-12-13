@@ -91,7 +91,7 @@ function Thanhcong() {
                             {
                                 bdt.map(result =>
                                     <div className='thanhcong-product'>
-                                        <img className='thanhcong-product-img' src={'/images/' + result.product.photo} />
+                                        <img className='thanhcong-product-img' src={'https://tranhoangmaianh.herokuapp.com/images/' + result.product.photo} />
                                         <div className='thanhcong-product-infor'>
                                             <span>{result.product.name}</span>
                                             <span>{result.number}</span>

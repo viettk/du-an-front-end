@@ -355,7 +355,7 @@ function ReceiptDetail({ show, setShow, ma, setMa, reload, setReload }) {
 
                     <div>
                         <p>Hình ảnh</p>
-                        {imgpro.img === '' ? <span>Không có hình ảnh</span> : <img src={'/images/' + imgpro.img} className='img-goi-y-product' /> }
+                        {imgpro.img === '' ? <span>Không có hình ảnh</span> : <img src={'https://tranhoangmaianh.herokuapp.com/images/' + imgpro.img} className='img-goi-y-product' /> }
                     </div>
                     </div>
                     <div className="table-receipt">

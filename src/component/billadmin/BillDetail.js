@@ -121,7 +121,7 @@ console.log(response.product)
                                             {index + 1}
                                         </TableCell>
                                         <TableCell>{row.product.name}</TableCell>
-                                        <TableCell><img src={'/images/'+row.product.photo} className='bdt-img-pro' /></TableCell>
+                                        <TableCell><img src={'https://tranhoangmaianh.herokuapp.com/images/' +row.product.photo} className='bdt-img-pro' /></TableCell>
                                         <TableCell>{row.number}</TableCell>
                                         <TableCell>{row.price}</TableCell>
                                         <TableCell>{row.total}</TableCell>

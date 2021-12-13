@@ -51,7 +51,7 @@ function BillCustomerModal({show, setShow, ma, setMa}){
                         result.map(
                             (result) =>
                                 <tr key={result.id}>
-                                    <td><img style={{width: "90px", height: "90px"}} className="body-new-img-pro" src={'/images/'+result.product.photo} alt="" /></td>
+                                    <td><img style={{width: "90px", height: "90px"}} className="body-new-img-pro" src={'https://tranhoangmaianh.herokuapp.com/images/'+result.product.photo} alt="" /></td>
                                     <td>{result.product.name}</td>
                                     <td>{String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' đ'}</td>
                                     <td>{result.number}</td>

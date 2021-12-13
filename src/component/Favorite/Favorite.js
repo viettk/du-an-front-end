@@ -91,7 +91,7 @@ function Favorite(){
                         <div className="yeuthich-pro-body" key={index}>
                             
                             <div className="yeuthich-infor-product">
-                            <img src={'/images/' + result.photo} className="f-img" />
+                            <img src={'https://tranhoangmaianh.herokuapp.com/images/' + result.photo} className="f-img" />
                                 <div className="yeuthich-first">
                                     <p>{result.name}</p>
                                     <p>Giá <span>{String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.')} VNĐ</span></p>

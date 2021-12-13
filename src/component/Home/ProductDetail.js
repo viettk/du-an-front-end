@@ -281,14 +281,14 @@ function ProductDetail({reload, setReload}) {
           <div className="product-details">
             <div className="product-detail-body">
               <div className="pr-detail-img">
-                <img id="product-detail-image-main" src={'/images/' + result.photo} height="400px" />
+                <img id="product-detail-image-main" src={'https://tranhoangmaianh.herokuapp.com/images/' + result.photo} height="400px" />
                 <div className="img-detail">
                   {
                     imagep.map((i, index) =>
-                      <img key={index} className="product-detail-image" src={'/images/' + i.name} onClick={() => changeimg(index)} />
+                      <img key={index} className="product-detail-image" src={'https://tranhoangmaianh.herokuapp.com/images/'+ i.name} onClick={() => changeimg(index)} />
                     )
                   }
-                  <img id="product-detail-image-main-b" src={'/images/' + result.photo} onClick={() => changeimg(3)} />
+                  <img id="product-detail-image-main-b" src={'https://tranhoangmaianh.herokuapp.com/images/' + result.photo} onClick={() => changeimg(3)} />
                 </div>
               </div>
               <div className="pr-detail-infor">
@@ -369,7 +369,7 @@ function ProductDetail({reload, setReload}) {
                 {
                   goiysp.map((goiysp, index) =>
                     <div className="product-body-live" key={index}>
-                      <img src={'/images/'+goiysp.photo} className="rounded-like mx-auto d-block goiysp" />
+                      <img src={'https://tranhoangmaianh.herokuapp.com/images/'+goiysp.photo} className="rounded-like mx-auto d-block goiysp" />
                       <div className="body-pro-buy">
                         <p className="fix-line-css"><b>{goiysp.name}</b></p>
                         <p>SKU: {goiysp.sku}</p>

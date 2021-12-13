@@ -424,6 +424,7 @@ line-height: 2.5rem;
     transform-origin: bottom;
     animation: enter 0.2s ease forwards;
     font-size: 15px;
+    margin-bottom: 5px;
     /* width: 118px; */
 }
 .an-di{

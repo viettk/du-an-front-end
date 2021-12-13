@@ -81,7 +81,7 @@ function Home() {
                     resultShf.map(respSHF =>
                       <Carousel.Item >
                         <div className="body-new-pro" key={respSHF.id} onClick={() => chuyentrang(respSHF.id)}>
-                          <img style={{width: "90%", height: "207px"}} className="body-new-img-pro" src={'/images/'+respSHF.photo} alt="" />
+                          <img style={{width: "90%", height: "207px"}} className="body-new-img-pro" src={'https://tranhoangmaianh.herokuapp.com/images/'+respSHF.photo} alt="" />
                           <p className="fix-line-css">{respSHF.name}</p>
                           <p>SKU: {respSHF.sku}</p>
                           <span className="pro-body">
@@ -106,7 +106,7 @@ function Home() {
                     resultShf.map(respSHF =>
                       <Carousel.Item >
                         <div className="body-new-pro" key={respSHF.id} onClick={() => chuyentrang(respSHF.id)}>
-                          <img style={{width: "90%", height: "207px"}} className="body-new-img-pro" src={'/images/'+respSHF.photo} alt="" />
+                          <img style={{width: "90%", height: "207px"}} className="body-new-img-pro" src={'https://tranhoangmaianh.herokuapp.com/images/'+respSHF.photo} alt="" />
                           <p className="fix-line-css">{respSHF.name}</p>
                           <p>SKU: {respSHF.sku}</p>
                           <span className="pro-body">
@@ -132,7 +132,7 @@ function Home() {
               favorite.map(result =>
                 <Carousel.Item >
                 <div className="product-body-live" onClick={() => chuyentrang(result.id)}>
-                  <img src={'/images/' + result.photo} style={{width: "90%", height: "210px"}} className="rounded-like mx-auto d-block" />
+                  <img src={'https://tranhoangmaianh.herokuapp.com/images/' + result.photo} style={{width: "90%", height: "210px"}} className="rounded-like mx-auto d-block" />
                   <div className="body-pro-buy">
                     <p className="fix-line-css">{result.name}</p>
                     <p>SKU: {result.sku}</p>

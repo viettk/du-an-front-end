@@ -179,7 +179,7 @@ function FavoriteNotLogin({reload, setReload}){
                         <div className="yeuthich-pro-body" key={index}>
                             
                             <div className="yeuthich-infor-product">
-                            <img src={'/images/' + result.photo} className="f-img" />
+                            <img src={'https://tranhoangmaianh.herokuapp.com/images/' + result.photo} className="f-img" />
                                 <div className="yeuthich-first">
                                     <p>{result.name}</p>
                                     <p>Giá <span>{String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.')} VNĐ</span></p>
@@ -221,7 +221,7 @@ function FavoriteNotLogin({reload, setReload}){
                 result.length > 0 ? result.map((result, index) =>
                     <div className="yeuthich-pro-body" key={index}>                      
                         <div className="yeuthich-infor-product">
-                        <img src={'/images/' + result.photo} className="f-img" />
+                        <img src={'https://tranhoangmaianh.herokuapp.com/images/' + result.photo} className="f-img" />
                             <div className="yeuthich-first">
                                 <p><Link to={'/product/'+result.product_id} >{result.name}</Link></p>
                                 <p>Giá <span>{String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.')} VNĐ</span></p>
