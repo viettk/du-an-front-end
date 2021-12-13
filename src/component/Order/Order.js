@@ -39,7 +39,7 @@ function Order() {
     themc: '',
     discountName: '',
     total: 0,
-    type_pay:false,
+    type_pay: false,
   });
 
 
@@ -65,7 +65,7 @@ function Order() {
   });
 
   const [open, setOpen] = useState(false);
-  
+
   const [selectXa, setSelectXa] = useState({
     xa: '',
     code: ''
@@ -249,13 +249,13 @@ function Order() {
       BillApi.dathangKhachLogin(customerId, result.input).then(r => {
         localStorage.setItem('mahoadon', r.id);
         //kiểm tra kiểu thanh toán
-        if(bill.type_pay){
-          VnPayApi.createUrl(r).then((url)=>{
+        if (bill.type_pay) {
+          VnPayApi.createUrl(r).then((url) => {
             window.location.replace(url)
           })
-        }else{
+        } else {
           history.push('/dat-hang-thanh-cong');
-        } 
+        }
       }).catch((error) => {
         if (error.response) {
           setLoi(error.response.data);
@@ -266,20 +266,20 @@ function Order() {
           console.log('Error', error.message);
         }
       });
-    } else {  
+    } else {
       const cart = [];
       BillApi.dathang(result.input).then(resp => {
         localStorage.setItem('mahoadon', resp.id);
         BillApi.datHangKhachhangkoLogin(resp.id, demo).then(r => {
           localStorage.setItem('cart', JSON.stringify(cart));
           //kiểm tra kiểu thnah toán
-          if(bill.type_pay){
-            VnPayApi.createUrl(resp).then((url)=>{
+          if (bill.type_pay) {
+            VnPayApi.createUrl(resp).then((url) => {
               window.location.replace(url)
             })
-          }else{
+          } else {
             history.push('/dat-hang-thanh-cong');
-          } 
+          }
         }).catch((error) => {
           if (error.response) {
             setLoi(error.response.data);
@@ -314,7 +314,7 @@ function Order() {
         address: ''
       });
     }
-    else {      
+    else {
       AddressApi.getOnAddress(index, emailc).then(resp => {
         setBill({
           ...bill,
@@ -334,7 +334,7 @@ function Order() {
       ...discountName,
       name: e.target.value
     })
-    
+
   }
 
 
@@ -387,8 +387,8 @@ function Order() {
     console.log(bill)
   }
 
-  const handleClose = () =>{
-      setOpen(false);  
+  const handleClose = () => {
+    setOpen(false);
   }
 
   return (
@@ -479,14 +479,14 @@ function Order() {
               <h6>Phương thức thanh toán</h6>
               <div style={{ border: "1px solid #cecdcd", height: "105px", padding: " 10px 0 5px 10px", borderRadius: "5px" }}>
                 <div className="form-check">
-                  <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" defaultChecked onClick={()=>typePay(false)} />
+                  <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" defaultChecked onClick={() => typePay(false)} />
                   <label className="form-check-label" htmlFor="flexRadioDefault1">
                     Thanh toán khhi giao hàng
                   </label>
                 </div>
                 <hr />
                 <div className="form-check">
-                  <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" onClick={()=>typePay(true)} />
+                  <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" onClick={() => typePay(true)} />
                   <label className="form-check-label" htmlFor="flexRadioDefault1">
                     Thanh toán online
                   </label>
@@ -497,62 +497,62 @@ function Order() {
             {/* Giỏ hàng và thành tiền, đặt hàng */}
             <div className="viet-order-dat" style={{ backgroundColor: "#fafafa", padding: "0 10px 0 10px" }}>
               <div className="order-detail">
-                <h2 style={{fontSize: "17px"}}>Đơn hàng ({slsp} sản phẩm)</h2>
+                <h2 style={{ fontSize: "17px" }}>Đơn hàng ({slsp} sản phẩm)</h2>
                 <div className id="father">
                   <table className="table table-hover">
                     {
-                      customerId ? (<tbody>
-                        {
-                          cart.map(cart =>
-                            <tr key={cart.id}>
-                              <td>
-                                <div className="img-order">
-                                  <img src="images/demo2.png" className="rounded mx-auto d-block" alt="" />
-                                </div>
-                              </td>
-                              <td>
-                                <p style={{ fontSize: '16px' }}><b>Tên SP:{cart.name}</b></p>
-                                <p>Giá tiền: {cart.price} VND</p>
-                                <p>Số lượng: {cart.number}</p>
-                              </td>
-                              <td>
-                                <p style={{ fontSize: '16px' }}>
-                                  <b>{cart.total}<u>đ</u></b>
-                                </p>
-                              </td>
-                              <td />
-                              <td />
-                            </tr>
-                          )
-                        }
-                      </tbody>):
-                      (
-                        <tbody>
-                      {
-                        cart.map(cart =>
-                          <tr key={cart.id}>
-                            <td>
-                              <div className="img-order">
-                                <img src="images/demo2.png" className="rounded mx-auto d-block" alt="" />
-                              </div>
-                            </td>
-                            <td>
-                              <p style={{ fontSize: '16px' }}><b>Tên SP:{cart.product.name}</b></p>
-                              <p>Giá tiền: {cart.product.price} VND</p>
-                              <p>Số lượng: {cart.number}</p>
-                            </td>
-                            <td>
-                              <p style={{ fontSize: '16px' }}>
-                                <b>{cart.total}<u>đ</u></b>
-                              </p>
-                            </td>
-                            <td />
-                            <td />
-                          </tr>
-                        )
-                      }
-                    </tbody>
-                      )
+                      customerId ? 
+                        (
+                          <tbody>
+                            {
+                              cart.map(cart =>
+                                <tr key={cart.id}>
+                                  <td>
+                                    <div className="img-order">
+                                      <img src="images/demo2.png" className="rounded mx-auto d-block" alt="" />
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <p style={{ fontSize: '16px' }}><b>Tên SP:{cart.product.name}</b></p>
+                                    <p>Giá tiền: {cart.product.price} VND</p>
+                                    <p>Số lượng: {cart.number}</p>
+                                  </td>
+                                  <td>
+                                    <p style={{ fontSize: '16px' }}>
+                                      <b>{cart.total}<u>đ</u></b>
+                                    </p>
+                                  </td>
+                                  <td />
+                                  <td />
+                                </tr>
+                              )
+                            }
+                          </tbody>
+                        ) : (<tbody>
+                          {
+                            cart.map(cart =>
+                              <tr key={cart.id}>
+                                <td>
+                                  <div className="img-order">
+                                    <img src="images/demo2.png" className="rounded mx-auto d-block" alt="" />
+                                  </div>
+                                </td>
+                                <td>
+                                  <p style={{ fontSize: '16px' }}><b>Tên SP:{cart.name}</b></p>
+                                  <p>Giá tiền: {cart.price} VND</p>
+                                  <p>Số lượng: {cart.number}</p>
+                                </td>
+                                <td>
+                                  <p style={{ fontSize: '16px' }}>
+                                    <b>{cart.total}<u>đ</u></b>
+                                  </p>
+                                </td>
+                                <td />
+                                <td />
+                              </tr>
+                            )
+                          }
+                        </tbody>)
                     }
                   </table>
                 </div>
@@ -587,9 +587,9 @@ function Order() {
           </div>
         </form>
         <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
-                <Alert severity="success" sx={{ width: '100%' }}>
-                    Cảm ơn Bạn đã đặt hàng !
-                </Alert>
+          <Alert severity="success" sx={{ width: '100%' }}>
+            Cảm ơn Bạn đã đặt hàng !
+          </Alert>
         </Snackbar>
       </div>
     </section>

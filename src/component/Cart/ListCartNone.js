@@ -16,7 +16,7 @@ function ListCartNone() {
     const history = useHistory();
     let storage = localStorage.getItem('cart');
     const [result, setResult] = useState([]);
-    const [totalf, setTotalf] = useState((result.reduce((a, v) => a = a + v.total, 0)));
+    const [totalf, setTotalf] = useState(0);
     const [loading, setLoading] = useState(false);
     const [mess, setMess] = useState({
         errorMessage: ''
@@ -31,6 +31,7 @@ function ListCartNone() {
             try {
                 if(storage){
                     setResult(JSON.parse(storage));
+                    setTotalf((JSON.parse(storage).reduce((a, v) => a = a + v.total, 0)));
                 }
                 setLoading(true);
                 setTimeout(() => {
