@@ -57,6 +57,10 @@ function ProductDetail({reload, setReload}) {
         setImagep(response.photos)
         setGoiysp(goiy);
 
+        console.log(response);
+        console.log(goiy);
+        console.log(response.photos)
+
       } catch (error) {
         console.log(error);
       }
