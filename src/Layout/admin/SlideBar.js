@@ -79,6 +79,11 @@ const SlideBar = () => {
             icon: <PermIdentityIcon />,
             path: "/admin/staff",
         },
+        {
+            text: 'Đăng xuất',
+            icon: <PermIdentityIcon />,
+        },
+
     ];
 
     return (
