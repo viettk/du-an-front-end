@@ -81,7 +81,7 @@ function SignInSide() {
       if (location.state) {
         window.location.replace('https://nguyenthianhtuyet.herokuapp.com' + location.state.from)
       } else {
-        window.location.replace('https://nguyenthianhtuyet.herokuapp.com/login')
+        window.location.replace('https://nguyenthianhtuyet.herokuapp.com/home')
       }
     }).catch(error => {
       if (error.response) {
