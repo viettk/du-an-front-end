@@ -65,7 +65,7 @@ function SignInSide() {
   const handleSubmit = (event) => {
     event.preventDefault();
     axios({
-      url: 'https://tranhoangmaianh.herokuapp.com/api/login',
+      url: 'http://localhost:8080/api/login',
       method: 'post',
       data: result,
       headers: {
@@ -79,9 +79,9 @@ function SignInSide() {
       CookieService.setCookie('id', resp.data.id, 7);
       CookieService.setCookie('email', resp.data.email, 7);
       if (location.state) {
-        window.location.replace('https://nguyenthianhtuyet.herokuapp.com' + location.state.from)
+        window.location.replace('http://localhost:300/' + location.state.from)
       } else {
-        window.location.replace('https://nguyenthianhtuyet.herokuapp.com/home')
+        window.location.replace('http://localhost:300/home')
       }
     }).catch(error => {
       if (error.response) {

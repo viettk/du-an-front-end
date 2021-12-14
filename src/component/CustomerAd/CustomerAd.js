@@ -64,7 +64,7 @@ function CustomerAd() {
     const update = (id) => {
         console.log(id)
         axios({
-            url: 'https://tranhoangmaianh.herokuapp.com/admin/customer/' + id,
+            url: 'http://localhost:8080/admin/customer/' + id,
             method: 'PUT',
             type: 'application/json',
             headers: {

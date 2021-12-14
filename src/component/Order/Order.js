@@ -341,7 +341,7 @@ function Order() {
   //lấy mã giảm giá-------------------------------------------------------------------------------------------------------------
   const laymagiam = () => {
     axios({
-      url: 'https://tranhoangmaianh.herokuapp.com/discount/apdung?discountName=' + discountName.name,
+      url: 'http://localhost:8080/discount/apdung?discountName=' + discountName.name,
       method: 'get',
       headers: {
         'content-type': 'application/json',
