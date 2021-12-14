@@ -82,7 +82,7 @@
     margin-left: 10px;
     text-decoration: none;
     color: white;
-    font-size: 16px;
+    font-size: 18px;
 }
 .head-midd-linkto-cart:hover {
     text-decoration: none;
@@ -161,6 +161,7 @@
 .head-dropdown a:hover{
     color: rgb(0, 0, 0);
 }
+
 .drop-menu-hidden-vi li:hover{
     background-color: lightgray;
 }
@@ -323,7 +324,7 @@
 
   .menu-item {
     position: relative;
-line-height: 2.5rem;
+    line-height: 2.5rem;
     text-align: center;
     font-size: 18px;
   }
@@ -377,42 +378,33 @@ line-height: 2.5rem;
     text-align: center;
     font-size: 18px;
   }
-
-  .login-item li{
-      background-color: #ffba00;
-      border-radius: 5px;
-      padding: 0 20px;
-  }
-
   .login-item a {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     display: block;
     text-decoration: none;
-    color: white;
-    font-size: 16px;
-    font-weight: 500;
+    color: rgb(0, 0, 0) !important;
 
   }
   .login-item:hover {
     color: rgb(241, 180, 46);
   }
-
-
+  .hover-login .login-item:hover a {
+    color: rgb(241, 180, 46);
+  }
   .hover-login .hover-login a {
     color: #fff;
     padding: 0 0.75rem;
   }
   .hover-login {
     position: absolute;
-    top: 100%;
-    left: -94px;
+    top: 150%;
+    left: -100px;
     display: none;
     z-index: 1;
     background: white;
-    padding: 7px 10px;
-    border-radius: 5px;
+    padding: 3px 8px;
 }
   .login-item:hover > .hover-login {
     display: block;
@@ -424,7 +416,6 @@ line-height: 2.5rem;
     transform-origin: bottom;
     animation: enter 0.2s ease forwards;
     font-size: 15px;
-    margin-bottom: 5px;
     /* width: 118px; */
 }
 .an-di{
@@ -458,7 +449,7 @@ line-height: 2.5rem;
     .sub-menu {
         width: 185px !important;
         left: 0rem !important;
-        margin-top: 80px;
+        margin-top: 60px;
         transform: translateY(-50%);
     }
     .head-dropdown {
@@ -484,7 +475,7 @@ line-height: 2.5rem;
     .sub-menu {
         width: 125px!important;
         left: 2rem !important;
-        margin-top: 80px;
+        margin-top: 60px;
         transform: translateY(-50%);
     }
     .sub-menu li .an-di{
@@ -545,7 +536,7 @@ line-height: 2.5rem;
     .sub-menu {
         width: 130px !important;
         left: 0rem !important;
-        margin-top: 80px;
+        margin-top: 60px;
         transform: translateY(-50%);
 
     }
@@ -609,7 +600,7 @@ line-height: 2.5rem;
 
  @media only screen  and (max-width: 767px) {
      .logo-header{
-margin-left: 20px !important;
+        margin-left: 20px !important;
      }
     .header-category-show{
         width: 150px;
@@ -739,7 +730,7 @@ margin-left: 20px !important;
         display: grid;
         height:auto;
         width: auto;
-grid-template-columns: 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr;
         border: 1px solid lightgray;
     }
     .head-dropdown a {
@@ -865,14 +856,15 @@ grid-template-columns: 1fr 1fr 1fr;
         left: -7rem !important;
         margin-top: 82px !important;
         transform: translateY(-50%);
+        margin-left: 102px;
     }
     .menu ul {
         display: none;
         justify-content: center;
         height: auto;
         animation: fade 0.2s ease-out;
-background: black;
-        margin-top: 60px;
+        background: black;
+        margin-top: 60px !important;
         /* margin-left: 105px; */
     }
     .menu ul .menu-item {
@@ -922,7 +914,7 @@ background: black;
     }
     .sub-menu {
         width: 120px !important;
-        left: 0rem !important;
+        left: -7rem !important;
         margin-top: 81px !important;
         transform: translateY(-50%);
     }
@@ -953,7 +945,7 @@ background: black;
     }
     .sub-menu {
         width: 95px !important;
-        left: -2px !important;
+        left: -100px !important;
         margin-top: 81px !important;
         transform: translateY(-50%);
     }

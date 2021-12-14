@@ -72,7 +72,7 @@ function SignUp() {
         CookieService.setCookie('id',resp.data.id,7);
         CookieService.setCookie('email',resp.data.email,7);
         alert("Đăng ký thành công!")
-        window.location.replace('https://nguyenthianhtuyet.herokuapp.com/home')
+        window.location.replace('http://localhost:3000/home')
       }).catch(error=>{
         if (error.response) {
           setLoi(error.response.data);

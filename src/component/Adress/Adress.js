@@ -19,8 +19,8 @@ function Address() {
         const fetchList = async () => {
             try {
                 const response = await CartApi.getAddress(customerId, emailc);
-                console.log(response)
-                setResult(response)
+                // console.log(response+'vndoifvl');
+                setResult(response);
             } catch (error) {
                 console.log(error);
             }

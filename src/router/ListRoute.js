@@ -73,7 +73,9 @@ function ListRoute({reload, setReload}){
           <FavoriteNotLogin reload={reload} setReload={setReload} />
         </Route>
 
-        <Route path="/cart" component={customerId ? ListCart : ListCartNone} />
+        <Route path="/cart">
+            {customerId ? <ListCart reload={reload} setReload={setReload} /> : <ListCartNone /> }
+        </Route>
 
         <Route path="/dia-chi" component={Address} />
 

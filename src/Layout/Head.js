@@ -30,8 +30,8 @@ function Head({reload}) {
   const user_name = CookieService.getCookie('name');
   const customerId = CookieService.getCookie('id');
   const emailc = CookieService.getCookie('email');
-  console.log(CookieService.getCookie('role'))
-  // console.log(document.cookie)
+
+
   const [username,setUsername] = useState(user_name);
   // biến load lại trang
   const [load, setLoad] = useState(false);
@@ -46,9 +46,15 @@ function Head({reload}) {
       try {
         const response = await CategoryApi.getAllCateCustomer();
         if (customerId) {
-          CartApi.getNumberOfCart(customerId, emailc).then(reps =>{
-            setItemSp(reps);
-          });
+        CartApi.getNumberOfCart(customerId, emailc).then(c =>{
+          if(c.data == 0){
+            setItemSp(0);
+          } else{
+            setItemSp(c)
+          }
+        })
+        
+        
         } else{
           setItemSp(JSON.parse(localStorage.getItem('cart')).length);
         }

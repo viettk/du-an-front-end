@@ -23,13 +23,15 @@ function ModalAddress({ show, setShow, ma, setMa, reload, setReload}) {
         parent_name: ''
     });
 
+    const idcustomer = CookieService.getCookie('id');
+
     const [detail, setDetail] = useState({
         id: '',
         name: '',
         phone: '',
         address: '',
         status: 0,
-        customerInput: 1,
+        customerInput: idcustomer,
     });
 
     const dong = () => {
@@ -149,14 +151,12 @@ function ModalAddress({ show, setShow, ma, setMa, reload, setReload}) {
                             <label >Tên người nhận</label>
                             <input className="form-control" type="text" defaultValue={detail.name} name="name" onChange={getInputValue} />
                             <span style={{ color: "red", fontSize: "13px" }}>{loi.name}</span>
-                            <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span>
                         </div>
 
                         <div className="form-group">
                             <label>Địa chỉ </label>
                             <input className="form-control" type="text" defaultValue={detail.address} name="address" onChange={getInputValue} />
                             <span style={{ color: "red", fontSize: "13px" }}>{loi.name}</span>
-                            <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span>
                         </div>
 
                         <div className="form-group">

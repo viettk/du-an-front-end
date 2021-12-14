@@ -12,7 +12,7 @@ import './cart.css';
 import { Link } from 'react-router-dom';
 import SyncLoader from "react-spinners/SyncLoader";
 
-function ListCartNone() {
+function ListCartNone({reload, setReload}) {
     const history = useHistory();
     let storage = localStorage.getItem('cart');
     const [result, setResult] = useState([]);
@@ -25,6 +25,14 @@ function ListCartNone() {
         name: '',
         parent_name: ''
     });
+
+    const onReload =()=>{
+        if(reload){
+            setReload(false);
+        } else{
+            setReload(true);
+        }
+    }
 
     useEffect(() => {
         const fetchList = async () => {
@@ -55,8 +63,8 @@ function ListCartNone() {
         }
         item.total = item.price * item.number
         localStorage.setItem('cart', JSON.stringify(result));
-        let reload = localStorage.getItem('cart');
-        setResult(JSON.parse(reload));
+        let reCart = localStorage.getItem('cart');
+        setResult(JSON.parse(reCart));
         setTotalf((result.reduce((a, v) => a = a + v.total, 0)));
     }
 
@@ -65,8 +73,8 @@ function ListCartNone() {
         item.number += 1;
         item.total = item.price * item.number
         localStorage.setItem('cart', JSON.stringify(result));
-        let reload = localStorage.getItem('cart');
-        setResult(JSON.parse(reload));
+        let reCart = localStorage.getItem('cart');
+        setResult(JSON.parse(reCart));
         setTotalf((result.reduce((a, v) => a = a + v.total, 0)))
     }
 
@@ -78,8 +86,8 @@ function ListCartNone() {
         item.number = Math.round(e.target.value);
         item.total = item.price * item.number
         localStorage.setItem('cart', JSON.stringify(result));
-        let reload = localStorage.getItem('cart');
-        setResult(JSON.parse(reload));
+        let reCart = localStorage.getItem('cart');
+        setResult(JSON.parse(reCart));
         setTotalf((result.reduce((a, v) => a = a + v.total, 0)))
     }
 
@@ -92,9 +100,10 @@ function ListCartNone() {
         cart = cart.filter(c => c.product_id != idsp);
         cart.total = cart.price * cart.number;
         localStorage.setItem('cart', JSON.stringify(cart));
-        let reload = localStorage.getItem('cart');
-        setResult(JSON.parse(reload));
+        let reCart = localStorage.getItem('cart');
+        setResult(JSON.parse(reCart));
         setTotalf((cart.reduce((a, v) => a = a + v.total, 0)));
+        onReload();
     }
 
     const checkCart = () => {

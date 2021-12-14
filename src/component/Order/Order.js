@@ -113,51 +113,23 @@ function Order() {
           const respAdress = await CartApi.getAddressStatus(customerId, emailc);
           setStatusadress(respAdress.id);
           const resp = await CartApi.getCart(customerId, emailc);
-          const ship = await CartApi.getShip(customerId, emailc);
-          if (ship >= 2.99) {
-            setPhiship(15000);
-          }
-          else if (ship >= 3) {
-            setPhiship(30000);
-          } else if (ship >= 5.99) {
-            setPhiship(90000);
-          } else if (ship >= 7.99) {
-            setPhiship(12000);
-          } else {
-            setThanhTien(-1);
-          }
-          setTongtien(resp.total);
-          setThanhTien(resp.total + phiship);
           setBill({
             ...bill,
             email: emailc,
             name: respAdress.name,
             phone: respAdress.phone,
             address: respAdress.address,
-            total: (resp.total + phiship)
+            total: (resp.total)
           });
         } else {
           let storage = localStorage.getItem('cart');
           setCart(JSON.parse(storage));
           setSlsp(demo.length);
-          let ship = (demo.reduce((a, v) => a = a + v.weight, 0));
-          if (ship >= 2.99) {
-            setPhiship(15000);
-          }
-          else if (ship >= 3) {
-            setPhiship(30000);
-          } else if (ship >= 5.99) {
-            setPhiship(90000);
-          } else if (ship >= 7.99) {
-            setPhiship(12000);
-          } else {
-            setThanhTien(-1);
-          }
+         
           setTongtien(demo.reduce((a, v) => a = a + v.total, 0));
-          setThanhTien(demo.reduce((a, v) => a = a + v.total + phiship, 0));
           setBill({
             ...bill,
-            total: (demo.reduce((a, v) => a = a + v.total + phiship, 0))
+            total: (demo.reduce((a, v) => a = a + v.total , 0))
           });
         }
         tt();
@@ -558,12 +530,8 @@ function Order() {
                 </div>
               </div>
               <span className="total-amount">
-                <h2>Tạm tính :</h2>
+                <h2>Tổng cộng :</h2>
                 <p>{tongtien} VND</p>
-              </span>
-              <span className="fee">
-                <h2>Phí vận chuyển :</h2>
-                <p>{phiship} VNĐ</p>
               </span>
               <div className="discount">
                 <div className="user-box">

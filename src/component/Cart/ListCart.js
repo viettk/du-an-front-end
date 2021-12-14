@@ -15,12 +15,13 @@ import './cart.css';
 import CookieService from  '../../cookie/CookieService';
 import SyncLoader from "react-spinners/SyncLoader";
 
-function ListCart() {
+function ListCart({reload, setReload}) {
     const history = useHistory();
     const token = CookieService.getCookie('token');
     const customerId = CookieService.getCookie('id');
     const emailc = CookieService.getCookie('email');
     const initValues = [];
+    const [disablebtn, setDisablebtn] = useState(false);
     const [initParams, setInitParams]= useState(
         {
             productId: '',
@@ -32,7 +33,7 @@ function ListCart() {
         num: ''
     });
     
-    const [reload, setReload] = useState(true);
+    const [reCart, setRecart] = useState(true);
 
     const [thanhTien, SetThanhTien] = useState(0);
 
@@ -46,6 +47,15 @@ function ListCart() {
     const [loi, setLoi] = useState({
         number:''
     });
+
+    const reloadXoa =()=>{
+        if(reload){
+            setReload(false);
+        } else{
+            setReload(true);
+        }
+    }
+      
     useEffect(() => {
         const fetchList = async () =>{
             if(customerId){
@@ -64,15 +74,15 @@ function ListCart() {
         }
     }
         fetchList();
-      }, [params, reload,customerId]);
+      }, [params, reCart,customerId]);
 
-      const tangSL=(e, idp,sl)=>{
+      const tangSL=(e, index, idp, sl)=>{
         const sp = {
             productId: idp,
             number: sl
         }
         CartApi.tangSL(customerId, emailc, sp).then(resp =>{
-            setResult(resp);
+            document.getElementsByClassName("num")[index].value = resp.number
             onReload();
         }).catch((error) => {
             if (error.response) {
@@ -86,30 +96,40 @@ function ListCart() {
         })
       }
 
-      const giamSl =(e, idp, sl)=>{
-     
+      const giamSl =(e, index, idp, sl)=>{    
         const sp = {
             productId: idp,
             number: sl
         }
         CartApi.giamSL(customerId, emailc, sp).then(resp =>{
-            setResult(resp)
+            document.getElementsByClassName("num")[index].value = resp.number;
             onReload();
         })
       }
 
-      const xoaSP =(idp)=>{
+      const xoaSP =(index, idp)=>{
         const sp = {
             productId: idp,
         }
-        CartApi.xoaSP(customerId, emailc, sp).then(reps=>{
-            setResult([]);
+        CartApi.xoaSP(customerId ,emailc, sp).then(reps=>{
             onReload();
+            reloadXoa();
         })
         
       }
 
-      const checkNumber = (e,idsp, price) =>{
+      const onBlurNumb = () => {
+          setLoi({
+              ...loi,
+              num: ''
+          });
+          setMess({
+              ...mess,
+              errorMessage: ''
+          })
+      }
+
+      const checkNumber = (e, index, idsp, price) =>{
           if(e.target.value <= 0){
             xoaSP(idsp);
           } else{
@@ -117,7 +137,20 @@ function ListCart() {
                 productId: idsp,
                 number: Math.round(e.target.value),
             }
-            CartApi.checknumber(customerId, emailc, sp).catch((error) => {
+            CartApi.checknumber(customerId, emailc, sp).then(respp =>{
+                document.getElementsByClassName("num")[index].value = respp.number
+                onReload();
+                setLoi({
+                    ...loi,
+                    number:''
+                });
+                setMess({
+                    ...mess,
+                    errorMessage:''
+                })
+                setDisablebtn(false);
+            }).catch((error) => {
+                setDisablebtn(true);
                     if (error.response) {
                         setLoi(error.response.data);
                         setMess(error.response.data);
@@ -126,27 +159,16 @@ function ListCart() {
                     } else {
                         console.log('Error', error.message);
                     }
-                }).then(respp =>{
-                    setResult([])
-                    onReload();
-                    setLoi({
-                        ...loi,
-                        number:''
-                    });
-                    setMess({
-                        ...mess,
-                        errorMessage:''
-                    })
                 })
           }
         
       }
 
       const onReload = () =>{
-        if(reload){
-            setReload(false);
+        if(reCart){
+            setRecart(false);
         } else{
-            setReload(true)
+            setRecart(true)
         }
     }
     const returnAll = () => {
@@ -193,24 +215,24 @@ function ListCart() {
                         <td scope="col">Xóa</td>
                     </tr>
                 </tbody>
-                <tfoot style={{height: "10px"}}>
+                <tfoot style={{height: "10px"}} className="tfoot-cart-index" >
                     {
                         result.length > 0 ? result.map(
-                            (result) =>
-                                <tr key={result.id}>
-                                    <td>{result.id}</td>
+                            (result, index) =>
+                                <tr key={index} >
+                                    <td>{index + 1}</td>
                                     <td>{result.product.photo}</td>
                                     <td>{result.product.name}</td>
                                     <td>{String(Math.round(result.product.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.') }</td>
                                     <td>
-                                    <button className="button-sl" onClick={e => giamSl(e, result.product.id,result.number)} >-</button>
-                                        <input style={{ border: "1px solid #ddd", width: "60px", textAlign: "center", padding: "2px 0" }} type="number" className="num" type="number" defaultValue={result.number} onBlur={(e)=>checkNumber(e,result.product.id, result.price)} />
+                                    <button className="button-sl" onClick={e => giamSl(e, index, result.product.id,result.number)} >-</button>
+                                        <input style={{ border: "1px solid #ddd", width: "60px", textAlign: "center", padding: "2px 0" }} type="number" className="num" type="number" defaultValue={result.number} onBlur={(e)=>checkNumber(e, index,result.product.id, result.price)} />
                                             {/* {result.number} */}
-                                        <button className="button-sl1" onClick={e => tangSL(e, result.product.id,result.number)}>+</button>
+                                        <button className="button-sl1" onClick={e => tangSL(e, index ,result.product.id,result.number)}>+</button>
                                     </td>
                                     <td>{String(Math.round(result.total)).replace(/(.)(?=(\d{3})+$)/g, '$1.')}</td>
                                     <td>
-                                        <button style={{ border: "none" }} className="btn btn-outline-danger" onClick={() => xoaSP( result.product.id)} ><i class="fa fa-trash"></i></button>
+                                        <button style={{ border: "none" }} className="btn btn-outline-danger" onClick={() => xoaSP( index,result.product.id)} ><i class="fa fa-trash"></i></button>
                                     </td>
                                 </tr>
                         ) : <span style={{position: "absolute", left: " 48%"}}>Không có sản phẩm</span>             
@@ -228,7 +250,7 @@ function ListCart() {
                                 <div className="cart-hidden"></div>
                                 <div className="cart-contact">
                                     <button onClick={returnAll} style={{ backgroundColor: "#3d4356" }} >Tiếp tục mua hàng</button>
-                                    <button onClick={()=>thanhtoan()} >Thực hiện thanh toán</button>
+                                    <button type="button" disabled={disablebtn} onClick={()=>thanhtoan()} >Thực hiện thanh toán</button>
                                 </div>
                             </div> : <div></div>
                     }

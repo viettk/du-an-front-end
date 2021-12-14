@@ -14,6 +14,7 @@ import FavoriteApi from "../../api/FavoritApi";
 import SyncLoader from "react-spinners/SyncLoader";
 import Carousel from 'react-grid-carousel';
 import CartApi from '../../api/CartApi';
+import { Alert, Snackbar } from "@mui/material";
 
 function ProductDetail({reload, setReload}) {
   const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
@@ -23,10 +24,10 @@ function ProductDetail({reload, setReload}) {
   const [imagep, setImagep] = useState([]);
   let storage = localStorage.getItem('yeuthich');
   const [notloginyt, setNotloginyt] = useState(JSON.parse(storage));
-
   const token = localStorage.token;
   const idpage = useParams();
   const [result, setResult] = useState({});
+  const [open, setOpen] = useState(false);
   const [count, setCount] = useState({
     num: 1
   });
@@ -42,8 +43,12 @@ function ProductDetail({reload, setReload}) {
       try {
         const response = await HomeApi.getDetail(idpage.id);
         if(customerId){
-          const resp = await FavoriteApi.getOne(customerId, idpage.id);
-          setY(resp);
+          FavoriteApi.getOne(customerId, idpage.id, emailc).then(r=>{
+            if(r > 0){
+              setY(true);
+            }
+          })
+          
         } else{
           let item = notloginyt.find(c => c.product_id == idpage.id)
           if (item) {
@@ -76,12 +81,15 @@ function ProductDetail({reload, setReload}) {
     })
 
   }
+  const handleClose = () => {
+    setOpen(false);
+  }
   const downCount = () => {
-    if (count <= 1) {
+    if (count.num <= 1) {
       setCount({
         ...count,
         num: 1
-      })
+      });
     }
     else {
       setCount({
@@ -171,6 +179,8 @@ function ProductDetail({reload, setReload}) {
     if (customerId) {
       CartApi.addToCartByUserLogin(customerId, emailc, detail).then(r=>{
         onLoad();
+        handleClose();
+        console.log('vbdif')
       }).catch((error) => {
         if (error.response) {
           setMess(error.response.data);
@@ -196,6 +206,7 @@ function ProductDetail({reload, setReload}) {
       }
       localStorage.setItem('cart', JSON.stringify(cart));
       onLoad();
+      handleClose();
     }
   }
 
@@ -304,8 +315,7 @@ function ProductDetail({reload, setReload}) {
 
                   <div style={{ margin: "10px 0" }}>
                     <span style={{ fontWeight: 'bold', marginRight: " 20px", fontSize: "25px" }}>
-                    {String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' đ'}
-                      <u>đ</u>
+                    {String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' VNĐ'}
                     </span>
                     <span style={result.price != result.price_extra ? { display: "inline-block" } : { display: "none" }}>
                       <strike> {result.price_extra} </strike>
@@ -346,20 +356,16 @@ function ProductDetail({reload, setReload}) {
             <ul style={{display: "grid"}} className="nav nav-tabs">
               <li className="active"><a className="nav-title" data-toggle="tab">Mô tả sản phẩm</a></li>
               <span className="descriptio">
-                <p>
-                  <i className="fa fa-angellist " />
-                  <span>{result.describe}</span>
-                </p>
-                <p><i className="fa fa-angellist " />
-                  <span>{result.trait}</span>
-                </p>
+                <p><i className="fa fa-angellist " /><span>{result.describe}</span></p>
+                <p><i className="fa fa-angellist " /><span>{result.trait}</span></p>
+                <p><i className="fa fa-angellist " /><span>Kích thước: (dài * rộng * cao): {result.width} * {result.height} *</span></p>
               </span>
             </ul>
           </div>
           <div className="product-name-title">
             <nav className="navbar navbar-expand-sm navbar-dark bg-light">
               <div className="container-fluid">
-                <a className="brand" href>Sản phẩm Yêu thích</a>
+                <a className="brand" href>Sản phẩm Liên quan</a>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
                   <span className="navbar-toggler">
                     <i className="fa fa-bars fa-3x" />
@@ -383,6 +389,11 @@ function ProductDetail({reload, setReload}) {
                 }
             </div>
           </div>
+          <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
+          <Alert severity="success" sx={{ width: '100%' }}>
+            Thêm Sản phẩm thành công !
+          </Alert>
+        </Snackbar>
         </div>}
     </section>
   );

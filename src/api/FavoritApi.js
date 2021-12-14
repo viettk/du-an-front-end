@@ -1,8 +1,8 @@
 import axiosClient from "./axiosClient";
 
 const FavoriteApi = {
-    getOne: (id, prid) =>{
-        const url = '/yeu-thich/san-pham-yeu-thich?id='+ id + '&product_id=' + prid;
+    getOne: (id, prid, emailc) =>{
+        const url = '/yeu-thich/san-pham-yeu-thich?id='+ id + '&product_id=' + prid+'&email='+emailc;
         return axiosClient.get(url);
     },
 

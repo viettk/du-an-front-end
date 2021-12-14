@@ -61,9 +61,6 @@ function HomeCate() {
     const changeValueSelect = (e) => {
         var index = e.nativeEvent.target.selectedIndex;
         var ina = e.target.value;
-        if(query==""){
-            
-        }
         setSele({
             ...sele,
             optionValue: index + 1
@@ -100,7 +97,12 @@ function HomeCate() {
                 _known: 'down'
             });
         }
-        history.push('/all-product/query=' + query + '/page=' + xpage + '&sort=' + ina);
+        if(query==="" || query == undefined){
+            history.push('/all-product/query=' + '/page=0' + '&sort=' + ina);
+        } else{
+            history.push('/all-product/query=' + query + '/page=' + xpage + '&sort=' + ina);
+        }
+        
     }
 
     const chuyentrang = (id) =>{
