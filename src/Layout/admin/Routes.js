@@ -4,7 +4,6 @@ import {
     Route,
     Switch
 } from "react-router-dom";
-import Receipt from "../../component/PhieuNhap/Receipt/Receipt";
 import ListCategory from "../../component/Category/ListCategory";
 import ProductAd from "../../component/ProductAdmin/ProductAd";
 import Thongkedonhang from "../../component/Thongke/Thongkedonhang";
@@ -20,8 +19,6 @@ const Routes = () => {
             <Switch>
                 <Route path="/" exact component={Home} />
                 <Route path="/admin/bill/managerbill" component={Bill} />
-                <Route path="/admin/bill/returnbill" component={BillReturn} />
-                <Route path="/admin/receipt" component={Receipt} />
                 <Route path="/admin/category" component={ListCategory} />
                 <Route path="/admin/product" component={ProductAd} />
                 <Route path="/admin/chart/all" component={Thongkedonhang} />
