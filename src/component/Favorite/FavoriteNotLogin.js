@@ -8,8 +8,10 @@ import './favorite.css';
 import axios from "axios";
 import CookieService from "../../cookie/CookieService";
 import ProductApi from "../../api/ProductApi";
+import CartApi from "../../api/CartApi";
 import { Alert, Snackbar } from "@mui/material";
 import { Link } from 'react-router-dom';
+import FavoriteApi from "../../api/FavoritApi";
 
 function FavoriteNotLogin({reload, setReload}){
 
@@ -17,6 +19,8 @@ function FavoriteNotLogin({reload, setReload}){
     const [mess, setMess] = useState({
         errorMessage: ''
     });
+
+    const [loadx, setLoadx] = useState(true);
 
     const initParams= {
         _limit : '5',
@@ -34,14 +38,24 @@ function FavoriteNotLogin({reload, setReload}){
     const [result, setResult] = useState([]);
     let yt = [];
     const xoa = (e, idsp) => {
+      if (customerId) {
+        let ytlogin = {
+          productId: idsp,
+          customerId: customerId
+        }
+        FavoriteApi.deleteYeuthich(ytlogin).then(r=>{
+          onReload();
+        });
+      } else {
         let storage = localStorage.getItem('yeuthich');
         if (storage) {
-            yt = JSON.parse(storage);
+          yt = JSON.parse(storage);
         }
         yt = yt.filter(c => c.product_id != idsp);
         localStorage.setItem('yeuthich', JSON.stringify(yt));
         let reloadLocal = localStorage.getItem('yeuthich');
         setResult(JSON.parse(reloadLocal));
+      }
     }
 
     const [count, setCount] = useState({
@@ -49,10 +63,10 @@ function FavoriteNotLogin({reload, setReload}){
       });
 
       const onReload = () =>{
-        if(reload){
-            setReload(false);
+        if(loadx){
+            setLoadx(false);
         } else{
-            setReload(true);
+            setLoadx(true);
         }
     }
 
@@ -76,7 +90,7 @@ function FavoriteNotLogin({reload, setReload}){
           }
         }
         fetchList();
-      }, [params, reload]);
+      }, [params, reload, loadx]);
 
       const onLoad = () =>{
         if(reload === true){
@@ -105,16 +119,7 @@ function FavoriteNotLogin({reload, setReload}){
     }
 
     if (customerId) {
-
-      axios({
-        url: 'https://tranhoangmaianh.herokuapp.com/cart-detail/' + customerId + '?email=' + emailc,
-        method: 'post',
-        type: 'application/json',
-        data: detail,
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      }).then(r=>{
+      CartApi.addToCartByUserLogin(customerId, emailc, detail).then(r=>{
         setOpen(true);
         onLoad();
       }).catch((error) => {
@@ -182,10 +187,10 @@ function FavoriteNotLogin({reload, setReload}){
                         <div className="yeuthich-pro-body" key={index}>
                             
                             <div className="yeuthich-infor-product">
-                            <img src={'https://tranhoangmaianh.herokuapp.com/images/' + result.photo} className="f-img" />
+                            <img src={'https://tranhoangmaianh.herokuapp.com/images/' + result.product.photo} className="f-img" />
                                 <div className="yeuthich-first">
-                                    <p>{result.name}</p>
-                                    <p>Giá <span>{String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.')} VNĐ</span></p>
+                                    <p>{result.product.name}</p>
+                                    <p>Giá <span>{String(Math.round(result.product.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.')} VNĐ</span></p>
                                     <div className="input-group2">
                                     <button type="button" className="btn-number-yt" onClick={() => downCount(index)}>
                                         <i class="fa fa-minus"></i>
@@ -198,12 +203,12 @@ function FavoriteNotLogin({reload, setReload}){
                                 </div>
                             </div>
                             <div className="yeuthich-second">
-                                    <p>{String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.')} VNĐ</p>
+                                    <p>{String(Math.round(result.product.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.')} VNĐ</p>
                                     <p>{result.number > 0 && result.staus == true ? "Còn hàng" : "Hết hàng" }</p>
-                                    <button type="button" onClick={() => addToCart(result.id, result.price, result.photo, result.name, result.weight)} ><i class="fa fa-shopping-cart"></i></button>
+                                    <button type="button" onClick={() => addToCart(index, result.product.id, result.product.price, result.product.photo, result.product.name, result.product.weight)} ><i class="fa fa-shopping-cart"></i></button>
                                     {/* disabled={result.number <= 0 && result.staus == false ? false : true } */}
                                     <br/>
-                                    <button onClick={(e) => xoa(e, result.id)} type="button"><i class="fa fa-trash"></i></button>
+                                    <button onClick={(e) => xoa(e ,result.product.id)} type="button"><i class="fa fa-trash"></i></button>
                             </div>
                         </div>
                     ) : <span>Danh sách Sản phẩm yêu thích trống</span>

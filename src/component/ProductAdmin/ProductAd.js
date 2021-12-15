@@ -39,7 +39,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 function ProductAd() {
     const initValues = [];
     const initParams = {
-        _limit: '5',
+        _limit: '10',
         _page: 0,
         _field: 'id',
         _known: 'up'
@@ -242,7 +242,7 @@ function ProductAd() {
             </Snackbar>
 
             <ProductModal show={show} setShow={setShow} ma={ma} setMa={setMa} onLoad={onLoad} setOpen={setOpen} />
-            <h3 style={{ marginTop: 10 }}>Danh sách Danh mục Sản phẩm</h3>
+            <h3 style={{ marginTop: 10 }}>Danh sách Sản phẩm</h3>
             <TableContainer component={Paper}>
                 <Add style={{color: "#1976d2"}} onClick={() => create()} />
                 <table className="table table-striped">
@@ -278,6 +278,7 @@ function ProductAd() {
                     <tbody>
                         <tr style={{ textAlign: "center" }}>
                             <th scope="col">STT</th>
+                            <th scope="col">Mã sản phẩm</th>
                             <th scope="col">Ảnh</th>
                             <th scope="col">Tên Sản phẩm</th>
                             <th scope="col">Danh mục</th>
@@ -295,6 +296,7 @@ function ProductAd() {
                                 (result, index) =>
                                     <tr className="sp" key={result.id} >
                                         <td>{(index + 1)+Number(page-1)*5}</td>
+                                        <td>{result.sku}</td>
                                         <td><img src={'https://tranhoangmaianh.herokuapp.com/images/' + result.photo} style={{ width: 100 }} /></td>
                                         <td>{result.name}</td>
                                         <td>{result.category.name}</td>

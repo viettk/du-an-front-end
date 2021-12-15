@@ -21,6 +21,11 @@ const GiamgiaApi = {
         return axiosClient.get(url);
     },
 
+    laydanhmuc:(value)=>{
+        const url = '/danh-muc/cha/namedm?name='+value;
+        return axiosClient.get(url);
+    },
+
     khoiphuc: ()=>{
         const url = '/home/giamgia';
         return axiosClient.put(url);

@@ -12,6 +12,7 @@ import Giamgia from "../../component/Giamgia/Giamgia";
 import Bill from "../../component/billadmin/Bill";
 import Staff from "../../component/staff/Staff";
 import './headadmin.css';
+import Product from "../../component/ProductAdmin/Product";
 
 const Routes = () => {
     return (
@@ -25,6 +26,7 @@ const Routes = () => {
                 <Route path="/admin/chart/discount" component={Discount} />
                 <Route path="/admin/giam-gia" component={Giamgia} />
                 <Route path="/admin/staff" component={Staff} />
+                <Route path="/admin/demo" component={Product} />
             </Switch>
         </Box>
     );

@@ -127,7 +127,7 @@ function ListDiscount() {
             <thead>
                 <tr>
                     <td scope="col"><input onChange={getSearch} name="name" placeholder="Lọc theo Tên" /> </td>
-                    <td scope="col"><input onChange={changeValue} namee="valueDiscount" placeholder="Lọc theo Giá giảm" /></td>
+                    <td style={{display: "none"}} scope="col"><input onChange={changeValue} namee="valueDiscount" placeholder="Lọc theo Giá giảm" /></td>
                     <td></td>
                     <td></td>
                     <td></td>

@@ -27,7 +27,7 @@ function Order() {
     email: '',
     name: '',
     phone: '',
-    status_pay: 'Chưa thanh toán',
+    status_pay: 1,
     address: '',
     city: '',
     district: '',
@@ -80,12 +80,13 @@ function Order() {
   const [mess, setMess] = useState({
     errorMessage: ''
   });
+  const [dis, setDis] = useState(false);
 
   const [loi, setLoi] = useState({
     email: '',
     name: '',
     phone: '',
-    status_pay: '',
+    status_pay: 1,
     address: '',
     city: '',
     district: '',
@@ -105,14 +106,21 @@ function Order() {
       try {
         if (customerId) {
           const numberOfCart = await CartApi.getNumberOfCart(customerId, emailc);
-          setSlsp(numberOfCart);
-          const response = await CartApi.getCartDetail(customerId);
-          setCart(response);
+          if(numberOfCart.data === 0 ){
+            history.push('/cart');
+          } else{
+            setSlsp(numberOfCart);
+          }
+          const response = await CartApi.getCartDetail(customerId, emailc);
           const respo = await CartApi.getAddress(customerId, emailc);
-          setDiachi(respo);
+          
           const respAdress = await CartApi.getAddressStatus(customerId, emailc);
-          setStatusadress(respAdress.id);
+          
           const resp = await CartApi.getCart(customerId, emailc);
+
+          setDiachi(respo);
+          setStatusadress(respAdress.id);
+          
           setBill({
             ...bill,
             email: emailc,
@@ -131,6 +139,7 @@ function Order() {
             ...bill,
             total: (demo.reduce((a, v) => a = a + v.total , 0))
           });
+          setThanhTien(demo.reduce((a, v) => a = a + v.total, 0));
         }
         tt();
       } catch (error) {
@@ -285,14 +294,15 @@ function Order() {
         phone: '',
         address: ''
       });
+      setStatusadress('other')
     }
     else {
       AddressApi.getOnAddress(index, emailc).then(resp => {
         setBill({
           ...bill,
-          name: resp.data.name,
-          phone: resp.data.phone,
-          address: resp.data.address
+          name: resp.name,
+          phone: resp.phone,
+          address: resp.address
         });
       })
       setStatusadress(e.target.value)
@@ -312,22 +322,20 @@ function Order() {
 
   //lấy mã giảm giá-------------------------------------------------------------------------------------------------------------
   const laymagiam = () => {
-    axios({
-      url: 'http://localhost:8080/discount/apdung?discountName=' + discountName.name,
-      method: 'get',
-      headers: {
-        'content-type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-    }).then(resp => {
-      let finaltt = thanhTien - resp.data;
+    BillApi.getMAGiamGia(discountName.name).then(resp => {
+      let finaltt = thanhTien - resp;
+      setDis(true);
+      setLoidiscount({
+        ...loidiscount,
+        loi:''
+      })
       if (finaltt <= 0) {
         setThanhTien(0);
         setBill({
           ...bill,
           discountName: discountName.name,
           total: 0
-        })
+        });
       } else {
         setThanhTien(finaltt);
         setBill({
@@ -362,6 +370,8 @@ function Order() {
   const handleClose = () => {
     setOpen(false);
   }
+
+  console.log(dis)
 
   return (
     <section>
@@ -536,7 +546,7 @@ function Order() {
               <div className="discount">
                 <div className="user-box">
                   <input type="text" defaultValue={discountName.name} onChange={getDiscount} required placeholder="Nhập Mã giảm giá" />
-                  <button type="button" id="apdung-giamgia" onClick={laymagiam}>Áp dụng</button>
+                  { dis  ? <span></span> : <button type="button" id="apdung-giamgia" onClick={laymagiam}>Áp dụng</button> }
                   <span style={{ color: "red", fontSize: "13px" }}>{loidiscount.loi}</span>
                 </div>
                 <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span>

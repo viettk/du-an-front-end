@@ -17,7 +17,7 @@ const BillApi = {
     },
 
     dathangKhachLogin: (id, data)=>{
-        const url = `/order/dat/${id}`;
+        const url = '/order/dat/'+id;
         return axiosClient.post(url, data);
     },
 
@@ -54,6 +54,11 @@ const BillApi = {
     changeStatus_pay:(id, input)=>{
         const url = '/order/changeStatus_pay/'+id+'?status_pay='+input;
         return axiosClient.put(url);
+    },
+
+    getMAGiamGia:(discountName)=>{
+        const url ='/discount/apdung?discountName='+ discountName;
+        return axiosClient.get(url);
     }
 }
 export default BillApi;

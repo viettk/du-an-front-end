@@ -31,7 +31,7 @@ function BillCustomerModal({show, setShow, ma, setMa}){
         <div>
         <Modal show={show} onHide={() => dong()} fullscreen={true} >
             <Modal.Header>
-                <span>Danh sách Sản phẩm</span>
+                <span>Hóa đơn chi tiết</span>
                 <button type="button" class="btn-close" aria-label="Close" onClick={() => dong()}></button>
             </Modal.Header>
 

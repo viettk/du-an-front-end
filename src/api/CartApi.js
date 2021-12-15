@@ -6,8 +6,8 @@ const CategoryApi = {
         return axiosClient.get(url);
     },
 
-    getCartDetail:(cartId, email) =>{
-        const url = "/cart-detail/list/"+cartId +'?email='+email ;
+    getCartDetail:(customerId, email) =>{
+        const url = "/cart-detail/list/"+customerId +'?email='+email ;
         return axiosClient.get(url);
     },
 

@@ -275,11 +275,11 @@ function ProductModal({ show, setShow, ma, setMa, onLoad ,setOpen}) {
                             <span style={{ color: "red", fontSize: "13px" }}>{loi.status}</span>
                         </div>
 
-                        <div className="form-group">
+                        {/* <div className="form-group">
                             <label>Mã SKU</label>
                             <input className="form-control" type="text" onChange={onChangeDetail} name="sku" value={detail.sku} />
                             <span style={{ color: "red", fontSize: "13px" }}>{loi.sku}</span>
-                        </div>
+                        </div> */}
 
                         <div className="form-group">
                             <label>Chi tiết</label>

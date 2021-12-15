@@ -36,3 +36,92 @@
     border: none;
     padding: 5px 10px;
 }
+
+.receipt-hiddent-show{
+    display: grid;
+    position: absolute;
+    overflow: hidden;
+    height: 0;
+}
+
+.receipt-hiddent-show.active{
+    height: 200px;
+    overflow-y: scroll;
+    background-color: white;
+    width: auto;
+    left: 39.7%;
+    transform: translateX(-51%);
+    top: 40%;
+}
+
+.receipt-product-name.active{
+    border: 1px solid lightgray;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.receipt-product-name.active li{
+    padding: 5px;
+}
+
+.receipt-product-name.active li:hover{
+    background-color: lightgray;
+    cursor: pointer;
+}
+
+.giamgia-product-op{
+    display: grid;
+    grid-template-columns: 100px 100px 100px;
+}
+
+.giamgia-theo-sp{
+    display: grid;
+    grid-row-gap: 10px;
+}
+
+.giamgia-theo-sp input{
+    width: 350px;
+}
+
+.giamgia-product-op select{
+    margin: 0 10px;
+}
+
+.gg-btn-kp:hover{
+    background-color: lightgreen;
+}
+
+.receipt-hiddent-show-dm{
+    display: grid;
+    position: absolute;
+    overflow: hidden;
+    height: 0;
+    z-index: 10;
+}
+
+.receipt-hiddent-show-dm.active{
+    height: 200px;
+    overflow-y: scroll;
+    background-color: white;
+    width: auto;
+    left: 39.7%;
+    transform: translateX(-51%);
+    top: 40%;
+}
+
+.receipt-product-name-dm.active{
+    border: 1px solid lightgray;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.receipt-product-name-dm.active li{
+    padding: 5px;
+}
+
+.receipt-product-name-dm.active li:hover{
+    background-color: lightgray;
+    cursor: pointer;
+}

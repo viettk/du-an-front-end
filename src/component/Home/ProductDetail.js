@@ -42,6 +42,10 @@ function ProductDetail({reload, setReload}) {
     const fetchList = async () => {
       try {
         const response = await HomeApi.getDetail(idpage.id);
+        const goiy = await FavoriteApi.goiYsanPham(response.price);
+        setResult(response);
+        setImagep(response.photos)
+        setGoiysp(goiy);
         if(customerId){
           FavoriteApi.getOne(customerId, idpage.id, emailc).then(r=>{
             if(r > 0){
@@ -50,22 +54,17 @@ function ProductDetail({reload, setReload}) {
           })
           
         } else{
-          let item = notloginyt.find(c => c.product_id == idpage.id)
-          if (item) {
-            setY(true);
+          let getLocalYeuThich = localStorage.getItem('yeuthich');
+          if (getLocalYeuThich) {
+            let item = notloginyt.find(c => c.product_id == idpage.id);
+            if (item) {
+              setY(true);
+            }
+          } else{
+            localStorage.setItem('yeuthich',[]);
           }
+          
         }
-        
-
-        const goiy = await FavoriteApi.goiYsanPham(response.price);
-
-        setResult(response);
-        setImagep(response.photos)
-        setGoiysp(goiy);
-
-        console.log(response);
-        console.log(goiy);
-        console.log(response.photos)
 
       } catch (error) {
         console.log(error);
@@ -180,7 +179,6 @@ function ProductDetail({reload, setReload}) {
       CartApi.addToCartByUserLogin(customerId, emailc, detail).then(r=>{
         onLoad();
         handleClose();
-        console.log('vbdif')
       }).catch((error) => {
         if (error.response) {
           setMess(error.response.data);
@@ -311,7 +309,7 @@ function ProductDetail({reload, setReload}) {
                   <h4 className="fix-line-css">{result.name}</h4>
                   <span>Tình trạng : {result.number > 0 ? 'Còn hàng' : 'Hết hàng'}</span>
                   <span style={{ margin: "0 5px" }}> | </span>
-                  <span>SKU: {result.sku}</span>
+                  <span>Mã SP: {result.sku}</span>
 
                   <div style={{ margin: "10px 0" }}>
                     <span style={{ fontWeight: 'bold', marginRight: " 20px", fontSize: "25px" }}>
@@ -373,6 +371,10 @@ function ProductDetail({reload, setReload}) {
                 </button>
               </div>
             </nav>
+
+
+
+
 
             <div className="product-body-favorite">
                 {

@@ -6,7 +6,7 @@ import CategoryApi from '../../api/CategoryApi';
 import { Alert, Snackbar } from '@mui/material';
 
 
-function Modaldm({ show, setShow, ma, setMa , reload, setReload}) {
+function Modaldm({ show, setShow, ma, setMa, reload, setReload }) {
 
     const [detail, setDetail] = useState({
         id: '',
@@ -22,7 +22,7 @@ function Modaldm({ show, setShow, ma, setMa , reload, setReload}) {
         setMa(0);
     }
 
-    const [ parent, setParent ] = useState([]);
+    const [parent, setParent] = useState([]);
 
     //Thông báo lỗi
     const [mess, setMess] = useState({
@@ -35,26 +35,26 @@ function Modaldm({ show, setShow, ma, setMa , reload, setReload}) {
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
-        const fetchList = async () =>{
-          try{
-              const response = await CategoryApi.getParent();
-              setParent(response);
-              if(ma != undefined || ma != undefined){
-                const resp = await CategoryApi.getIdCategory(ma);
-                setDetail(resp);
-              } else {
-                  setDetail({
-                    id: '',
-        name: '',
-        parent_name: null  
-                  })
-              }
-          }catch (error){
-            console.log(error);
-          }
+        const fetchList = async () => {
+            try {
+                const response = await CategoryApi.getParent();
+                setParent(response);
+                if (ma != undefined || ma != undefined) {
+                    const resp = await CategoryApi.getIdCategory(ma);
+                    setDetail(resp);
+                } else {
+                    setDetail({
+                        id: '',
+                        name: '',
+                        parent_name: null
+                    })
+                }
+            } catch (error) {
+                console.log(error);
+            }
         }
         fetchList();
-      }, [ma, reload]);
+    }, [ma, reload]);
     //lấy dữ liệu từ input
     const updateName = (e) => {
         const newvalue = e.target.value;
@@ -64,16 +64,31 @@ function Modaldm({ show, setShow, ma, setMa , reload, setReload}) {
         });
     }
 
-    const updateParent = (e) => {
+    const updateNewParent = (e)=>{
         const newvalue = e.target.value;
         setDetail({
             ...detail,
             parent_name: newvalue,
         });
     }
-    
-    const onReload = () =>{
-        if(reload){
+
+    const updateParent = (e) => {
+        const newvalue = e.target.value;
+        if(newvalue == 'Chọn'){
+            setDetail({
+                ...detail,
+                parent_name: '',
+            })
+        } else {
+            setDetail({
+                ...detail,
+                parent_name: newvalue,
+            });
+        }
+    }
+
+    const onReload = () => {
+        if (reload) {
             setReload(false);
         } else {
             setReload(true);
@@ -82,11 +97,11 @@ function Modaldm({ show, setShow, ma, setMa , reload, setReload}) {
 
     //Thêm mới hoặc Cập nhật Sản phẩm
     const update = () => {
-        if(detail.id == 0 || detail.id == undefined){
+        if (detail.id == 0 || detail.id == undefined) {
             try {
                 CategoryApi.postDm(detail).then(resp => {
-                    setDetail(resp);          
-                    dong(); 
+                    setDetail(resp);
+                    dong();
                     setOpen(true);
                     onReload();
                 }).catch((error) => {
@@ -95,16 +110,16 @@ function Modaldm({ show, setShow, ma, setMa , reload, setReload}) {
                         setLoi(error.response.data);
                         setMess(error.response.data);
                     } else if (error.request) {
-                        console.log(error.request );
+                        console.log(error.request);
                     } else {
                         console.log('Error', error.message.data);
                     }
                 });
             } catch (error) {
                 console.error(error)
-            }            
+            }
         }
-        else{
+        else {
             try {
                 CategoryApi.putDm(detail.id, detail).then(resp => {
                     setDetail({
@@ -112,7 +127,7 @@ function Modaldm({ show, setShow, ma, setMa , reload, setReload}) {
                         name: resp.name,
                         parent_name: resp.parent_name,
                     });
-                    dong(); 
+                    dong();
                     setOpen(true);
                     onReload();
                 }).catch((error) => {
@@ -131,7 +146,7 @@ function Modaldm({ show, setShow, ma, setMa , reload, setReload}) {
         }
     }
 
-    const handleClose = () =>{
+    const handleClose = () => {
         setOpen(false);
     }
     return (
@@ -149,13 +164,12 @@ function Modaldm({ show, setShow, ma, setMa , reload, setReload}) {
                         <div className="form-group">
                             <label>Tên Danh mục</label>
                             <input className="form-control" type="text" onChange={(e) => updateName(e)} value={detail.name} />
-                            <span style={{ color: "red", fontSize: "13px" }}>{loi.name}</span> 
+                            <span style={{ color: "red", fontSize: "13px" }}>{loi.name}</span>
                             <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span>
                         </div>
                         <div className="form-group">
                             <label>Danh mục cha</label>
-                            <select class="form-select form-select-sm" aria-label=".form-select-sm example" onChange={(e)=>updateParent(e)} value={detail.parent_name}>
-                                        <option>Chọn</option>
+                            <select class="form-select form-select-sm" aria-label=".form-select-sm example" onChange={(e) => updateParent(e)} value={detail.parent_name}>
                                 {
                                     parent.map(parent => (
                                         <option key={parent} >{parent}</option>
@@ -165,6 +179,15 @@ function Modaldm({ show, setShow, ma, setMa , reload, setReload}) {
                             <span style={{ color: "red", fontSize: "13px" }}>{loi.parent_name}</span>
                             <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span>
                         </div>
+                        {
+                            ma == 0 || ma == undefined ?
+                                (<div className="form-group">
+                                    <label>Danh mục cha Mới</label>
+                                    <input className="form-control" type="text" onChange={(e) => updateNewParent(e)} value={detail.parent_name} />
+                                    <span style={{ color: "red", fontSize: "13px" }}>{loi.parent_name}</span>
+                                    <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span>
+                                </div>) : <span></span>
+                        }
                     </form>
                 </Modal.Body>
 
