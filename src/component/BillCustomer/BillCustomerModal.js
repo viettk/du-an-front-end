@@ -4,8 +4,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Modal } from 'react-bootstrap';
 import CategoryApi from '../../api/CategoryApi';
 import BillApi from '../../api/BillApi';
+import { useHistory } from "react-router-dom";
 
 function BillCustomerModal({show, setShow, ma, setMa}){
+    const history = useHistory();
     const [result, setResult] = useState([]);
     const dong = () => {
         setShow(false);
@@ -27,9 +29,13 @@ function BillCustomerModal({show, setShow, ma, setMa}){
         }
         fetchList();
       }, [ma]);
+
+      const chuyentrang = (id) =>{
+        history.push('/product/' + id );
+      }
     return(
         <div>
-        <Modal show={show} onHide={() => dong()} fullscreen={true} >
+        <Modal show={show} onHide={() => dong()} size="lg" >
             <Modal.Header>
                 <span>Hóa đơn chi tiết</span>
                 <button type="button" class="btn-close" aria-label="Close" onClick={() => dong()}></button>
@@ -50,8 +56,8 @@ function BillCustomerModal({show, setShow, ma, setMa}){
                     {
                         result.map(
                             (result) =>
-                                <tr key={result.id}>
-                                    <td><img style={{width: "90px", height: "90px"}} className="body-new-img-pro" src={'https://tranhoangmaianh.herokuapp.com/images/'+result.product.photo} alt="" /></td>
+                                <tr key={result.id} onClick={() => chuyentrang(result.product.id)} style={{cursor: "pointer"}}>
+                                    <td><img style={{width: "120px", height: "120px"}} src={'/images/' + result.product.photo} className="body-new-img-pro"  alt="" /></td>
                                     <td>{result.product.name}</td>
                                     <td>{String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' đ'}</td>
                                     <td>{result.number}</td>

@@ -16,6 +16,7 @@ import { useParams, useLocation, useHistory } from "react-router-dom";
 import Modaldm from "./Modaldm";
 import { height } from "@mui/system";
 import { Add } from "@mui/icons-material";
+import { Box, Grid, InputBase } from "@mui/material";
 
 function ListCategory() {
     const initValues = [];
@@ -115,17 +116,26 @@ function ListCategory() {
         <React.Fragment>
              <Modaldm show={show} setShow={setShow} ma={ma} setMa={setMa} reload={reload} setReload={setReload} />
         <h3 style={{marginTop: 10}}>Danh sách Danh mục Sản phẩm</h3>
+        <Grid item xs={6}>
+                            <Box
+                                component="form"
+                                sx={{
+                                    display: 'flex',
+                                    justifyContent: 'center'
+                                }}
+                            >
+                                <InputBase
+                                    sx={{ ml: 1, flex: 1 ,background: '#f0f0f0', pt:0.7 ,pb:0.7, pl: 0.7 }}
+                                    placeholder="Tên danh mục ...."
+                                    name="name"
+                                    onChange={(e) => getSearchName(e)}
+                                />
+                            </Box>
+                        </Grid>
         <TableContainer component={Paper}>
-        <Add style={{color: "#1976d2"}} onClick={() => them()} />
+        <button style={{margin: "5px 0"}} className="btn btn-primary" onClick={() => them()}>Thêm mới <Add /></button>
+        
         <table className="table table-striped dm">
-            <thead>
-                <tr>
-                    <td></td>
-                    <td><input placeholder="Tên danh mục..." onChange={(e) => getSearchName(e)} type='text' /></td>
-                    <td><input placeholder="Danh mục cha..." onChange={(e) => getSearchParent_name(e)} type='text' /></td>
-                    <td></td>
-                </tr>
-            </thead>
                 <tbody>
                     <tr>
                         <td scope="col">STT</td>

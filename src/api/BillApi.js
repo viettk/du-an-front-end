@@ -1,8 +1,8 @@
 import axiosClient from "./axiosClient";
 
 const BillApi = {
-    getBillCustomer: (params) =>{
-        const url = `/lich-su-mua-hang`;
+    getBillCustomer: (params, st) =>{
+        const url = `/lich-su-mua-hang?status_order=`+st;
         return axiosClient.get(url, {params});
     },
 

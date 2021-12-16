@@ -170,6 +170,7 @@ function Modaldm({ show, setShow, ma, setMa, reload, setReload }) {
                         <div className="form-group">
                             <label>Danh mục cha</label>
                             <select class="form-select form-select-sm" aria-label=".form-select-sm example" onChange={(e) => updateParent(e)} value={detail.parent_name}>
+                                <option>Chọn</option>
                                 {
                                     parent.map(parent => (
                                         <option key={parent} >{parent}</option>
@@ -180,13 +181,12 @@ function Modaldm({ show, setShow, ma, setMa, reload, setReload }) {
                             <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span>
                         </div>
                         {
-                            ma == 0 || ma == undefined ?
-                                (<div className="form-group">
-                                    <label>Danh mục cha Mới</label>
+                                <div className="form-group">
+                                    <label>Danh mục cha mới</label>
                                     <input className="form-control" type="text" onChange={(e) => updateNewParent(e)} value={detail.parent_name} />
                                     <span style={{ color: "red", fontSize: "13px" }}>{loi.parent_name}</span>
                                     <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span>
-                                </div>) : <span></span>
+                                </div>
                         }
                     </form>
                 </Modal.Body>

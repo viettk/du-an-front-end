@@ -27,7 +27,7 @@ function Order() {
     email: '',
     name: '',
     phone: '',
-    status_pay: 1,
+    status_pay: 0,
     address: '',
     city: '',
     district: '',
@@ -463,14 +463,14 @@ function Order() {
                 <div className="form-check">
                   <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" defaultChecked onClick={() => typePay(false)} />
                   <label className="form-check-label" htmlFor="flexRadioDefault1">
-                    Thanh toán khhi giao hàng
+                    Thanh toán khi nhận hàng
                   </label>
                 </div>
                 <hr />
                 <div className="form-check">
                   <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" onClick={() => typePay(true)} />
                   <label className="form-check-label" htmlFor="flexRadioDefault1">
-                    Thanh toán online
+                    Thanh toán VNPAY
                   </label>
                 </div>
               </div>
@@ -491,7 +491,7 @@ function Order() {
                                 <tr key={cart.id}>
                                   <td>
                                     <div className="img-order">
-                                      <img src="images/demo2.png" className="rounded mx-auto d-block" alt="" />
+                                      <img style={{width: "120px", height:" 120px"}} src={'/images/' + cart.product.photo } className="rounded mx-auto d-block" alt="" />
                                     </div>
                                   </td>
                                   <td>
@@ -516,7 +516,7 @@ function Order() {
                               <tr key={cart.id}>
                                 <td>
                                   <div className="img-order">
-                                    <img src="images/demo2.png" className="rounded mx-auto d-block" alt="" />
+                                    <img style={{width: "120px", height:" 120px"}} src={'/images/' + cart.photo } className="rounded mx-auto d-block" alt="" />
                                   </div>
                                 </td>
                                 <td>

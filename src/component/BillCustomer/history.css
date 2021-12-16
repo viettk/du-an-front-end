@@ -1,0 +1,58 @@
+.change-mk-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 20px;
+    padding: 20px 50px 20px 0;
+}
+
+.change-mk-div{
+    display: grid;
+    grid-template-columns: 170px 1fr;
+    grid-column-gap: 10px;
+    align-items: center;
+}
+
+.change-mk-first{
+    display: grid;
+    grid-row-gap: 30px;
+}
+
+.change-mk-container label{
+    justify-self: end;   
+    margin: 0;
+}
+
+.change-mk-container input{
+    height: 40px;  
+    border-radius: 5px;
+    border: 1px solid lightgray;
+    padding-left: 10px;
+}
+
+.change-mk-div:last-child{
+    margin-top: 30px;
+}
+
+.change-mk-div button{
+    float: right;
+    border: none;
+    background-color: lightgray;
+    padding: 10px 25px;
+    border: 5px;
+}
+
+.change-mk-div button:hover{
+    background-color: lightgreen;
+}
+
+@media (max-width: 767px){
+    .change-mk-container{
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-row-gap: 30px;
+    }
+
+    .change-mk-div:last-child{
+        margin-top: 0;
+    }
+}

@@ -13,3 +13,46 @@
     transform: translateX(-50%);
     top: 15%;
 }
+
+.thong-ke-cha{
+    position: relative;
+    width: 50%;
+    left: 20%;
+}
+
+.thong-ke-con{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-column-gap: 50px;
+}
+
+.thong-ke-head{
+    display: grid;
+    grid-template-columns: 30px 1fr;
+    background-color: tomato;
+    padding-right: 5px;
+    justify-self: end;
+    width: 150px;
+}
+
+.thong-ke-head p{
+    margin: 0;
+    color: white;
+}
+
+.thong-ke-head .tk-sdh{
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.thong-ke-dv{
+    display: grid;
+}
+
+.thong-ke-dv p{
+    justify-self: end;
+}
+
+.thong-ke-head span{
+    margin: 10px 0 0 5px;
+}

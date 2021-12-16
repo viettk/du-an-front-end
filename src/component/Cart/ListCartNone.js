@@ -160,7 +160,7 @@ function ListCartNone({reload, setReload}) {
                                         (result) =>
                                             <tr key={result.product_id}>
                                                 <td>{result.product_id}</td>
-                                                <td>{result.photo}</td>
+                                                <td><img style={{width: "120px", height:" 120px"}} src={'/images/'+ result.photo} /></td>
                                                 <td>{result.name}</td>
                                                 <td>{String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.') }</td>
                                                 <td key={result.number}>

@@ -179,7 +179,7 @@ function Giamgia() {
             <div style={{ position: "relative", display: "grid", gridTemplateColumns: "230px 1fr" }}>
                 <label>Giảm giá Danh mục:</label>
                 <div className="giamgia-theo-dm">
-                    <input onChange={(e) => getInputdm(e)} id="dmsp" type="search" className="input-search form-control" placeholder="Tên danh mục" aria-label="Search" aria-describedby="search-addon" />
+                    <input style={{width: "347px", marginBottom: "10px"}}  onChange={(e) => getInputdm(e)} id="dmsp" type="search" className="input-search form-control" placeholder="Tên danh mục" aria-label="Search" aria-describedby="search-addon" />
                     <div className={acdm == true ? "receipt-hiddent-show-dm active" : "receipt-hiddent-show-dm"}>
                         <ul className="receipt-product-name-dm active" >
                             {
@@ -191,8 +191,8 @@ function Giamgia() {
                         </ul>
                     </div>
                     <div className="giamgia-product-op">
-                        <input onChange={(e) => giamgiadm(e)} value={giam3.value} type="text" className="input-number" style={{ textAlign: 'center', height: "36px", width: "100px", marginRight: "10px" }} />
-                        <button className="gg-btn" type="button" onClick={giamm} >Giảm</button>
+                        <input onChange={(e) => giamgiadm(e)} value={giam3.value} type="text" className="input-number" style={{ textAlign: 'center', height: "36px", width: "100px" }} />
+                        <button style={{marginRight: "10px"}} className="gg-btn" type="button" onClick={giamm} >Giảm</button>
                     </div>
                 </div>
             </div>

@@ -31,6 +31,8 @@ import Introduce from "../Layout/headchild/Introduce";
 import Instruct from "../Layout/headchild/Hdmua";
 import Hddt from "../Layout/headchild/Hddt";
 import Hdtt from "../Layout/headchild/Hdtt";
+import VerticalTabs from "../component/BillCustomer/TaikhoanCaNhan";
+import ThongKe from "../component/Thongke/ThongKe";
 
 function ListRoute({reload, setReload}){
   const customerId = CookieService.getCookie('id');
@@ -81,6 +83,8 @@ function ListRoute({reload, setReload}){
 
         {/* <Route path="/cart_none" component={ListCartNone} /> */}
 
+        <Route path="/tai-khoan-ca-nhan" component={VerticalTabs} />
+
         <Route path="/lich-su-mua-hang" component={BillCustomer} />
 
         <Route path="/chinh-sach-doi-tra-hoan-tien" component={Chinhsachtra} />
@@ -100,6 +104,8 @@ function ListRoute({reload, setReload}){
         <Route path="/huong-dan-mua-hang" component={Instruct} />
 
         <Route path="/huong-dan-thanh-toan" component={Hdtt} />
+
+        {/* <Route path="/thongke" component={ThongKe} /> */}
 
         {/* <PrivateRoutes component={ListDanhmuc} authed={false} path='/admin'  /> */}
         {/* component PageNotFound phải để cuối cùng */}

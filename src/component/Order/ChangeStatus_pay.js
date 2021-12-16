@@ -87,7 +87,7 @@ function ChangeStatus_pay() {
                                 <div className="form-check">
                                     <input className="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" onClick={momo} />
                                     <label className="form-check-label" htmlFor="flexRadioDefault1">
-                                        Thanh toán online
+                                        Thanh toán VNPAY
                                     </label>
                                 </div>
                             </div>

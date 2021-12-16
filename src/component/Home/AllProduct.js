@@ -128,15 +128,15 @@ function HomeCate() {
                     </div>
                     <div className="product-category list-product">
                         {
-                            result.map(result =>
+                            result.length > 0 ? result.map(result =>
                                 <div key={result.id} className="productinfo lst-pro-infor" onClick={() => chuyentrang(result.id)}>
-                                    <img src={'https://tranhoangmaianh.herokuapp.com/images/' + result.photo} alt="" className="pr-img" width="206px" height="206px" />
+                                    <img src={'/images/' + result.photo} alt="" className="pr-img" width="206px" height="206px" />
                                     <p className="fix-line-css">{result.name}</p>
                                     <p style={{ margin: "0 0 5px 0", justifySelf: "start" }}>SKU: {result.sku}</p>
                                     <p style={{ fontSize: "16px", fontWeight: '550', color: result.price < result.price_extra ? "red" : "#080000" }}>{result.price} đ</p>
                                     <span>{result.price_extra}đ</span>
                                 </div>
-                            )
+                            ):<p>Không tìm thấy Sản phẩm phù hợp</p>
                         }
                     </div>
                 </div>}

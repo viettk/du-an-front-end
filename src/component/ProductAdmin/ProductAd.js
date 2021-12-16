@@ -7,7 +7,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import ProductApi from "../../api/ProductApi";
 import CategoryApi from "../../api/CategoryApi";
 import ProductModal from "./ProductModal";
-import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import Dialog from '@mui/material/Dialog';
@@ -20,12 +19,20 @@ import Checkbox from '@mui/material/Checkbox';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import TextField from '@mui/material/TextField';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
 import Box from '@mui/material/Box';
-import { Add } from "@mui/icons-material";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import TableRow from '@mui/material/TableRow';
+import { Button, FormControl, Grid, IconButton, InputBase, InputLabel, MenuItem, Select } from "@mui/material";
+import FilterAltTwoToneIcon from '@mui/icons-material/FilterAltTwoTone';
+import CreateIcon from '@mui/icons-material/Create';
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import NotInterestedIcon from '@mui/icons-material/NotInterested';
+import ControlPointIcon from '@mui/icons-material/ControlPoint';
+import Add from "@mui/icons-material/Add";
 
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -42,7 +49,7 @@ function ProductAd() {
         _limit: '10',
         _page: 0,
         _field: 'id',
-        _known: 'up'
+        _known: ''
     };
     //biến lưu các id sản phẩm ẩn hiện
     const [ids, setIds] = useState([]);
@@ -65,15 +72,17 @@ function ProductAd() {
             setLoad(true)
         }
     }
+    
 
     //lấy danh sách danh mục
-    const [parent, setParent] = useState([]);
+    const [danhMuc, setDanhMuc] = useState([]);
     const [search, setSearch] = useState({
         categoryName: '',
         name: '',
         create_date: '',
         price: '',
-        status: ''
+        status: '',
+        categoryId: ''
     });
 
     const paramsChange = (event) => {
@@ -94,11 +103,12 @@ function ProductAd() {
     useEffect(() => {
         const fetchList = async () => {
             try {
-                const response = await ProductApi.getAll(params, search.name, search.price, search.categoryName, search.create_date, search.status);
+                const response = await ProductApi.getAll(params, search.name, search.price, search.categoryId, search.create_date, search.status);
                 setResult(response.content);
+                const resp = await CategoryApi.getForProduct();
+                setDanhMuc(resp);
                 if (response.totalPages === 0) {
                     setCount(response.totalPages);
-                    console.log(null)
                     return;
                 }
                 if (response.totalPages < count) {
@@ -108,8 +118,6 @@ function ProductAd() {
                 } else {
                     setCount(response.totalPages);
                 }
-                const resp = await CategoryApi.getParent();
-                setParent(resp);
 
             } catch (error) {
                 console.log(error);
@@ -161,6 +169,7 @@ function ProductAd() {
     const anHienNSP = () => {
         productHide(ids);
     }
+    
     //hàm api chung xử lý ẩn hiện sp
     const productHide = async (dsID) => {
         let listId;
@@ -212,6 +221,11 @@ function ProductAd() {
         }
         onLoad();
     }
+
+// sét tổng sổ bán ghi muốn trả về 
+const handleChangeRowsPerPage = (event) => {
+    setParams({...params,_limit: event.target.value})
+  };
     return (
 
         <React.Fragment>
@@ -237,94 +251,136 @@ function ProductAd() {
             {/* snackbar thành công */}
             <Snackbar open={open} autoHideDuration={5000} onClose={handleClose} >
                 <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                    This is a success message!
+                    Thực hiện thành công!
                 </Alert>
             </Snackbar>
 
-            <ProductModal show={show} setShow={setShow} ma={ma} setMa={setMa} onLoad={onLoad} setOpen={setOpen} />
+
             <h3 style={{ marginTop: 10 }}>Danh sách Sản phẩm</h3>
-            <TableContainer component={Paper}>
-                <Add style={{color: "#1976d2"}} onClick={() => create()} />
-                <table className="table table-striped">
-                    <thead>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td> <TextField label="Tên sản phẩm" name="name" onChange={paramsChange} variant="outlined" /></td>
-                            <td>
-                            <Box sx={{ minWidth: 120 }}>
-                                <FormControl fullWidth>
-                                    <InputLabel id="demo-simple-select-label">Danh mục</InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value={search.categoryName}
-                                        label="Danh mục"
-                                        name="categoryName"
-                                        onChange={paramsChange}
-                                    >
-                                        <MenuItem value=''>Tất cả</MenuItem>
-                                        {
-                                        parent.map(parent => (
-                                            <MenuItem value={parent}>{parent}</MenuItem>
+            {/* sửa  */}
+            <Box sx={{ marginBottom: 2 }}>
+                <Box mb={2}>
+                    <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3}} sx={{alignItems: 'center'}}>
+                        <Grid item xs={2}>
+                            <FormControl variant="filled" fullWidth>
+                                <InputLabel id="demo-simple-select-standard-label">Danh mục</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-standard-label"
+                                    id="demo-simple-select-standard"
+                                    size="small"
+                                    value={search.categoryId}
+                                    label="Danh mục"
+                                    name="categoryId"
+                                    onChange={paramsChange}
+                                >
+                                    <MenuItem value=''>Tất cả</MenuItem>
+                                    {
+                                        danhMuc.map(parent => (
+                                            <MenuItem value={parent.id}>{parent.name}</MenuItem>
                                         ))
-                                        }                                       
-                                    </Select>
-                                </FormControl>
-                                </Box>
-                            </td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr style={{ textAlign: "center" }}>
-                            <th scope="col">STT</th>
-                            <th scope="col">Mã sản phẩm</th>
-                            <th scope="col">Ảnh</th>
-                            <th scope="col">Tên Sản phẩm</th>
-                            <th scope="col">Danh mục</th>
-                            <th scope="col"><Button variant="text" onClick={() => upDown("price")} >Giá{params._field === 'price' ? (params._known === 'up' ?  <ArrowUpwardIcon color="primary" />:<ArrowDownwardIcon color="primary" /> ) : ''}</Button></th>
-                            <th scope="col">Giám giá</th>
-                            <th scope="col"><Button variant="text" onClick={() => upDown("id")}>Ngày tạo{params._field === 'id' ? (params._known === 'up' ? <ArrowUpwardIcon color="primary" />:<ArrowDownwardIcon color="primary" />) : ''}</Button></th>
-                            <th scope="col">Số lượng</th>
-                            <th scope="col">Trạng thái</th>
-                            <th scope="col">Thao tác nhanh {search.status !== '' ? <Button variant="contained" color={search.status ? 'error' : 'warning'} onClick={() => dialog('', 'đã chọn', search.status)}>{search.status ? 'Vô hiệu' : 'Hoạt động'}</Button> : ''}</th>
-                        </tr>
-                    </tbody>
-                    <tfoot style={{ height: "10px" }}>
-                        {
-                            result.length > 0 ? result.map(
-                                (result, index) =>
-                                    <tr className="sp" key={result.id} >
-                                        <td>{(index + 1)+Number(page-1)*5}</td>
-                                        <td>{result.sku}</td>
-                                        <td><img src={'https://tranhoangmaianh.herokuapp.com/images/' + result.photo} style={{ width: 100 }} /></td>
-                                        <td>{result.name}</td>
-                                        <td>{result.category.name}</td>
-                                        <td>{String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' đ'}</td>
-                                        <td>{(result.value_extra) ? result.value_extra : '0'}%</td>
-                                        <td>{(result.createDate.split('T')[0]).split('-').reverse().join('-')}</td>
-                                        <td>{result.number}</td>
-                                        <td>
-                                            <Button variant="contained" color="success" onClick={() => xemChitiet(result.id)}>
-                                                Xem
-                                            </Button>
+                                    }
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Box
+                                component="form"
+                                sx={{
+                                    display: 'flex',
+                                    justifyContent: 'center'
+                                }}
+                            >
+                                <InputBase
+                                    sx={{ ml: 1, flex: 1 ,background: '#f0f0f0', pt:0.7 ,pb:0.7, pl: 0.7 }}
+                                    placeholder="Tên sản phẩm ...."
+                                    name="name"
+                                    onChange={paramsChange}
+                                />
+                            </Box>
+                        </Grid>
+                        <Grid item xs={2}>
+                            <FormControl variant="filled" fullWidth>
+                                <InputLabel id="demo-simple-select-standard-label">Trạng thái</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-standard-label"
+                                    id="demo-simple-select-standard"
+                                    size="small"
+                                    value={search.status}
+                                    label="Trạng thái"
+                                    name="status"
+                                    onChange={paramsChange}
+                                >
+                                    <MenuItem value=''>Tất cả</MenuItem>
+                                     <MenuItem value={true}>Hoạt động</MenuItem>
+                                     <MenuItem value={false}>Vô hiệu hóa</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                    </Grid>
+                </Box>
+            </Box>
+           
+            <button className="btn btn-primary" onClick={() => create()} >Thêm mới <Add/></button>
+            
+            <Box sx={{ marginBottom: 2 }}>
+                <ProductModal show={show} setShow={setShow} ma={ma} setMa={setMa} onLoad={onLoad} setOpen={setOpen} danhMuc={danhMuc} />
+            </Box>
+            <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+                <TableContainer sx={{ minHeight: 440 }}>
+                    <Table stickyHeader aria-label="sticky table">
+                        <TableHead style={{ background: "#ccc" }}>
+                            <TableRow>
+                                <TableCell>Stt</TableCell>
+                                <TableCell>Mã sản phẩm</TableCell>
+                                <TableCell>Tên sản phẩm</TableCell>
+                                <TableCell>Ảnh</TableCell>
+                                <TableCell>Danh mục</TableCell>
+                                <TableCell><Button variant="text" onClick={() => upDown("price")} >Giá{params._field === 'price' ? (params._known === 'up' ? <ArrowUpwardIcon color="primary" /> : <ArrowDownwardIcon color="primary" />) : ''}</Button></TableCell>
+                                <TableCell>Giảm giá</TableCell>
+                                <TableCell><Button variant="text" onClick={() => upDown("id")}>Ngày tạo{params._field === 'id' ? (params._known === 'up' ? <ArrowUpwardIcon color="primary" /> : <ArrowDownwardIcon color="primary" />) : ''}</Button></TableCell>
+                                <TableCell>Số lượng</TableCell>
+                                <TableCell>Trạng thái</TableCell>
+                                <TableCell>Hoạt động {(search.status !== '' &&  ids.length > 0 ) ? <Button variant="contained" color={search.status ? 'error' : 'warning'} onClick={() => dialog('', 'đã chọn', search.status)}>{search.status ? 'Vô hiệu' : 'Hoạt động'}</Button> : ''}</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {
+                                result.length > 0 ? result.map(
+                                    (result, index) =>
+                                        <TableRow className="sp" key={result.id} >
+                                            <TableCell>{(index + 1) + Number(page - 1) * 5}</TableCell>
+                                            <TableCell>{result.sku}</TableCell>
+                                            <TableCell>{result.name}</TableCell>
+                                            <TableCell><img src={'http://localhost:8080/images/' + result.photo} style={{ width: 100 }} /></TableCell>
+                                            <TableCell>{result.category.name}</TableCell>
+                                            <TableCell>{String(Math.round(result.price/1000)*1000).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' VNĐ'}</TableCell>
+                                            <TableCell>{(result.value_extra) ? result.value_extra : '0'}%</TableCell>
+                                            <TableCell>{(result.createDate.split('T')[0]).split('-').reverse().join('-')}</TableCell>
+                                            <TableCell>{result.number}</TableCell>
+                                            <TableCell>
+                                                <Button variant="contained" color="success" onClick={() => xemChitiet(result.id)}>
+                                                   <CreateIcon sx ={{fontSize:16}}/>
+                                                </Button>
 
-                                            <Button variant="contained" disabled={search.status !== ''} color={result.status ? 'warning' : 'error'} onClick={() => dialog(result.id, result.name, result.status)}>{result.status ? 'Hoạt động' : 'Vô hiệu'}</Button>
-                                        </td>
-                                        <td><Checkbox key={Math.random()} className="checkbox" color="secondary" defaultChecked={ids.includes(result.id)} onChange={() => addID(result.id, result.status)} /></td>
-                                    </tr>
+                                                <Button variant="contained" disabled={search.status !== '' && ids.length>0} color={result.status ? 'warning' : 'error'} onClick={() => dialog(result.id, result.name, result.status)}>{result.status ? <NotificationsActiveIcon/> : <NotInterestedIcon/>}</Button>
+                                            </TableCell>
+                                            <TableCell><Checkbox key={Math.random()} className="checkbox" color="secondary" defaultChecked={ids.includes(result.id)} onChange={() => addID(result.id, result.status)} /></TableCell>
+                                        </TableRow>
 
-                            ) : (
+                                ) : (
 
-                                <div style={{ textAlign: "center", position: 'absolute', left: "50%", transform: `translate(${-50}%, ${0}px)` }}>Không có dữ liệu</div>
-                            )
-                        }
-                    </tfoot>
-                </table>
-            </TableContainer>
-            <Stack spacing={2}>
+                                    <div style={{ textAlign: "center", position: 'absolute', left: "50%", transform: `translate(${-50}%, ${0}px)` }}>Không có dữ liệu</div>
+                                )
+                            }
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                <Stack spacing={2}>
                 <Pagination className="d-flex justify-content-center" count={count} page={page} onChange={handleChange} color="secondary" />
             </Stack>
+            </Paper>
+            {/* sửa end */}
+           
         </React.Fragment>
     );
 }

@@ -131,19 +131,25 @@ function HomeCateParentName() {
 
                     <div className="product-category list-product">
                         {
-                            result.map(result =>
+                            result.length > 0 ?result.map(result =>
                                 <div key={result.id} className="productinfo lst-pro-infor" onClick={() => chuyentrang(result.id)}>
-                                    <img src={'https://tranhoangmaianh.herokuapp.com/images/' + result.photo} alt="" className="pr-img" width="206px" height="206px" />
+                                    <img src={'/images/' + result.photo} alt="" className="pr-img" width="206px" height="206px" />
                                     <p className="fix-line-css">{result.name}</p>
-                                    <p style={{ margin: "0 0 5px 0", justifySelf: "start" }}>SKU: {result.sku}</p>
-                                    <p style={{ fontSize: "16px", fontWeight: '550', color: result.price < result.price_extra ? "red" : "#080000" }}>{result.price} đ</p>
-                                    <span>{result.price_extra}đ</span>
+                                    <p style={{ margin: "0 0 5px 0", justifySelf: "start" }}>Mã SP: {result.sku}</p>
+                                    <span className="pro-body">
+                                        <span style={result.price != result.price_extra ? { fontSize: "15px", marginRight: "15px", color: "red", fontWeight: "500" } : { fontSize: "15px", marginRight: "15px", fontWeight: "500" }}>
+                                            {String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' VNĐ'}
+                                        </span>
+                                        <span style={result.price != result.price_extra ? { display: "inline-block" } : { display: "none" }}>
+                                            <strike> {String(Math.round(result.price_extra)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' VNĐ'} </strike>
+                                        </span>
+                                    </span>
                                 </div>
-                            )
+                            ):<p>Không tìm thấy Sản phẩm phù hợp</p>
                         }
 
                     </div>
-                    <Pagination className="d-flex justify-content-center" count={count} page={page} onChange={handleChange} color="secondary" />
+                    <Pagination sx={{marginTop: "30px"}} className="d-flex justify-content-center" count={count} page={page} onChange={handleChange} color="secondary" />
                 </div>}
         </section>
     );

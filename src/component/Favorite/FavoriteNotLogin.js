@@ -105,7 +105,7 @@ function FavoriteNotLogin({reload, setReload}){
     var x = document.getElementsByClassName('input-number-yt')[index].value;
     const detail = {
       productId: idsp,
-      number: count.num,
+      number: x,
     }
 
     const localDetail = {
@@ -171,6 +171,10 @@ function FavoriteNotLogin({reload, setReload}){
     setOpen(false);  
     }
 
+    const chuyentrang = (id) =>{
+      history.push('/product/' + id );
+    }
+
     return (
         customerId ? 
         <div className="yeu-thich-product">
@@ -187,9 +191,9 @@ function FavoriteNotLogin({reload, setReload}){
                         <div className="yeuthich-pro-body" key={index}>
                             
                             <div className="yeuthich-infor-product">
-                            <img src={'https://tranhoangmaianh.herokuapp.com/images/' + result.product.photo} className="f-img" />
+                            <img src={'/images/' + result.product.photo} className="f-img" />
                                 <div className="yeuthich-first">
-                                    <p>{result.product.name}</p>
+                                    <p onClick={() => chuyentrang(result.product.id)} style={{cursor: "pointer"}} >{result.product.name}</p>
                                     <p>Giá <span>{String(Math.round(result.product.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.')} VNĐ</span></p>
                                     <div className="input-group2">
                                     <button type="button" className="btn-number-yt" onClick={() => downCount(index)}>
@@ -229,7 +233,7 @@ function FavoriteNotLogin({reload, setReload}){
                 result.length > 0 ? result.map((result, index) =>
                     <div className="yeuthich-pro-body" key={index}>                      
                         <div className="yeuthich-infor-product">
-                        <img src={'https://tranhoangmaianh.herokuapp.com/images/' + result.photo} className="f-img" />
+                        <img src={'/images/' + result.photo} className="f-img" />
                             <div className="yeuthich-first">
                                 <p><Link to={'/product/'+result.product_id} >{result.name}</Link></p>
                                 <p>Giá <span>{String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.')} VNĐ</span></p>

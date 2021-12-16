@@ -221,7 +221,7 @@ function ListCart({reload, setReload}) {
                             (result, index) =>
                                 <tr key={index} >
                                     <td>{index + 1}</td>
-                                    <td>{result.product.photo}</td>
+                                    <td><img style={{width: "120px", height: "120px"}} src={'/images/'+ result.product.photo} /></td>
                                     <td>{result.product.name}</td>
                                     <td>{String(Math.round(result.product.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.') }</td>
                                     <td>

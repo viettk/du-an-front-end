@@ -5,3 +5,12 @@ td{
 .unkown{
     text-align: center;
 }
+
+.xem-receipt{
+    border: none;
+    background-color: white;
+}
+
+.xem-receipt:hover{
+    background-color: lightgray;
+}

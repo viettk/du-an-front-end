@@ -54,6 +54,10 @@ const CategoryApi = {
     getListAll :(param)=>{
         const url = `/api/danh-muc/all/search`;
         return axiosClient.get(url, {param});
+    },
+    getForProduct:()=>{
+        const url = `/api/danh-muc/all`;
+        return axiosClient.get(url);
     }
 
 }

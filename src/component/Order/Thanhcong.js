@@ -40,6 +40,17 @@ function Thanhcong() {
         fetchList();
       }, []);
 
+      const onSwithStatusOrder=((value)=>{
+        switch (value) {
+            case 0:
+                return 'Thanh toán khi nhận hàng';
+            case 1:
+                return 'Thanh toán VNPAY';
+            default:
+                return (<p>Lỗi hiện thị</p>);
+        }
+    });
+
     return (
         <div className="dat-hang-thanh-cong">
             <div className="container">
@@ -79,7 +90,7 @@ function Thanhcong() {
                                     <p>{bill.phone}</p>
                                 </div>
                                 <span style={{fontWeight: "500"}}>Phương thức thanh toán:</span>
-                                <span>{bill.status_pay}</span>
+                                <span>{onSwithStatusOrder(bill.status_pay)}</span>
                             </div>
                             {statusOrder===true ? <button className='thanhcong-btn first-btn-tc'><Link to="/home" className='thanhcong-ttmh'>Tiếp tục mua hàng</Link></button>:
                                 <button className='thanhcong-btn first-btn-tc'>Thanh toán lại</button>}
@@ -91,7 +102,7 @@ function Thanhcong() {
                             {
                                 bdt.map(result =>
                                     <div className='thanhcong-product'>
-                                        <img className='thanhcong-product-img' src={'https://tranhoangmaianh.herokuapp.com/images/' + result.product.photo} />
+                                        <img className='thanhcong-product-img' src={'/images/' + result.product.photo} />
                                         <div className='thanhcong-product-infor'>
                                             <span>{result.product.name}</span>
                                             <span>{result.number}</span>

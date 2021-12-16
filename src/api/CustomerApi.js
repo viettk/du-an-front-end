@@ -9,6 +9,11 @@ const CustomerApi = {
     putCustomer: (id) =>{
         const url = `/admin/customer/`+id;
         return axiosClient.put(url);
+    },
+
+    getCustomer:(emailc)=>{
+        const url = '/account/get-email?email=' + emailc;
+        return axiosClient.get(url);
     }
 
 }

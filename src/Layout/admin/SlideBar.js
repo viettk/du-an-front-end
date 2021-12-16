@@ -13,6 +13,8 @@ import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
 import SubMenu from "./SubMenu";
 import './headadmin.css';
+import logo from './Logo.png';
+import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 
 const SlideBar = () => {
     // const logout = () => {
@@ -28,12 +30,12 @@ const SlideBar = () => {
         {
             text: 'Trang chủ',
             icon: <CardMembershipIcon />,
-            path: "/admin/chart/all",
+            path: "/admin",
         },
         {
             text: 'Thống kê',
             icon: <BarChartIcon />,
-            path: "/admin/chart/all",
+            path: "/",
         },
 
         {
@@ -57,6 +59,20 @@ const SlideBar = () => {
             icon: <CategoryIcon />,
             path: "/admin/giam-gia",
         },
+
+        {
+            text: 'Khách hàng',
+            icon: <SupportAgentIcon />,
+            path: "/admin/khach-hang",
+        },
+        
+
+        {
+            text: 'Cá nhân',
+            icon: <SupportAgentIcon />,
+            path: "/admin/ttcn",
+        },
+
         {
             text: 'Hóa đơn',
             icon: <CardMembershipIcon />,
@@ -72,21 +88,7 @@ const SlideBar = () => {
                 },
             ]
         },
-        {
-            text: 'Phiếu nhập kho',
-            icon: <ReceiptIcon />,
-            path: "/admin/receipt",
-        },
-        {
-            text: 'Phiếu xuất kho',
-            icon: <ReceiptLongIcon />,
-            path: "/admin/nk",
-        },
-        {
-            text: 'Nhân viên',
-            icon: <PermIdentityIcon />,
-            path: "/admin/staff",
-        },
+
         {
             text: 'Đăng xuất',
             icon: <PermIdentityIcon />,
@@ -98,7 +100,7 @@ const SlideBar = () => {
         <div>
             {/* logo */}
             <Toolbar>
-                <img src="../../public/logo192.png" alt="logo"></img>
+                <img src={logo} alt="logo" style={{width: "100px", height: "100px"}} ></img>
                 <Typography>Gumdam</Typography>
             </Toolbar>
             <Divider />

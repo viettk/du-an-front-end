@@ -15,6 +15,7 @@ import { useParams, useLocation, useHistory } from "react-router-dom";
 import { height } from "@mui/system";
 import Discountdm from "./Discountdm";
 import { Add } from "@mui/icons-material";
+import { Box, Grid, InputBase } from "@mui/material";
 
 function ListDiscount() {
     
@@ -121,19 +122,25 @@ function ListDiscount() {
         <React.Fragment>
              <Discountdm show={show} setShow={setShow} ma={ma} setMa={setMa} reload={reload} setReload={setReload} />
         <h3 style={{marginTop: 10}}>Danh sách phiếu giảm giá</h3>
+        <Grid item xs={6}>
+                            <Box
+                                component="form"
+                                sx={{
+                                    display: 'flex',
+                                    justifyContent: 'center'
+                                }}
+                            >
+                                <InputBase
+                                    sx={{ ml: 1, flex: 1 ,background: '#f0f0f0', pt:0.7 ,pb:0.7, pl: 0.7 }}
+                                    placeholder="Tên mã giảm giá ...."
+                                    name="name"
+                                    onChange={getSearch}
+                                />
+                            </Box>
+                        </Grid>
         <TableContainer component={Paper}>
-        <Add style={{color: "#1976d2"}} onClick={() => getMa()} />
+        <button style={{margin: "5px 0"}} className="btn btn-primary"  onClick={() => getMa()} >Thêm mới <Add /></button>
         <table className="table table-striped">
-            <thead>
-                <tr>
-                    <td scope="col"><input onChange={getSearch} name="name" placeholder="Lọc theo Tên" /> </td>
-                    <td style={{display: "none"}} scope="col"><input onChange={changeValue} namee="valueDiscount" placeholder="Lọc theo Giá giảm" /></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </thead>
                 <tbody>
                     <tr>
                         <td scope="col">Tên <i class={ params._known == 'up' && params._field =='name' ? "fa fa-angle-up searh-icon" : "fa fa-angle-down searh-icon"  } onClick={nameSort}></i></td>
@@ -154,7 +161,7 @@ function ListDiscount() {
                                     <td>{result.number}</td>
                                     <td>{(result.open_day.split('T')[0]).split('-').reverse().join('-')}</td>
                                     <td>{result.end_day}</td>
-                                    <td><button type="button" className="xem-receipt" style={{padding: 0}} onClick={() => getMa(result.id)}><i class="fa fa-edit"></i></button></td>    
+                                    <td><button type="button" className="xem-receipt" onClick={() => getMa(result.id)}><i class="fa fa-edit"></i></button></td>    
                                 </tr>
 
                         ) : (         

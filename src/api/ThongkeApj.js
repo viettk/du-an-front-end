@@ -24,6 +24,11 @@ const ThongkeApi = {
     getDoanhthu:(year)=>{
         const url  = "/api/thong-ke/doanhthu1nam?year=" + year ;
         return axiosClient.get(url);
+    },
+
+    getThongke_typepay: ()=>{
+        const url = '/api/thong-ke/thongkeTypepay';
+        return axiosClient.get(url);
     }
 
 }

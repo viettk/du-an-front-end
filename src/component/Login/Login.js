@@ -62,7 +62,7 @@ function SignInSide() {
       [name]: value
     })
   }
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     axios({
       url: 'http://localhost:8080/api/login',
@@ -78,11 +78,16 @@ function SignInSide() {
       CookieService.setCookie('role', resp.data.role, 7);
       CookieService.setCookie('id', resp.data.id, 7);
       CookieService.setCookie('email', resp.data.email, 7);
-      if (location.state) {
-        window.location.replace('http://localhost:3000/' + location.state.from)
-      } else {
-        window.location.replace('http://localhost:300/home')
+    if (location.state) {
+      window.location.replace('http://localhost:3000' + location.state.from)
+    } else {
+      if(resp.data.role==='ADMIN'){
+        window.location.replace('http://localhost:3000/admin')
+      }else{
+        window.location.replace('http://localhost:3000/home')
       }
+     
+    }
     }).catch(error => {
       if (error.response) {
         setLoi(error.response.data);
@@ -99,14 +104,20 @@ function SignInSide() {
     const resp = await GoogleApi.login(response.accessToken);
     CookieService.setCookie('token', resp.token, 7);
     CookieService.setCookie('name', resp.name, 7);
-    CookieService.setCookie('role', resp.role, 7);
+CookieService.setCookie('role', resp.role, 7);
     CookieService.setCookie('id', resp.id, 7);
     CookieService.setCookie('email', resp.email, 7);
     CookieService.setCookie('accessToken', response.accessToken, 7);
+    alert(resp.role)
     if (location.state) {
-      window.location.replace('http://localhost:3000/' + location.state.from)
+      window.location.replace('http://localhost:3000' + location.state.from)
     } else {
-      window.location.replace('http://localhost:3000/home')
+      if(resp.role==='ADMIN'){
+        window.location.replace('http://localhost:3000/admin')
+      }else{
+        window.location.replace('http://localhost:3000/home')
+      }
+     
     }
     // setAccess(response.accessToken)
   }
@@ -115,7 +126,22 @@ function SignInSide() {
     <ThemeProvider theme={theme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
-        <Grid item xs={12} sm={8} md={12} component={Paper} elevation={6} square>
+        <Grid
+          item
+          xs={false}
+          sm={4}
+          md={7}
+          sx={{
+            backgroundImage: 'url(https://1.bp.blogspot.com/-K_jSl5CUX4k/YId4xg7EQyI/AAAAAAAAFXY/4cCbBVXvEo4Hzf7AKWohieS2uAHKid8mwCLcBGAsYHQ/s1024/Mo%25CC%2582%2Bhi%25CC%2...1.jpeg)',
+            backgroundRepeat: 'no-repeat',
+            backgroundColor: (t) =>
+              t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        />
+
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
           <Box
             sx={{
               my: 8,
@@ -164,7 +190,7 @@ function SignInSide() {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
-              >
+>
                 Đăng nhập
               </Button>
               <Grid container sx={{ display: 'block', textAlign: 'center', mb: 2, marginTop: "15px" }} >

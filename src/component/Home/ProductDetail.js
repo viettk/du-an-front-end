@@ -15,6 +15,7 @@ import SyncLoader from "react-spinners/SyncLoader";
 import Carousel from 'react-grid-carousel';
 import CartApi from '../../api/CartApi';
 import { Alert, Snackbar } from "@mui/material";
+import logoa from './b.jpg';
 
 function ProductDetail({reload, setReload}) {
   const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
@@ -293,14 +294,14 @@ function ProductDetail({reload, setReload}) {
           <div className="product-details">
             <div className="product-detail-body">
               <div className="pr-detail-img">
-                <img id="product-detail-image-main" src={'https://tranhoangmaianh.herokuapp.com/images/' + result.photo} height="400px" />
+                <img id="product-detail-image-main"  src={'/images/' + result.photo} height="400px" />
                 <div className="img-detail">
                   {
                     imagep.map((i, index) =>
-                      <img key={index} className="product-detail-image" src={'https://tranhoangmaianh.herokuapp.com/images/'+ i.name} onClick={() => changeimg(index)} />
+                      <img key={index} className="product-detail-image"  src={'/images/' + result.photo} onClick={() => changeimg(index)} />
                     )
                   }
-                  <img id="product-detail-image-main-b" src={'https://tranhoangmaianh.herokuapp.com/images/' + result.photo} onClick={() => changeimg(3)} />
+                  <img id="product-detail-image-main-b"  src={'/images/' + result.photo} onClick={() => changeimg(3)} />
                 </div>
               </div>
               <div className="pr-detail-infor">
@@ -312,12 +313,11 @@ function ProductDetail({reload, setReload}) {
                   <span>Mã SP: {result.sku}</span>
 
                   <div style={{ margin: "10px 0" }}>
-                    <span style={{ fontWeight: 'bold', marginRight: " 20px", fontSize: "25px" }}>
+                    <span style={result.price != result.price_extra ? { fontWeight: 'bold', marginRight: " 20px", fontSize: "25px", color: "red"} :{fontWeight: 'bold', marginRight: " 20px", fontSize: "25px"} }>
                     {String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' VNĐ'}
                     </span>
                     <span style={result.price != result.price_extra ? { display: "inline-block" } : { display: "none" }}>
-                      <strike> {result.price_extra} </strike>
-                      <u>đ</u>
+                      <strike> {String(Math.round(result.price_extra)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' VNĐ'} </strike>
                     </span>
                   </div>
 
@@ -356,7 +356,7 @@ function ProductDetail({reload, setReload}) {
               <span className="descriptio">
                 <p><i className="fa fa-angellist " /><span>{result.describe}</span></p>
                 <p><i className="fa fa-angellist " /><span>{result.trait}</span></p>
-                <p><i className="fa fa-angellist " /><span>Kích thước: (dài * rộng * cao): {result.width} * {result.height} *</span></p>
+                <p><i className="fa fa-angellist " /><span>Kích thước: (dài * rộng * cao * cân nặng): {result.width} * {result.height} * {result.length} * {result.weight} </span></p>
               </span>
             </ul>
           </div>
@@ -380,11 +380,16 @@ function ProductDetail({reload, setReload}) {
                 {
                   goiysp.map((goiysp, index) =>
                     <div className="product-body-live" key={index}>
-                      <img src={'https://tranhoangmaianh.herokuapp.com/images/'+goiysp.photo} className="rounded-like mx-auto d-block goiysp" />
+                      <img src={'/images/'+goiysp.photo} className="rounded-like mx-auto d-block goiysp" />
                       <div className="body-pro-buy">
                         <p className="fix-line-css"><b>{goiysp.name}</b></p>
-                        <p>SKU: {goiysp.sku}</p>
-                        <h6 className="price"><b>{goiysp.price}</b> </h6>
+                        <p>Mã SP: {goiysp.sku}</p>
+                        <span style={result.price != result.price_extra ? { fontWeight: 'bold', marginRight: " 20px", fontSize: "15px", color: "red"} :{fontWeight: 'bold', marginRight: " 20px", fontSize: "15px"} }>
+                    {String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' VNĐ'}
+                    </span>
+                    <span style={result.price != result.price_extra ? { display: "inline-block" } : { display: "none" }}>
+                      <strike> {String(Math.round(result.price_extra)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' VNĐ'} </strike>
+                    </span>
                       </div>
                     </div>
                   )

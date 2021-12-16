@@ -17,6 +17,8 @@ function Home() {
   const [resultShf, setResulshf] = useState([]);
   const [resultd, setResultd] = useState([]);
   const [favorite, setFavorite] = useState([]);
+
+  const [gundam, setGundam] = useState([]);
   const history = useHistory();
   const [mess, setMess] = useState({
     errorMessage: ''
@@ -25,13 +27,17 @@ function Home() {
   useEffect(() => {
     const fetchList = async () => {
       try {
-        const newsp = await HomeApi.getNew();
-        setResultnew(newsp);
+        const newsp = await HomeApi.getNew();  
         const respSHF = await HomeApi.getShf();
-        setResulshf(respSHF.content);
         const respKit = await HomeApi.getKit();
-        setResultKit(respKit.content);
+        const gundam =await HomeApi.getStatic();
         const top5 = await HomeApi.getTop5();
+
+        setGundam(gundam.content);
+        console.log(gundam.content)
+        setResulshf(respSHF);
+        setResultKit(respKit);
+        setResultnew(newsp);
         setFavorite(top5);
       } catch (error) {
         console.log(error);
@@ -57,11 +63,16 @@ function Home() {
             resultnew.map(result =>
               <Carousel.Item >
                 <div className="body-new-pro" key={result.id} onClick={() => chuyentrang(result.id)}>
-                  <img className="body-new-img-pro" src={logoa} alt="" />
+                  <img className="body-new-img-pro" src={'/images/' + result.photo} alt="" />
                   <p className="fix-line-css">{result.name}</p>
-                  <p>SKU: {result.sku}</p>
+                  <p>Mã SP: {result.sku}</p>
                   <span className="pro-body">
-                    <h6 style={{ fontSize: "15px" }}>{result.price} đ</h6>
+                  <span style={result.price != result.price_extra ? { fontSize: "15px", marginRight: "15px" ,color: "red", fontWeight: "500"} :{ fontSize: "15px", marginRight: "15px", fontWeight: "500" } }>
+                    {String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' VNĐ'}
+                    </span>
+                    <span style={result.price != result.price_extra ? { display: "inline-block" } : { display: "none" }}>
+                      <strike> {String(Math.round(result.price_extra)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' VNĐ'} </strike>
+                    </span>
                   </span>
                 </div>
               </Carousel.Item>
@@ -71,27 +82,27 @@ function Home() {
         
         <div className="product-name-title" id="product-first">
           <nav className="body-nav-pr">
-            <Link className="body-link-a"> Mô Hình SHF </Link>
+            <Link to={'/GUNDAM/page=1/sort=0'} className="body-link-a"> Mô Hình GUNDAM </Link>
           </nav>
           <div className="product-title product-first-home-body" style={{marginTop: "15px"}}>
           <img className="body-img-main" src={logoa} width="300px" height="380px" style={{ marginRight: "30px",border: "1px solid black" }} alt="" />
             <div className="product-child" >
-              <Carousel  cols={4} rows={2} gap={15} >             
-                  {
-                    resultShf.map(respSHF =>
-                      <Carousel.Item >
-                        <div className="body-new-pro" key={respSHF.id} onClick={() => chuyentrang(respSHF.id)}>
-                          <img style={{width: "90%", height: "207px"}} className="body-new-img-pro" src={'https://tranhoangmaianh.herokuapp.com/images/'+respSHF.photo} alt="" />
-                          <p className="fix-line-css">{respSHF.name}</p>
-                          <p>SKU: {respSHF.sku}</p>
-                          <span className="pro-body">
-                            <h6 style={{ fontSize: "15px" }}>{respSHF.price} đ</h6>
-                          </span>
-                        </div>
-                      </Carousel.Item>
-                    )
-                  }        
-              </Carousel>
+            <Carousel  cols={5} rows={2} gap={50} > 
+          {
+            gundam.map(result =>
+              <Carousel.Item >
+                <div className="body-new-pro" key={result.id} onClick={() => chuyentrang(result.id)}>
+                  <img className="body-new-img-pro" src={'/images/' + result.photo} alt="" />
+                  <p className="fix-line-css">{result.name}</p>
+                  <p>Mã SP: {result.sku}</p>
+                  <span className="pro-body">
+                    <h6 style={{ fontSize: "15px" }}>{result.price} đ</h6>
+                  </span>
+                </div>
+              </Carousel.Item>
+              )
+          }
+          </Carousel>
             </div>        
           </div>
         </div>
@@ -101,22 +112,22 @@ function Home() {
           </nav>
           <div className="product-title body-second-pro">
             <div className="product-child" >
-              <Carousel  cols={4} rows={2} gap={15} >             
-                  {
-                    resultShf.map(respSHF =>
-                      <Carousel.Item >
-                        <div className="body-new-pro" key={respSHF.id} onClick={() => chuyentrang(respSHF.id)}>
-                          <img style={{width: "90%", height: "207px"}} className="body-new-img-pro" src={'https://tranhoangmaianh.herokuapp.com/images/'+respSHF.photo} alt="" />
-                          <p className="fix-line-css">{respSHF.name}</p>
-                          <p>SKU: {respSHF.sku}</p>
-                          <span className="pro-body">
-                            <h6 style={{ fontSize: "15px" }}>{respSHF.price} đ</h6>
-                          </span>
-                        </div>
-                      </Carousel.Item>
-                    )
-                  }            
-              </Carousel>
+            <Carousel  cols={5} rows={2} gap={50} > 
+          {
+            resultnew.map(result =>
+              <Carousel.Item >
+                <div className="body-new-pro" key={result.id} onClick={() => chuyentrang(result.id)}>
+                  <img className="body-new-img-pro" src={'/images/' + result.photo} alt="" />
+                  <p className="fix-line-css">{result.name}</p>
+                  <p>Mã SP: {result.sku}</p>
+                  <span className="pro-body">
+                    <h6 style={{ fontSize: "15px" }}>{result.price} đ</h6>
+                  </span>
+                </div>
+              </Carousel.Item>
+              )
+          }
+          </Carousel>
             </div>   
             <img className="body-img-main" src={logoa} width="300px" height="380px" style={{ marginRight: "30px",border: "1px solid black" }} alt="" />     
           </div>
@@ -127,22 +138,22 @@ function Home() {
             <h5>Top Sản phẩm bán chạy</h5>
           </div>
           <div className="product-body-favorite-m">
-          <Carousel  cols={5} rows={1} gap={15} >
-            {
-              favorite.map(result =>
-                <Carousel.Item >
-                <div className="product-body-live" onClick={() => chuyentrang(result.id)}>
-                  <img src={'https://tranhoangmaianh.herokuapp.com/images/' + result.photo} style={{width: "90%", height: "210px"}} className="rounded-like mx-auto d-block" />
-                  <div className="body-pro-buy">
-                    <p className="fix-line-css">{result.name}</p>
-                    <p>SKU: {result.sku}</p>
-                    <h6 className="price">{result.price}</h6>
-                  </div>
+          <Carousel  cols={5} rows={2} gap={50} > 
+          {
+            resultnew.map(result =>
+              <Carousel.Item >
+                <div className="body-new-pro" key={result.id} onClick={() => chuyentrang(result.id)}>
+                  <img className="body-new-img-pro" src={'/images/' + result.photo} alt="" />
+                  <p className="fix-line-css">{result.name}</p>
+                  <p>Mã SP: {result.sku}</p>
+                  <span className="pro-body">
+                    <h6 style={{ fontSize: "15px" }}>{result.price} đ</h6>
+                  </span>
                 </div>
-                </Carousel.Item>
-                )
-            }
-            </Carousel>
+              </Carousel.Item>
+              )
+          }
+          </Carousel>
           </div>
         </div>
       </div>

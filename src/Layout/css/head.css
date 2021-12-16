@@ -106,6 +106,7 @@
     padding: 0;
     margin: 0;
     height: 60px;
+    z-index: 9;
 }
 
 .header-bottom .header-menu-ul-main li{
@@ -369,14 +370,48 @@
     /* width: 118px; */
 }
 
+.span-head-hover{
+    color: white;
+    position: relative;
+    cursor: pointer;
+}
 
+.span-head-hover:hover .hover-login{
+    display: block;
+}
 
+.span-head-hover:hover .head-tam-giac{
+    display: block;
+}
+
+.hover-login {
+    position: absolute;
+    top: 28px;
+    right: 10%;
+    display: none;
+    z-index: 1;
+    background: white;
+    padding: 0;
+    margin: 0;
+}
+
+.head-tam-giac{
+    width: 0;
+    height: 0;
+    border-left: 13px solid transparent;
+    border-right: 13px solid transparent;
+    border-bottom: 13px solid white;
+    display: none;
+    position: absolute;
+    left: 20%;
+}
 
 .login-item {
     position: relative;
     line-height: 2.5rem;
     text-align: center;
     font-size: 18px;
+    color: white !important;
   }
   .login-item a {
     overflow: hidden;
@@ -397,15 +432,7 @@
     color: #fff;
     padding: 0 0.75rem;
   }
-  .hover-login {
-    position: absolute;
-    top: 150%;
-    left: -100px;
-    display: none;
-    z-index: 1;
-    background: white;
-    padding: 3px 8px;
-}
+
   .login-item:hover > .hover-login {
     display: block;
   }
@@ -415,8 +442,21 @@
     opacity: 0;
     transform-origin: bottom;
     animation: enter 0.2s ease forwards;
-    font-size: 15px;
+    font-weight: 500;
+    padding: 0 25px;
     /* width: 118px; */
+}
+
+.hover-login .login-item:hover{
+    background-color: lightgray;
+}
+
+.hover-login .login-item:hover .dn-head{
+    color: white;
+}
+
+.hover-login .login-item a{
+    font-size: 16px;
 }
 .an-di{
     padding: 0 !important;
