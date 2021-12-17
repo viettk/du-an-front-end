@@ -61,7 +61,7 @@ function Address() {
                 <button type="button" className="btn btn-danger addAdress"  onClick={() => getMahidden()} disabled={result.length >= 3 ? "disabled" : ""} > Thêm</button>
             </span>
             {
-                result.map(result =>
+                result.length > 0 ? result.map(result =>
                     <div className="add-information" key={result.id}>
                         <span>
                             <p className="thanh-p-address">Tên người nhận: </p>
@@ -79,7 +79,7 @@ function Address() {
                             <button type="button" className="btn btn-default add-delete" onClick={() => xoadc(result.id)} ><i class="fa fa-trash"></i></button>
                         </div>
                     </div>
-                )
+                ) :<p>Không có địa chỉ nào !</p>
             }
         </div>
     );

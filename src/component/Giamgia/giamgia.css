@@ -105,8 +105,7 @@
     overflow-y: scroll;
     background-color: white;
     width: auto;
-    left: 39.7%;
-    transform: translateX(-51%);
+    left: 18.7%;
     top: 40%;
 }
 
@@ -124,4 +123,13 @@
 .receipt-product-name-dm.active li:hover{
     background-color: lightgray;
     cursor: pointer;
+}
+
+.btn-khoi-phuc-each-sp{
+    border: none;
+    padding: 5px 10px;
+}
+
+.btn-khoi-phuc-each-sp:hover{
+    background-color: lightgreen;
 }

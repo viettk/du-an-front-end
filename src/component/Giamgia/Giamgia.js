@@ -3,15 +3,22 @@ import { useEffect } from "react";
 import { useState } from "react";
 import CategoryApi from "../../api/CategoryApi";
 import GiamgiaApi from "../../api/GiamgiaApi";
+import ProductApi from "../../api/ProductApi";
 import './giamgia.css';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import { Alert, Pagination, Snackbar, Stack } from "@mui/material";
 
 function Giamgia() {
     const [giamValue, setGiamValue] = useState(0);
     const [giamdm, setGiamdm] = useState(0);
     const [danhmuc, setDanhmuc] = useState([]);
+    const [count, setCount] = useState(0);
 
     const [result, setResult] = useState([]);
-    const [reload, setReload] = useState(true);
     const [product, setProduct] = useState([]);
     const [active, setActive] = useState(false);
     const [acdm, setAcdm] = useState(false);
@@ -37,7 +44,10 @@ function Giamgia() {
     const [iddm, setIddm] = useState();
 
     const giamm = (e) => {
-        GiamgiaApi.giamTheoDanhMuc(giam3.value, iddm);
+        GiamgiaApi.giamTheoDanhMuc(giam3.value, d.iddm).then(resp => {
+            onLoad();
+            setOpen(true);
+        });
     }
 
     const giamgiadm = (e) => {
@@ -46,19 +56,6 @@ function Giamgia() {
             value: e.target.value
         })
     }
-
-    useEffect(() => {
-        const fetchList = async () => {
-            try {
-                const response = await CategoryApi.getListAll(param);
-                setResult(response);
-            } catch (error) {
-                console.log(error);
-                // history.push('/404');
-            }
-        }
-        fetchList();
-    }, [reload, param]);
 
     const changeparam = (e) => {
         setParam({
@@ -72,23 +69,13 @@ function Giamgia() {
     }
 
     const getInputname = (e) => {
-        setInput({
-            ...input,
-            productName: e.target.value
+        setSearch({
+            ...search,
+            name: e.target.value
         })
-        setActive(true);
-        if (input.productName != null) {
-            GiamgiaApi.laythongtin(e.target.value).then(resp => {
-                setProduct(resp);
-            });
-        }
     }
 
     const getInputdm = (e) => {
-        // setInput({
-        //     ...input,
-        //     productName: e.target.value
-        // })
         setAcdm(true);
         if (input.productName != null) {
             GiamgiaApi.laydanhmuc(e.target.value).then(resp => {
@@ -110,14 +97,12 @@ function Giamgia() {
     const [d, setD] = useState({
         iddm: ''
     })
-    const layId = (e, id, iddanhmuc) => {
-        console.log(id)
-        document.getElementById('namesp').value = e.target.innerHTML;
-        setActive(false);
+    const layId = (e, index, id) => {
+        let x = document.getElementsByClassName('namesp')[index].innerHTML;
+        document.getElementById('namesp').value = x;
         setA({
             ...a,
             idpro: id,
-            iddanhmuc: iddanhmuc
         });
     }
 
@@ -131,7 +116,10 @@ function Giamgia() {
     }
 
     const khoiphuc = () => {
-        GiamgiaApi.khoiphuc();
+        GiamgiaApi.khoiphuc().then(resp => {
+            onLoad();
+            setOpen(true);
+        });
     }
 
     const giamtoansp = (e) => {
@@ -144,15 +132,23 @@ function Giamgia() {
 
     const giam = () => {
         if (giamValue != 0) {
-            GiamgiaApi.giamAll(giamValue);
+            GiamgiaApi.giamAll(giamValue).then(resp => {
+                onLoad();
+                setOpen(true);
+            });
 
         } else if (giamValue == 0) {
-            GiamgiaApi.giamAll(giam1.value);
+            GiamgiaApi.giamAll(giam1.value).then(resp => {
+                onLoad();
+            });
         }
     }
 
     const giampro = (e) => {
-        GiamgiaApi.giamTheoTungSP(a.idpro, giam2.value, a.iddanhmuc);
+        GiamgiaApi.giamTheoTungSP(a.idpro, giam2.value).then(resp => {
+            onLoad();
+            setOpen(true);
+        });
     }
 
     const giam1sp = (e) => {
@@ -162,6 +158,70 @@ function Giamgia() {
         });
         setGiamdm(0);
     }
+
+    const [search, setSearch] = useState({
+        categoryName: '',
+        name: '',
+        create_date: '',
+        price: '',
+        status: '',
+        categoryId: ''
+    });
+
+    const initParams = {
+        _limit: '10',
+        _page: 0,
+        _field: 'id',
+        _known: ''
+    };
+
+    const [params, setParams] = useState(initParams);
+    const [page, setPage] = useState(initParams._page + 1);
+
+    const [load, setLoad] = useState(true);
+    const onLoad = () => {
+        if (load) {
+            setLoad(false)
+        } else {
+            setLoad(true)
+        }
+    }
+
+    useEffect(() => {
+        const fetchList = async () => {
+            try {
+                const response = await ProductApi.getAll(params, search.name, search.price, search.categoryId, search.create_date, search.status);
+                setResult(response.content);
+                setCount(response.totalPages);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchList();
+    }, [search, load]);
+
+    const giamEarchPro = (id) => {
+        GiamgiaApi.giamTheoTungSP(id, 0).then(resp => {
+            onLoad();
+        });
+    }
+    const [open, setOpen] = useState(false);
+
+    const handleClose = () => {
+        setOpen(false);
+    }
+
+    const handleChange = (event, value) => {
+        setPage(value);
+        setParams(
+            {
+                ...params,
+                _limit: '10',
+                _page: value - 1,
+            }
+        );
+        onLoad();
+    };
 
     return (
         <div className="giam-gia-discount" onClick={onBlur}>
@@ -179,7 +239,7 @@ function Giamgia() {
             <div style={{ position: "relative", display: "grid", gridTemplateColumns: "230px 1fr" }}>
                 <label>Giảm giá Danh mục:</label>
                 <div className="giamgia-theo-dm">
-                    <input style={{width: "347px", marginBottom: "10px"}}  onChange={(e) => getInputdm(e)} id="dmsp" type="search" className="input-search form-control" placeholder="Tên danh mục" aria-label="Search" aria-describedby="search-addon" />
+                    <input style={{ width: "347px", marginBottom: "10px" }} onChange={(e) => getInputdm(e)} id="dmsp" type="search" className="input-search form-control" placeholder="Tên danh mục" aria-label="Search" aria-describedby="search-addon" />
                     <div className={acdm == true ? "receipt-hiddent-show-dm active" : "receipt-hiddent-show-dm"}>
                         <ul className="receipt-product-name-dm active" >
                             {
@@ -192,7 +252,7 @@ function Giamgia() {
                     </div>
                     <div className="giamgia-product-op">
                         <input onChange={(e) => giamgiadm(e)} value={giam3.value} type="text" className="input-number" style={{ textAlign: 'center', height: "36px", width: "100px" }} />
-                        <button style={{marginRight: "10px"}} className="gg-btn" type="button" onClick={giamm} >Giảm</button>
+                        <button style={{ marginLeft: "10px" }} className="gg-btn" type="button" onClick={giamm} >Giảm</button>
                     </div>
                 </div>
             </div>
@@ -203,16 +263,6 @@ function Giamgia() {
                 <label>Giảm giá Sản phẩm:</label>
                 <div className="giamgia-theo-sp">
                     <input id="namesp" onChange={(e) => getInputname(e)} type="search" className="input-search form-control" placeholder="Tên sản phẩm" aria-label="Search" aria-describedby="search-addon" />
-                    <div className={active == true ? "receipt-hiddent-show active" : "receipt-hiddent-show"}>
-                        <ul className="receipt-product-name active" >
-                            {
-                                product.length != 0 ? product.map(pr =>
-                                    <li key={pr.id} defaultValue={pr.id} onClick={(e) => layId(e, pr.id, pr.category.id)}>{pr.name}-Danh mục: {pr.category.name}-Danh mục cha: {pr.category.parent_name}</li>
-                                ) : <li>Không có Sản phẩm</li>
-
-                            }
-                        </ul>
-                    </div>
                     <div className="giamgia-product-op">
                         <input onChange={(e) => giam1sp(e)} value={giam2.value} type="text" className="input-number" style={{ textAlign: 'center', height: "36px", width: "100px" }} />
                         <button style={{ margin: "0 10px" }} className="gg-btn" type="button" onClick={giampro} >Giảm</button>
@@ -221,8 +271,58 @@ function Giamgia() {
             </div>
 
             <div>
+                <Table stickyHeader aria-label="sticky table">
+                    <TableHead style={{ background: "#ccc" }}>
+                        <TableRow>
+                            <TableCell>Stt</TableCell>
+                            <TableCell>Tên sản phẩm</TableCell>
+                            <TableCell>Ảnh</TableCell>
+                            <TableCell>Giá bán</TableCell>
+                            <TableCell>% giảm</TableCell>
+                            <TableCell>Giá gốc</TableCell>
+                            <TableCell>#</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {
+                            result.length > 0 ? result.map(
+                                (result, index) =>
+                                    <TableRow className="sp" key={result.id}>
+                                        <TableCell onClick={(e) => layId(e, index, result.id)}>{(index + 1) + Number(page - 1) * 5}</TableCell>
+                                        <TableCell onClick={(e) => layId(e, index, result.id)}><span className='namesp'>{result.name}</span></TableCell>
+                                        <TableCell onClick={(e) => layId(e, index, result.id)}><img src={'http://localhost:8080/images/' + result.photo} style={{ width: 100 }} /></TableCell>
+                                        <TableCell onClick={(e) => layId(e, index, result.id)}>{String(Math.round(result.price / 1000) * 1000).replace(/(.)(?=(\d{3})+$)/g, '$1.')}</TableCell>
+                                        <TableCell onClick={(e) => layId(e, index, result.id)}>{result.value_extra}%</TableCell>
+                                        <TableCell onClick={(e) => layId(e, index, result.id)}>{String(Math.round(result.price_extra / 1000) * 1000).replace(/(.)(?=(\d{3})+$)/g, '$1.')}</TableCell>
+                                        <TableCell>
+                                            <button onClick={() => giamEarchPro(result.id)} className="btn-khoi-phuc-each-sp">Khôi phục</button>
+                                        </TableCell>
+                                    </TableRow>
+
+                            ) : (
+
+                                <div style={{ textAlign: "center", position: 'absolute', left: "50%", transform: `translate(${-50}%, ${0}px)` }}>Không có dữ liệu</div>
+                            )
+                        }
+                    </TableBody>
+                </Table>
+                <Stack spacing={2}>
+                    <Pagination className="d-flex justify-content-center" count={count} page={page} onChange={handleChange} color="secondary" />
+                </Stack>
+            </div>
+
+            <div>
                 <button className="gg-btn-kp" type="button" onClick={khoiphuc} >Khôi phục lại giá</button>
             </div>
+
+            <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{
+                vertical: "center",
+                horizontal: "center"
+            }}>
+                <Alert severity="success" sx={{ width: '100% ' }}  >
+                    Cập nhật thành công
+                </Alert>
+            </Snackbar>
         </div>
     );
 }

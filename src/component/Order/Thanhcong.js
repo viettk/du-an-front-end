@@ -27,11 +27,16 @@ function Thanhcong() {
                  }else{
                     setStatsusOrder(s)
                  }
-             });}
-            
-            const responseBill = await BillApi.getMahoadonThanhCong(mahoadon);
+                 BillApi.getMahoadonThanhCong(mahoadon).then((responseBill)=>{
+                    setBill(responseBill);
+                    console.log(responseBill);
+                 })
+             });
+            }else{
+                const responseBill = await BillApi.getMahoadonThanhCong(mahoadon);
+                setBill(responseBill);
+            }
             const responseBillDetail = await BillApi.getListBillDetailthanhcong(mahoadon);
-            setBill(responseBill);
             setBdt(responseBillDetail);
           } catch (error) {
             console.log(error);
@@ -41,10 +46,11 @@ function Thanhcong() {
       }, []);
 
       const onSwithStatusOrder=((value)=>{
+          console.log(value);
         switch (value) {
-            case 0:
+            case false:
                 return 'Thanh toán khi nhận hàng';
-            case 1:
+            case true:
                 return 'Thanh toán VNPAY';
             default:
                 return (<p>Lỗi hiện thị</p>);
@@ -90,7 +96,7 @@ function Thanhcong() {
                                     <p>{bill.phone}</p>
                                 </div>
                                 <span style={{fontWeight: "500"}}>Phương thức thanh toán:</span>
-                                <span>{onSwithStatusOrder(bill.status_pay)}</span>
+                                <span>{onSwithStatusOrder(bill.type_pay)}</span>
                             </div>
                             {statusOrder===true ? <button className='thanhcong-btn first-btn-tc'><Link to="/home" className='thanhcong-ttmh'>Tiếp tục mua hàng</Link></button>:
                                 <button className='thanhcong-btn first-btn-tc'>Thanh toán lại</button>}

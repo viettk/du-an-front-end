@@ -12,7 +12,7 @@ const GiamgiaApi = {
     },
 
     giamTheoTungSP: (id, giamdm, iddm)=>{
-        const url = '/home/giamgia/' + id + '?value=' + giamdm + '&categoryId=' + iddm ;
+        const url = '/home/giamgia/' + id + '?value=' + giamdm;
         return axiosClient.post(url);
     },
 

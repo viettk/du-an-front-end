@@ -14,7 +14,16 @@ const CustomerApi = {
     getCustomer:(emailc)=>{
         const url = '/account/get-email?email=' + emailc;
         return axiosClient.get(url);
-    }
+    },
+    fillAll:(param)=>{
+        const url = '/account/admin?email='+param.email+'&status='+param.status+'&known='+param.known+'&field='
+        +param.field+'&name='+param.name+'&page='+param.page;
+        return axiosClient.get(url);
+    },
+    hideCustomer:(id)=>{
+        const url = '/account/admin/hide?id=' + id;
+        return axiosClient.delete(url);
+    },
 
 }
 export default CustomerApi;

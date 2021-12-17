@@ -1,4 +1,4 @@
-import { Button, TextField, Typography } from "@mui/material";
+import { Alert, Button, Snackbar, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { Fragment, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -38,12 +38,11 @@ function RePassword() {
 
 
     const change = () => {
-        console.log('vfouh')
         AuthApi.changePW(result).then(() => {
             setLoi({})
             setMess({})
             setResult(resultNull)
-            alert('Đổi mật khẩu thành công !')       
+            setOpen(true)    
         }).catch(error => {
             if (error.response) {
                 setLoi(error.response.data);
@@ -56,6 +55,12 @@ function RePassword() {
         });
     }
 
+    const [open, setOpen] = useState(false);
+
+    const handleClose = () => {
+        setOpen(false);
+      }
+
     return (
         <Fragment>
             <div className="change-mk-bbody">
@@ -67,7 +72,7 @@ function RePassword() {
                             <input disabled={true} value={emailc} />
                         </div>
                         <div className="change-mk-div">
-                            <label>Tên tài khoản: </label>
+                            <label>Tên đăng nhập: </label>
                             <input disabled={true} value={user_name} />
                         </div>
                         <div className="change-mk-div">
@@ -84,8 +89,11 @@ function RePassword() {
                                 id="password"
                                 value={result.password}
                                 onChange={onChangeHandler} />
+                            <span></span>
+                            <span>
                             <span style={{ color: "red", fontSize: "13px" }}>{loi.password}</span>
                             <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span>
+                            </span>
                         </div>
                         <div className="change-mk-div">
                             <label>Mật khẩu mới:</label>
@@ -94,8 +102,11 @@ function RePassword() {
                                 id="newPassword"
                                 value={result.newPassword}
                                 onChange={onChangeHandler} />
+                            <span></span>
+                            <span>
                             <span style={{ color: "red", fontSize: "13px" }}>{loi.newPassword}</span>
                             <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span>
+                            </span>
                         </div>
                         <div className="change-mk-div">
                             <label>Nhập lại mật khẩu mới:</label>
@@ -104,8 +115,11 @@ function RePassword() {
                                 id="repeatNewPassword"
                                 value={result.repeatNewPassword}
                                 onChange={onChangeHandler} />
+                            <span></span>
+                            <span>
                             <span style={{ color: "red", fontSize: "13px" }}>{loi.repeatNewPassword}</span>
                             <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span>
+                            </span>
                         </div>
                     </div>
 
@@ -116,9 +130,16 @@ function RePassword() {
                             <button onClick={()=>change()}>Cập nhật</button>
                         </div>
                     </div>
-
                 </div>
             </div>
+            <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{
+                vertical: "center",
+                horizontal: "center"
+            }}>
+                <Alert severity="success" sx={{ width: '100% ' }}  >
+                    Cập nhật thành công
+                </Alert>
+            </Snackbar>
         </Fragment>
     )
 }

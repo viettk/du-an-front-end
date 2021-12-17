@@ -241,7 +241,7 @@ function ListCart({reload, setReload}) {
             </table>
             <span style={{ color: "red", fontSize: "13px", marginLeft: "10px" }}>{loi.parent_name}</span>
             <span style={{ color: "red", fontSize: "13px", marginLeft: "10px" }}>{mess.errorMessage}</span>
-            <span style={{float: "right", margin: "0 65px 20px 0"}}>Tổng tiền: <span style={{fontWeight: " 500"}}>{thanhTien != undefined ? String(Math.round(thanhTien)).replace(/(.)(?=(\d{3})+$)/g, '$1.') : 0  } VNĐ</span> VNĐ</span>
+            <span style={{float: "right", margin: "0 65px 20px 0"}}>Tổng tiền: <span style={{fontWeight: " 500"}}>{thanhTien != undefined ? String(Math.round(thanhTien)).replace(/(.)(?=(\d{3})+$)/g, '$1.') : 0  } VNĐ</span></span>
             
             </TableContainer>
             {

@@ -29,7 +29,37 @@ const ThongkeApi = {
     getThongke_typepay: ()=>{
         const url = '/api/thong-ke/thongkeTypepay';
         return axiosClient.get(url);
-    }
+    },
+
+    getChoXacNhan: ()=>{
+        const url = '/api/thong-ke/choxacnhan';
+        return axiosClient.get(url);
+    },
+
+    getDangchuanbi: ()=>{
+        const url = '/api/thong-ke/dangchuanbi';
+        return axiosClient.get(url);
+    },
+
+    getDanggiao: ()=>{
+        const url = '/api/thong-ke/danggiao';
+        return axiosClient.get(url);
+    },
+
+    gettuchoi: ()=>{
+        const url = '/api/thong-ke/tuchoi';
+        return axiosClient.get(url);
+    },
+
+    getthanhcong: ()=>{
+        const url = '/api/thong-ke/thanhcong';
+        return axiosClient.get(url);
+    },
+
+    getThatbai: ()=>{
+        const url = '/api/thong-ke/thatbai';
+        return axiosClient.get(url);
+    },
 
 }
 export default ThongkeApi;

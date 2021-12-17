@@ -8,7 +8,8 @@ const initState = {
     detail: {},
     loading: false,
     message: '',
-    s: true,
+    reload: true,
+    success: true,
 }
 
 export const billReducer = (state = initState, action) => {
@@ -59,21 +60,24 @@ export const billReducer = (state = initState, action) => {
                 ...state,
                 loading: true,
                 message: '',
-                s: false,
+                reload: false,
+                success: false,
             }
         case type.UPDATE_BILL_STATUS_ORDER_ACTION_SUCCESS:
             return {
                 ...state,
                 loading: false,
                 message: '',
-                s: true,
+                reload: true,
+                success: true,
             }
         case type.UPDATE_BILL_STATUS_ORDER_ACTION_FAIL:
             return {
                 ...state,
                 loading: false,
                 message: action.message,
-                s: false,
+                reload: false,
+                success: false,
             }
         //cap nhat trang thai thanh toán hoa don
         case type.UPDATE_BILL_STATUS_PAY_ACTION:
@@ -81,21 +85,46 @@ export const billReducer = (state = initState, action) => {
                 ...state,
                 loading: true,
                 message: '',
-                s: false,
+                reload: false,
             }
         case type.UPDATE_BILL_STATUS_PAY_ACTION_SUCCESS:
             return {
                 ...state,
                 loading: false,
                 message: '',
-                s: true,
+                reload: true,
             }
         case type.UPDATE_BILL_STATUS_PAY_ACTION_FAIL:
             return {
                 ...state,
                 loading: false,
                 message: action.message,
-                s: false,
+                reload: false,
+            }
+        //cap nhat hoas ddon chi tiet
+        case type.UPDATE_BILL_DETAIL_ACTION:
+            return {
+                ...state,
+                loading: true,
+                message: '',
+                reload: false,
+                success: false,
+            }
+        case type.UPDATE_BILL_DETAIL_ACTION_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                message: '',
+                reload: true,
+                success: true,
+            }
+        case type.UPDATE_BILL_DETAIL_ACTION_FAIL:
+            return {
+                ...state,
+                loading: false,
+                message: action.message,
+                reload: false,
+                success: false,
             }
         default:
             return state;

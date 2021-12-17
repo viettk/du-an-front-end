@@ -34,6 +34,32 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
     },
 }));
 
+const check = (value)=>{
+    let error = {}
+    if(!value.price_extra || /^\s*$/.test(value.price_extra)){
+        error.price_extra = 'Giá bán không được để trống'
+    }
+    if(!value.price_release || /^\s*$/.test(value.price_release)){
+        error.price_release = 'Giá nhập không được để trống'
+    }
+    if(!Number.isInteger(Number(value.number))){
+        error.number = 'Số lượng phải là số nguyên'
+    }
+    if(!value.number || /^\s*$/.test(value.number)){
+        error.number = 'Số lượng không được để trống'
+    }
+    if(!value.name || /^\s*$/.test(value.name)){
+        error.name = 'Tên sản phẩm không được để trống'
+    }
+    if(!value.categoryID || /^\s*$/.test(value.categoryID)){
+        error.categoryID = 'Vui lòng chọn danh mục'
+    }
+    if(!value.describe || /^\s*$/.test(value.describe)){
+        error.describe = 'Miêu tả Không được để trống '
+    }    
+    return error;
+}
+
 
 function ProductModal({ show, setShow, ma, setMa, onLoad, setOpen, danhMuc }) {
 
@@ -86,7 +112,6 @@ function ProductModal({ show, setShow, ma, setMa, onLoad, setOpen, danhMuc }) {
             }
             reader.readAsDataURL(selectedFile);
         }
-        // console.log(images)
     }
     useEffect(() => {
         const fetchList = async () => {
@@ -121,6 +146,10 @@ function ProductModal({ show, setShow, ma, setMa, onLoad, setOpen, danhMuc }) {
     }, [ma]);
 
     const create = async () => {
+        let loife = check(detail);
+        if(Object.keys(loife).length>0){
+            setLoi(loife)
+        }else{
         await ProductApi.postProduct(detail).then(resp => {
             let id = resp;
             let data = new FormData();
@@ -144,9 +173,14 @@ function ProductModal({ show, setShow, ma, setMa, onLoad, setOpen, danhMuc }) {
             }
         });
     }
+    }
    
     const update = async () => {
-        let detailUpdate = { ...detail, category: null };
+        let loife = check(detail);
+        if(Object.keys(loife).length>0){
+            setLoi(loife)
+        }else{
+            let detailUpdate = { ...detail, category: null };
         if (!detail.categoryID) {
             detailUpdate = { ...detailUpdate, categoryID: detail.category.id };
         }
@@ -172,6 +206,8 @@ function ProductModal({ show, setShow, ma, setMa, onLoad, setOpen, danhMuc }) {
                 console.log('Error', error.message);
             }
         });
+        }
+        
     }
     return (
         <div>

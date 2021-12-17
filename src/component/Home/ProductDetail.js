@@ -132,7 +132,6 @@ function ProductDetail({reload, setReload}) {
         }).catch((error) => {
         if (error.response) {
           setMess(error.response.data);
-          console.log(mess.errorMessage);
         } else if (error.request) {
           console.log(error.request);
         } else {
@@ -341,6 +340,8 @@ function ProductDetail({reload, setReload}) {
                     <i onClick={() => yeuThich(result.id, result.price, result.photo, result.name, result.weight)} style={{color: y ? "red" : "lightgray", cursor: "pointer"}} class="fa fa-heart pr-he"></i>
                   </div>
 
+                  <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span>
+
                   <div className="button-pro-detai">
                     <button onClick={() => addToCart(result.id, result.price, result.photo, result.name, result.weight)} type="button" className="btn btn-outline-primary btn-de"><i className="fa fa-shopping-basket" /> Thêm vào giỏ hàng</button>
                     <button onClick={() => muaNgay(result.id, result.price, result.photo, result.name, result.weight)} type="button" className="btn btn-outline-danger btn-de">Mua ngay </button>
@@ -396,11 +397,14 @@ function ProductDetail({reload, setReload}) {
                 }
             </div>
           </div>
-          <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
-          <Alert severity="success" sx={{ width: '100%' }}>
-            Thêm Sản phẩm thành công !
-          </Alert>
-        </Snackbar>
+          <Snackbar open={open} autoHideDuration={3000} onClose={handleClose} anchorOrigin={{
+                vertical: "center",
+                horizontal: "center"
+            }}>
+                <Alert severity="success" sx={{ width: '100% ' }}  >
+                    Thêm vào giỏ thành công
+                </Alert>
+            </Snackbar>
         </div>}
     </section>
   );

@@ -95,16 +95,13 @@ const StatusOrder = (
                                 onChange={handleChangeOrder}
                                 size="small"
                             >
-                                <MenuItem value={null}>Trạng thái đơn hàng</MenuItem>
-                                <MenuItem value={'Chờ xác nhận'}>Chờ xác nhận</MenuItem>
-                                <MenuItem value={'Đã xác nhận'}>Đã xác nhận</MenuItem>
-                                <MenuItem value={'Đang chuẩn bị hàng'}>Đang chuẩn bị hàng</MenuItem>
-                                <MenuItem value={'Đang gia hàng'}>Đang giao hàng</MenuItem>
-                                <MenuItem value={'Hoàn thành'}>Hoàn thành</MenuItem>
-                                <MenuItem value={'Thất bại'}>Thất bại</MenuItem>
-                                <MenuItem value={'Đã hủy'}>Đã hủy</MenuItem>
-                                <MenuItem value={'Đang hoàn trả'}>Đang hoàn trả</MenuItem>
-                                <MenuItem value={'Đã hoàn trả'}>Đã hoàn trả</MenuItem>
+                                <MenuItem value={''}>Trạng thái đơn hàng</MenuItem>
+                                <MenuItem value={'0'}>Chờ xác nhận</MenuItem>
+                                <MenuItem value={'1'}>Đã xác nhận</MenuItem>
+                                <MenuItem value={'2'}>Từ chối</MenuItem>
+                                <MenuItem value={'3'}>Đang giao hàng</MenuItem>
+                                <MenuItem value={'4'}>Hoàn thành</MenuItem>
+                                <MenuItem value={'5'}>Thất bại</MenuItem>
                             </Select>
                         </FormControl>
                     </Grid>
@@ -119,10 +116,9 @@ const StatusOrder = (
                                 onChange={handleChangePay}
                                 size="small"
                             >
-                                <MenuItem value={null}>Trạng thái thanh toán</MenuItem>
-                                <MenuItem value={'Chưa thanh toán'}>Chưa thanh toán</MenuItem>
-                                <MenuItem value={'Đã thanh toán'}>Đã thanh toán</MenuItem>
-                                <MenuItem value={'Đã hoàn trả'}>Đã hoàn trả</MenuItem>
+                                <MenuItem value={''}>Trạng thái thanh toán</MenuItem>
+                                <MenuItem value={'0'}>Chưa thanh toán</MenuItem>
+                                <MenuItem value={'1'}>Đã thanh toán</MenuItem>
                             </Select>
                         </FormControl>
                     </Grid>

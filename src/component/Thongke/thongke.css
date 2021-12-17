@@ -6,6 +6,7 @@
 }
 .don-hang-thong-ke{
     position: relative;
+    text-align: center;
 }
 .don-hang-span{
     position: absolute;
@@ -17,12 +18,12 @@
 .thong-ke-cha{
     position: relative;
     width: 50%;
-    left: 20%;
+    left: 3%;
 }
 
 .thong-ke-con{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-column-gap: 50px;
 }
 

@@ -12,6 +12,7 @@ import CartApi from "../../api/CartApi";
 import { Alert, Snackbar } from "@mui/material";
 import { Link } from 'react-router-dom';
 import FavoriteApi from "../../api/FavoritApi";
+import { useSnackbar } from 'notistack';
 
 function FavoriteNotLogin({reload, setReload}){
 
@@ -29,6 +30,7 @@ function FavoriteNotLogin({reload, setReload}){
         _known: 'up'
     };
 
+    const { enqueueSnackbar } = useSnackbar();
     const [ params, setParams] = useState(initParams);
     const [open, setOpen] = useState(false);
     
@@ -124,7 +126,10 @@ function FavoriteNotLogin({reload, setReload}){
         onLoad();
       }).catch((error) => {
         if (error.response) {
-          setMess(error.response.data);
+          const message = 'Sản phẩm không đủ!';
+            enqueueSnackbar(message, {
+                variant: 'error',
+            });
         } else if (error.request) {
           console.log(error.request);
         } else {
@@ -204,9 +209,14 @@ function FavoriteNotLogin({reload, setReload}){
                                         <i class="fa fa-plus"></i>
                                     </button>
                                 </div>
+
                                 </div>
+                                
                             </div>
+                            
+                            
                             <div className="yeuthich-second">
+                            
                                     <p>{String(Math.round(result.product.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.')} VNĐ</p>
                                     <p>{result.number > 0 && result.staus == true ? "Còn hàng" : "Hết hàng" }</p>
                                     <button type="button" onClick={() => addToCart(index, result.product.id, result.product.price, result.product.photo, result.product.name, result.product.weight)} ><i class="fa fa-shopping-cart"></i></button>
@@ -248,6 +258,7 @@ function FavoriteNotLogin({reload, setReload}){
                                 </div>
                             </div>
                         </div>
+                        {/* <span style={{ color: "red", fontSize: "13px" }}>{loi.newPassword}</span> */}
                         <div className="yeuthich-second">
                                 <p>{String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.')} VNĐ</p>
                                 <p>{result.number > 0 && result.staus == true ? "Còn hàng" : "Hết hàng" }</p>

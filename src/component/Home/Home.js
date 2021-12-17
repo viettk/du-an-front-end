@@ -34,8 +34,7 @@ function Home() {
         const top5 = await HomeApi.getTop5();
 
         setGundam(gundam.content);
-        console.log(gundam.content)
-        setResulshf(respSHF);
+        setResulshf(respSHF.content);
         setResultKit(respKit);
         setResultnew(newsp);
         setFavorite(top5);
@@ -54,6 +53,9 @@ function Home() {
     history.push('/product/' + id );
   }
 
+  const src_img = process.env.URL_IMAGE;
+  console.log(src_img)
+
   return (
     <section style={{marginTop: "30px"}}>
       <div className="body-container">
@@ -63,7 +65,7 @@ function Home() {
             resultnew.map(result =>
               <Carousel.Item >
                 <div className="body-new-pro" key={result.id} onClick={() => chuyentrang(result.id)}>
-                  <img className="body-new-img-pro" src={'/images/' + result.photo} alt="" />
+                  <img className="body-new-img-pro" src={src_img + result.photo} alt="" />
                   <p className="fix-line-css">{result.name}</p>
                   <p>Mã SP: {result.sku}</p>
                   <span className="pro-body">
@@ -114,7 +116,7 @@ function Home() {
             <div className="product-child" >
             <Carousel  cols={5} rows={2} gap={50} > 
           {
-            resultnew.map(result =>
+            resultShf.map(result =>
               <Carousel.Item >
                 <div className="body-new-pro" key={result.id} onClick={() => chuyentrang(result.id)}>
                   <img className="body-new-img-pro" src={'/images/' + result.photo} alt="" />
@@ -138,9 +140,9 @@ function Home() {
             <h5>Top Sản phẩm bán chạy</h5>
           </div>
           <div className="product-body-favorite-m">
-          <Carousel  cols={5} rows={2} gap={50} > 
+          <Carousel  cols={5} rows={1} gap={50} > 
           {
-            resultnew.map(result =>
+            favorite.map(result =>
               <Carousel.Item >
                 <div className="body-new-pro" key={result.id} onClick={() => chuyentrang(result.id)}>
                   <img className="body-new-img-pro" src={'/images/' + result.photo} alt="" />

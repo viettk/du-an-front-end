@@ -7,14 +7,15 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import CardMembershipIcon from '@mui/icons-material/CardMembership';
 import CategoryIcon from '@mui/icons-material/Category';
-import ReceiptIcon from '@mui/icons-material/Receipt';
-import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import ProductionQuantityLimitsIcon from '@mui/icons-material/ProductionQuantityLimits';
 import SubMenu from "./SubMenu";
 import './headadmin.css';
 import logo from './Logo.png';
+import MailIcon from '@mui/icons-material/Mail';
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
+import ReceiptIcon from '@mui/icons-material/Receipt';
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 
 const SlideBar = () => {
     // const logout = () => {
@@ -35,13 +36,24 @@ const SlideBar = () => {
         {
             text: 'Thống kê',
             icon: <BarChartIcon />,
-            path: "/",
+            path: "/admin/thk",
         },
 
         {
-            text: 'Mã giảm giá',
-            icon: <ProductionQuantityLimitsIcon />,
-            path: "/admin/chart/discount",
+            text: 'Giảm giá',
+            icon: <ReceiptIcon />,
+            iconOpen: <ExpandLess />,
+            iconClose: <ExpandMore />,
+            chiren: [
+                {
+                    text: 'Mã giảm giá',
+                    path: "/admin/discount",
+                },
+                {
+                    text: 'Giảm giá sản phẩm',
+                    path: "/admin/giam-gia",
+                },
+            ]
         },
 
         {
@@ -54,46 +66,23 @@ const SlideBar = () => {
             icon: <CategoryIcon />,
             path: "/admin/category",
         },
-        {
-            text: 'Giảm giá',
-            icon: <CategoryIcon />,
-            path: "/admin/giam-gia",
-        },
 
         {
             text: 'Khách hàng',
             icon: <SupportAgentIcon />,
             path: "/admin/khach-hang",
         },
-        
-
-        {
-            text: 'Cá nhân',
-            icon: <SupportAgentIcon />,
-            path: "/admin/ttcn",
-        },
 
         {
             text: 'Hóa đơn',
-            icon: <CardMembershipIcon />,
-            iconOpen: <ExpandLess />,
-            iconClose: <ExpandMore />,
-            chiren: [
-                {
-                    text: 'Quản lý hóa đơn',
-                    path: "/admin/bill/managerbill",
-                },
-                {
-                    text: 'Hoàn trả(Chưa xong)',
-                },
-            ]
+            icon: <ReceiptLongIcon />,
+            path: "/admin/bill/managerbill",
         },
-
         {
-            text: 'Đăng xuất',
-            icon: <PermIdentityIcon />,
+            text: 'Gửi Mail',
+            icon: <MailIcon />,
+            path: "/admin/sendmail",
         },
-
     ];
 
     return (
@@ -101,9 +90,7 @@ const SlideBar = () => {
             {/* logo */}
             <Toolbar>
                 <img src={logo} alt="logo" style={{width: "100px", height: "100px"}} ></img>
-                <Typography>Gumdam</Typography>
             </Toolbar>
-            <Divider />
             {/* list */}
             <List
                 sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}

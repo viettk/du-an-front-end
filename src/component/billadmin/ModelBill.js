@@ -1,9 +1,12 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { Fragment, memo, useState } from "react";
-import { useDispatch } from "react-redux";
-import BillDetail from "./BillDetail";
+import { lazy } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import * as type from '../../redux/const/type';
+import { useSnackbar } from 'notistack';
+//lazy gọi đến mới load componet
+const BillDetail = lazy(() => import("./BillDetail"));
 
 function ModelBill(
     {
@@ -21,11 +24,11 @@ function ModelBill(
         name: '',
         phone: '',
         total: '',
-        status_pay: '',
+        status_pay: null,
         address: '',
         city: '',
         district: '',
-        status_order: '',
+        status_order: null,
         thema: '',
         themb: '',
         themc: '',
@@ -33,9 +36,11 @@ function ModelBill(
         discount_id: '',
         id_code: '',
     }
+    const { enqueueSnackbar } = useSnackbar();
     const dispatch = useDispatch();
     const [formDataBill, setFormDataBill] = useState(initBill);
     const [clicked, setClicked] = useState(-1);
+    const success = useSelector((state) => state.bill.success);
     //phan trang
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -62,32 +67,21 @@ function ModelBill(
         setFormDataBill(value);
     }
     //update
-    const onClickUpdateHandler = async (id, data) => {
+    const onClickUpdateHandler = (id, data) => {
         id = bill[clicked].id;
         const value = bill[clicked].status_order;
-        let order = '';
-        let order_pay = '';
+        let order = null;
+        let pay = null;
         switch (value) {
-            case 'Chờ xác nhận':
-                order = 'Đã xác nhận';
+            case 0:
+                order = 1;
                 break;
-            case 'Đã xác nhận':
-                order = 'Đang chuẩn bị hàng';
+            case 1:
+                order = 2;
                 break;
-            case 'Đang chuẩn bị hàng':
-                order = 'Đang giao hàng';
-                break;
-            case 'Đang giao hàng':
-                order = 'Giao hàng thành công';
-                order_pay = 'Đã thanh toán';
-                break;
-            case 'Giao hàng thành công':
-                order = 'Hoàn thành';
-                order_pay = 'Đã thanh toán';
-                break;
-            case 'Đơn hoàn trả':
-                order = 'Hoàn thành';
-                order_pay = 'Đã thanh toán';
+            case 2:
+                order = 3;
+                pay = 1;
                 break;
             default:
                 break;
@@ -95,22 +89,33 @@ function ModelBill(
         data = {
             ...formDataBill,
             status_order: order,
-            status_pay: order_pay,
+            status_pay: pay,
         }
         dispatch({ type: type.UPDATE_BILL_STATUS_ORDER_ACTION, payload: { id, data } });
+        if (success) {
+            const message = 'Cập nhật thành công!';
+            enqueueSnackbar(message, {
+                variant: 'success',
+            });
+        } else {
+            const message = 'Cập nhật thất bại!';
+            enqueueSnackbar(message, {
+                variant: 'error',
+            });
+        }
         handleClose();
     }
     // hủy giao hàng chờ giao lại
     const onCanceBill = async (id, data) => {
         id = bill[clicked].id;
         const value = bill[clicked].status_order;
-        let order = '';
+        let order = null;
         switch (value) {
-            case 'Đang giao hàng':
-                order = 'Thất bại';
+            case 2:
+                order = 4;
                 break;
-            case 'Chờ xác nhận':
-                order = 'Đã hủy';
+            case 0:
+                order = 5;
                 break;
             default:
                 break;
@@ -120,37 +125,60 @@ function ModelBill(
             status_order: order,
         }
         dispatch({ type: type.UPDATE_BILL_STATUS_ORDER_ACTION, payload: { id, data } });
+        if (success) {
+            const message = 'Cập nhật thành công!';
+            enqueueSnackbar(message, {
+                variant: 'success',
+            });
+        } else {
+            const message = 'Cập nhật thất bại!';
+            enqueueSnackbar(message, {
+                variant: 'error',
+            });
+        }
         handleCloseCB();
     }
     const onSwitchFunction = ((value) => {
         switch (value) {
-            case 'Chờ xác nhận':
+            case 0:
                 return (
                     <div>
                         <Button size="small" variant="text" onClick={handleClickOpen}>Xác nhận</Button>
                         <Button size="small" variant="text" onClick={handleClickOpenCB}>Hủy</Button>
                     </div>);
-            case 'Đã hủy':
-                return (<p>Đã hủy</p>);
-            case 'Đã xác nhận':
-                return (<Button size="small" variant="text" onClick={handleClickOpen}>Chuẩn bị hàng</Button>);
-            case 'Đang chuẩn bị hàng':
+            case 1:
                 return (<Button size="small" variant="text" onClick={handleClickOpen}>Giao hàng</Button>);
-            case 'Đang giao hàng':
+            case 2:
                 return (<div>
                     <Button size="small" variant="text" onClick={handleClickOpen}>Nhận hàng</Button>
                     <Button size="small" variant="text" onClick={handleClickOpenCB}>Hủy</Button>
-                        </div>);
-            case 'Thất bại':
-                return (<p>Thất bại</p>);
-            case 'Hoàn thành':
-                return (<p>Hoàn thành</p>);
-            case 'Giao hàng thành công':
-                return (<p>Giao hàng thành công</p>);
-            case 'Đơn hoàn trả':
-                return (<p>Đơn hoàn trả</p>);
+                </div>);
+            case 3:
+                return 'Thành công';
+            case 4:
+                return 'Thất bại';
+            case 5:
+                return 'Đã từ chối';
             default:
-                return (<p>Không cập nhật được</p>);
+                return 'Không cập nhật được';
+        }
+    });
+    const onSwitchOrder = ((value) => {
+        switch (value) {
+            case 0:
+                return 'Chờ xác nhận';
+            case 1:
+                return 'Đã xác nhận';
+            case 2:
+                return 'Đang giao hàng';
+            case 3:
+                return 'Hoàn thành';
+            case 4:
+                return 'Thất bại';
+            case 5:
+                return 'Từ chối';
+            default:
+                return (<p>Không có trạng thái</p>);
         }
     });
 
@@ -173,9 +201,17 @@ function ModelBill(
     const handleCloseCB = () => {
         setOpenCB(false);
     };
+
+    function format(n, currency) {
+        if (n) {
+            return n.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') + ' ' + currency;
+        } else {
+            return ("null");
+        }
+    }
     return (
         <Fragment>
-            {bill ? (
+            {bill.length > 0 ? (
                 <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                     <TableContainer sx={{ minHeight: 440 }}>
                         <Table stickyHeader aria-label="sticky table">
@@ -210,10 +246,10 @@ function ModelBill(
                                         </TableCell>
                                         <TableCell>{row.phone}</TableCell>
                                         <TableCell>{row.address}</TableCell>
-                                        <TableCell>{row.status_order}</TableCell>
-                                        <TableCell>{row.status_pay}</TableCell>
+                                        <TableCell>{onSwitchOrder(row.status_order)}</TableCell>
+                                        <TableCell>{row.status_pay === 0 ? 'Chưa thanh toán' : 'Đã thanh toán'}</TableCell>
                                         <TableCell>{row.id_code}</TableCell>
-                                        <TableCell>{row.total}</TableCell>
+                                        <TableCell>{format(row.total, 'VNĐ')}</TableCell>
                                         <TableCell>{onSwitchFunction(row.status_order)}</TableCell>
                                         <TableCell><BillDetail id={row.id} formDataBill={formDataBill} /></TableCell>
                                     </TableRow>

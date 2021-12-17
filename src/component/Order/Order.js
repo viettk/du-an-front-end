@@ -75,7 +75,6 @@ function Order() {
   const [phiship, setPhiship] = useState(0);
   let getStorage = localStorage.getItem('cart');
   const [demo, setDemo] = useState(JSON.parse(getStorage));
-  const [thanhTien, setThanhTien] = useState(0);
   const [statusadress, setStatusadress] = useState();
   const [mess, setMess] = useState({
     errorMessage: ''
@@ -112,15 +111,14 @@ function Order() {
             setSlsp(numberOfCart);
           }
           const response = await CartApi.getCartDetail(customerId, emailc);
+          // console.log(response);
           const respo = await CartApi.getAddress(customerId, emailc);
           
           const respAdress = await CartApi.getAddressStatus(customerId, emailc);
           
           const resp = await CartApi.getCart(customerId, emailc);
-
           setDiachi(respo);
-          setStatusadress(respAdress.id);
-          
+          setStatusadress(respAdress.id);          
           setBill({
             ...bill,
             email: emailc,
@@ -129,6 +127,8 @@ function Order() {
             address: respAdress.address,
             total: (resp.total)
           });
+          setCart(response);
+          setTongtien(resp.total);
         } else {
           let storage = localStorage.getItem('cart');
           setCart(JSON.parse(storage));
@@ -139,7 +139,6 @@ function Order() {
             ...bill,
             total: (demo.reduce((a, v) => a = a + v.total , 0))
           });
-          setThanhTien(demo.reduce((a, v) => a = a + v.total, 0));
         }
         tt();
       } catch (error) {
@@ -323,21 +322,21 @@ function Order() {
   //lấy mã giảm giá-------------------------------------------------------------------------------------------------------------
   const laymagiam = () => {
     BillApi.getMAGiamGia(discountName.name).then(resp => {
-      let finaltt = thanhTien - resp;
+      let finaltt = tongtien - resp;
       setDis(true);
       setLoidiscount({
         ...loidiscount,
         loi:''
       })
       if (finaltt <= 0) {
-        setThanhTien(0);
+        setTongtien(0);
         setBill({
           ...bill,
           discountName: discountName.name,
           total: 0
         });
       } else {
-        setThanhTien(finaltt);
+        setTongtien(finaltt);
         setBill({
           ...bill,
           discountName: discountName.name,
@@ -496,12 +495,12 @@ function Order() {
                                   </td>
                                   <td>
                                     <p style={{ fontSize: '16px' }}><b>Tên SP:{cart.product.name}</b></p>
-                                    <p>Giá tiền: {cart.product.price} VND</p>
+                                    <p>Giá tiền: {String(Math.round(cart.product.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' VNĐ'}</p>
                                     <p>Số lượng: {cart.number}</p>
                                   </td>
                                   <td>
                                     <p style={{ fontSize: '16px' }}>
-                                      <b>{cart.total}<u>đ</u></b>
+                                      <b>{String(Math.round(cart.total)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' VNĐ'}</b>
                                     </p>
                                   </td>
                                   <td />
@@ -521,7 +520,7 @@ function Order() {
                                 </td>
                                 <td>
                                   <p style={{ fontSize: '16px' }}><b>Tên SP:{cart.name}</b></p>
-                                  <p>Giá tiền: {cart.price} VND</p>
+                                  <p>Giá tiền: {String(Math.round(cart.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' VNĐ'}</p>
                                   <p>Số lượng: {cart.number}</p>
                                 </td>
                                 <td>
@@ -540,8 +539,8 @@ function Order() {
                 </div>
               </div>
               <span className="total-amount">
-                <h2>Tổng cộng :</h2>
-                <p>{tongtien} VND</p>
+                <h2>Tạm tính :</h2>
+                <p>{String(Math.round(tongtien)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' VNĐ'}</p>
               </span>
               <div className="discount">
                 <div className="user-box">
@@ -553,7 +552,7 @@ function Order() {
               </div>
               <span className="total-amount">
                 <h2>Tổng cộng :</h2>
-                <p>{thanhTien} VND</p>
+                <p>{String(Math.round(tongtien)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' VNĐ'}</p>
               </span>
               <span style={{ display: "grid", gridTemplateColumns: "1fr 1fr", alignItems: "center" }}>
                 <Link to='/cart' id="viet-back-cart"><i class="fa fa-angle-left viet-order-arrow"></i>Quay lại giỏ hàng</Link>

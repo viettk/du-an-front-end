@@ -11,15 +11,22 @@ import { Animation } from "@devexpress/dx-react-chart";
 import { useState, useEffect } from 'react';
 import ThongkeApi from '../../api/ThongkeApj';
 import './thongke.css';
-import Box from '@mui/material/Box';
-import Tab from '@mui/material/Tab';
-import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 import AddAlertIcon from '@mui/icons-material/AddAlert';
 import AirlineSeatReclineNormalIcon from '@mui/icons-material/AirlineSeatReclineNormal';
-import { Pie } from 'react-chartjs-2';
+import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
+import {
+  PieChart,
+  Pie,
+  Tooltip,
+  BarChart,
+  XAxis,
+  YAxis,
+  Legend,
+  CartesianGrid,
+  Bar,
+} from "recharts";
 
 function Thongkedonhang() {
 
@@ -31,6 +38,13 @@ function Thongkedonhang() {
   const [doanhthu, setDoanhthu] = useState([]);
   const [tktp, setTktp] = useState([]);
 
+  const [choxacnhan, setChoxacnhan] = useState(0);
+  const [dangchuanbi, setDangchuanbi] = useState(0);
+  const [danggiao, setDanggiao] = useState(0);
+  const [tuchoi, setTuchoi] = useState(0);
+  const [thatbai, setThatbai] = useState(0);
+  const [thanhcong, setThanhcong] = useState(0);
+
   useEffect(() => {
     const fetchList = async () => {
       try {
@@ -40,15 +54,19 @@ function Thongkedonhang() {
         const respdoanhthu = await ThongkeApi.getDoanhthu(year);
         const thongke_typay = await ThongkeApi.getThongke_typepay();
 
+        const choxacnhan = await ThongkeApi.getChoXacNhan();
+        const chuanbi = await ThongkeApi.getDangchuanbi();
+        const giao = await ThongkeApi.getDanggiao();
+
         const type_pay = [
-          { type_p: 'COD', value: thongke_typay[0] },
-          { type_p: 'VNP', value: thongke_typay[1] }
+          { name: 'COD', value: thongke_typay[0] },
+          { name: 'VNPAY', value: thongke_typay[1] }
         ]
 
         const data = [
-          { status_order: 'Đã thanh toán', value: respone[2] },
-          { status_order: 'Đã hủy', value: respone[0] },
-          { status_order: 'Đã hoàn trả', value: respone[1] },
+          { name: 'Thành công', value: respone[2] },
+          { name: 'Từ chối', value: respone[0] },
+          { name: 'Thất bại', value: respone[1] },
         ]
         const num = [];
         for (var i = 0; i < top5.length; i++) {
@@ -64,6 +82,9 @@ function Thongkedonhang() {
         setResult(data);
         setTopsp(num);
         setDoanhthu(doanhThuData);
+        setChoxacnhan(choxacnhan);
+        setDangchuanbi(chuanbi);
+        setDanggiao(giao);
 
       } catch (error) {
         console.log(error);
@@ -85,36 +106,66 @@ function Thongkedonhang() {
     <React.Fragment>
       <div className='thong-ke-cha'>
         <div className='thong-ke-con'>
-        <div className='thong-ke-head'>
-        <span>
-          <AddAlertIcon/>
-        </span>
-          <div className='thong-ke-dv'>
-            <p className='tk-sdh'>50</p>
-            <p>Chờ xác nhận</p>
+          <div className='thong-ke-head'>
+            <span>
+              <AddAlertIcon />
+            </span>
+            <div className='thong-ke-dv'>
+              <p className='tk-sdh'>{choxacnhan}</p>
+              <p>Chờ xác nhận</p>
+            </div>
           </div>
-        </div>
-        <div className='thong-ke-head' style={{backgroundColor:"lightskyblue"}}>
-        <span>
-        <HourglassEmptyIcon/>
-        </span>
-          <div className='thong-ke-dv'>
-            <p className='tk-sdh'>30</p>
-            <p>Đang chuẩn bị</p>
+          <div className='thong-ke-head' style={{ backgroundColor: "lightskyblue" }}>
+            <span>
+              <HourglassEmptyIcon />
+            </span>
+            <div className='thong-ke-dv'>
+              <p className='tk-sdh'>{dangchuanbi}</p>
+              <p>Đang chuẩn bị</p>
+            </div>
           </div>
-        </div>
-        <div className='thong-ke-head' style={{backgroundColor:"lightgreen"}}>
-        <span>
-        <AirlineSeatReclineNormalIcon/>
-        </span>
-          <div className='thong-ke-dv'>
-            <p className='tk-sdh'>10</p>
-            <p>Đang giao</p>
+          <div className='thong-ke-head' style={{ backgroundColor: "lightgreen" }}>
+            <span>
+              <AirlineSeatReclineNormalIcon />
+            </span>
+            <div className='thong-ke-dv'>
+              <p className='tk-sdh'>{danggiao}</p>
+              <p>Đang giao</p>
+            </div>
           </div>
-        </div>
+
+          <div className='thong-ke-head' style={{backgroundColor: "#7FFF00"}}>
+            <span>
+              <DoneOutlineIcon />
+            </span>
+            <div className='thong-ke-dv'>
+              <p className='tk-sdh'>{thanhcong}</p>
+              <p>Thành công</p>
+            </div>
+          </div>
+
+          <div className='thong-ke-head' style={{backgroundColor: "#A9A9A9"}}>
+            <span>
+              <SentimentVeryDissatisfiedIcon />
+            </span>
+            <div className='thong-ke-dv'>
+              <p className='tk-sdh'>{thatbai}</p>
+              <p>Thất bại</p>
+            </div>
+          </div>
+
+          <div className='thong-ke-head'>
+            <span>
+              <AddAlertIcon />
+            </span>
+            <div className='thong-ke-dv'>
+              <p className='tk-sdh'>{tuchoi}</p>
+              <p>Từ chối</p>
+            </div>
+          </div>
         </div>
       </div>
-      <br/>
+      <br />
       <div style={{ position: "relative" }}>
         <div style={{ textAlign: "center" }}>
           <select value={month} onChange={(e) => changeMonth(e)} style={{ padding: "5px 10px" }} >
@@ -141,12 +192,28 @@ function Thongkedonhang() {
         </div>
         <div className="thong-ke">
           <div className="don-hang-thong-ke">
-            <Chart data={result} >
+            {/* <Chart data={result} >
               {result.length == 0 || (result[0].value == 0 && result[1].value == 0 && result[2].value == 0) ?
                 <span className="don-hang-span">Không có dữ liệu</span>
                 : <PieSeries valueField="value" argumentField="status_order" />}
               <Title text="Thống kê đơn hàng" />
-            </Chart>
+            </Chart> */}
+            <h4>Đơn hàng</h4>
+            {result.length === 0 || (result[0].value == 0 && result[1].value == 0 && result[2].value == 0) ? <p>Không có dữ liệu</p> :
+              <PieChart width={500} height={500}>
+                <Pie
+                  dataKey="value"
+                  isAnimationActive={false}
+                  data={result}
+                  cx={200}
+                  cy={200}
+                  outerRadius={80}
+                  fill="#8884d8"
+                  label
+                />
+                <Tooltip />
+              </PieChart>}
+
           </div>
 
           <div style={{ position: "relative" }}>
@@ -164,12 +231,27 @@ function Thongkedonhang() {
 
 
           <div className="don-hang-thong-ke">
-            <Chart data={tktp} >
+            {/* <Chart data={tktp} >
               {tktp.length == 0 || (tktp[0].value == 0 && tktp[1].value == 0) ?
                 <span className="don-hang-span">Không có dữ liệu</span>
                 : <PieSeries valueField="value" argumentField="type_p" />}
               <Title text="Phương thức thanh toán" />
-            </Chart>
+            </Chart> */}
+
+            <h4>Phương thức thánh toán</h4>
+            <PieChart width={500} height={500}>
+              <Pie
+                dataKey="value"
+                isAnimationActive={false}
+                data={tktp}
+                cx={200}
+                cy={200}
+                outerRadius={80}
+                fill="#8884d8"
+                label
+              />
+              <Tooltip />
+            </PieChart>
           </div>
 
 

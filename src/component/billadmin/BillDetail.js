@@ -9,9 +9,10 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import { useDispatch, useSelector } from 'react-redux';
 import * as type from '../../redux/const/type';
-import './bill.css';
+import BillAdminApi from '../../api/BillAdminApi';
+import { useDispatch, useSelector } from 'react-redux';
+import { useSnackbar } from 'notistack';
 
 export default function BillDetail({
     id,
@@ -22,14 +23,73 @@ export default function BillDetail({
         _field: 'id',
         _known: 'up',
     };
+    const { enqueueSnackbar } = useSnackbar();
     const dispatch = useDispatch();
-    const response = useSelector((state) => state.bill.detail);
+    const [form, setForm] = React.useState({});
+    const [number, setNumber] = React.useState(0);
     const [open, setOpen] = React.useState(false);
+    const [data, setData] = React.useState({});
+    const reload = useSelector((state) => state.bill.reload);
+    const success = useSelector((state) => state.bill.success);
     const handleClickOpen = () => {
         setOpen(true);
-        dispatch({ type: type.FETCH_BILL_DETAIL_ACTION, payload: { id, param } });
     };
 
+    React.useEffect(() => {
+        const fetchListDtail = async () => {
+            const value = {
+                param: param,
+                id: id,
+            }
+            try {
+                const response = await BillAdminApi.getBillDetailByBill(value);
+                setData(response);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        fetchListDtail();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [reload, success]);
+
+    const changeNumber = (event) => {
+        setNumber(event.target.value);
+    }
+    const onClickHandler = (event, value, index) => {
+        setForm(value);
+    }
+    const updateBillDetail = (id, data) => {
+        id = form.id;
+        data = {
+            ...form,
+            number: number,
+        }
+        console.log("số", number);
+        if (!number) {
+            const message = 'Nhập số lượng sản phẩm mới!';
+            enqueueSnackbar(message, {
+                variant: 'warning',
+            });
+            enqueueSnackbar('Cập nhật thất bại!', {
+                variant: 'error',
+            });
+        }
+        else {
+            dispatch({ type: type.UPDATE_BILL_DETAIL_ACTION, payload: { id, data } });
+            setNumber(null);
+            if (success) {
+                const message = 'Cập nhật thành công!';
+                enqueueSnackbar(message, {
+                    variant: 'success',
+                });
+            } else {
+                const message = 'Cập nhật thất bại!';
+                enqueueSnackbar(message, {
+                    variant: 'error',
+                });
+            }
+        }
+    }
     const handleClose = () => {
         setOpen(false);
     };
@@ -38,7 +98,13 @@ export default function BillDetail({
         const date = new Date(props.date);
         return (<>{date.getDate() - 1}/{date.getMonth() + 1}/{date.getFullYear()}</>);
     }
-console.log(response.product)
+    function format(n, currency) {
+        if (n) {
+            return n.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') + ' ' + currency;
+        } else {
+            return ("null");
+        }
+    }
     return (
         <React.Fragment>
             <IconButton color="primary" onClick={handleClickOpen}>
@@ -89,10 +155,10 @@ console.log(response.product)
                                         Trạng thái giao hàng: {formDataBill.status_order}
                                     </Typography>
                                     <Typography variant="body2" mt={2}>
-                                        Trạng thái thanh toán: {formDataBill.status_pay}
+                                        Trạng thái thanh toán: {formDataBill.status_pay === 0 ? 'Chưa thanh toán' : 'Đã thanh toán'}
                                     </Typography>
                                     <Typography variant="body2" mt={2}>
-                                        Tổng tiền: {formDataBill.total}VNĐ
+                                        Tổng tiền: {format(formDataBill.total, 'VNĐ')}
                                     </Typography>
                                 </Grid>
                             </Grid>
@@ -109,24 +175,35 @@ console.log(response.product)
                                     <TableCell>Số lượng</TableCell>
                                     <TableCell>Đơn giá</TableCell>
                                     <TableCell>Tổng</TableCell>
+                                    {formDataBill.status_order === 0 ? <TableCell>Hoạt động</TableCell> : null}
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {response.length > 0 ? response.map((row, index) => (
+                                {data.length > 0 ? data.map((row, index) => (
                                     <TableRow
                                         key={index}
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                        onClick={
+                                            (event) => {
+                                                onClickHandler(event, row, index);
+                                            }
+                                        }
                                     >
                                         <TableCell>
                                             {index + 1}
                                         </TableCell>
                                         <TableCell>{row.product.name}</TableCell>
-                                        <TableCell><img src={'https://tranhoangmaianh.herokuapp.com/images/' +row.product.photo} className='bdt-img-pro' /></TableCell>
-                                        <TableCell>{row.number}</TableCell>
-                                        <TableCell>{row.price}</TableCell>
-                                        <TableCell>{row.total}</TableCell>
+                                        <TableCell><img src={`url/${row.product.photo}`} alt="ảnh"></img></TableCell>
+                                        <TableCell>
+                                            {formDataBill.status_order === 0 ?
+                                                (<input type='number' onChange={changeNumber} defaultValue={row.number} style={{ maxWidth: "56px" }}></input>) :
+                                                row.number}
+                                        </TableCell>
+                                        <TableCell>{format(row.price, 'VNĐ')}</TableCell>
+                                        <TableCell>{format(row.total, 'VNĐ')}</TableCell>
+                                        {formDataBill.status_order === 0 ? <TableCell><Button size='small' onClick={updateBillDetail}>cập nhật</Button></TableCell> : null}
                                     </TableRow>
-                                )) : (<div>Không có Sản phẩm</div>)}
+                                )) : (<div>null</div>)}
                             </TableBody>
                         </Table>
                     </TableContainer>

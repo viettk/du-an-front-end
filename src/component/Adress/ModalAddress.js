@@ -156,13 +156,13 @@ function ModalAddress({ show, setShow, ma, setMa, reload, setReload}) {
                         <div className="form-group">
                             <label>Địa chỉ </label>
                             <input className="form-control" type="text" defaultValue={detail.address} name="address" onChange={getInputValue} />
-                            <span style={{ color: "red", fontSize: "13px" }}>{loi.name}</span>
+                            <span style={{ color: "red", fontSize: "13px" }}>{loi.address}</span>
                         </div>
 
                         <div className="form-group">
                             <label>Số điện thoại</label>
                             <input className="form-control" type="text" defaultValue={detail.phone} name="phone" onChange={getInputValue} />
-                            <span style={{ color: "red", fontSize: "13px" }}>{loi.name}</span>
+                            <span style={{ color: "red", fontSize: "13px" }}>{loi.phone}</span>
                             <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span>
                         </div>
 

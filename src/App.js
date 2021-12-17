@@ -5,7 +5,7 @@ import Footer from './Layout/Footer';
 import Sidebar from './Layout/Sidebar/Sidebar';
 import Bodyfooter from './Layout/Bodyfooter';
 import ListRoute from './router/ListRoute';
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import LayoutAdmin from './Layout/admin/LayoutAdmin';
 import CookieService from './cookie/CookieService';
@@ -16,6 +16,8 @@ import Forgot from './component/Login/Forgot';
 import ResetPassword from './component/Login/ResetPassword';
 import ChangePassword from './component/Login/ChangePassword';
 import PrivateRoute from "./router/PrivateRouter";
+import { SnackbarProvider } from 'notistack';
+import { Backdrop, CircularProgress } from '@mui/material';
 
 function App() {
 
@@ -24,23 +26,34 @@ function App() {
   return (
     <div>
       <BrowserRouter>
-        <Switch>
+        <SnackbarProvider maxSnack={3}>
+          <Suspense fallback={<div>
+            <Backdrop
+              sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+              open={true}
+            >
+              <CircularProgress color="inherit" />
+            </Backdrop>
+          </div>}>
+            <Switch>
 
-          {/* admin */}
-          <Route path='/admin'>
-          <PrivateRoute component={LayoutAdmin} role='ADMIN'/>
-            {/* <LayoutAdmin /> */}
-          </Route>
+              {/* admin */}
+              <Route path='/admin'>
+                <PrivateRoute component={LayoutAdmin} role='ADMIN' />
+                {/* <LayoutAdmin /> */}
+              </Route>
 
-          {/* Khách hàng */}
-          <Route path='/' >
-            <Head reload={reload} />
-            <ListRoute reload={reload} setReload={setReload} />
-            <Bodyfooter />
-            <Footer />
-          </Route>
+              {/* Khách hàng */}
+              <Route path='/' >
+                <Head reload={reload} />
+                <ListRoute reload={reload} setReload={setReload} />
+                <Bodyfooter />
+                <Footer />
+              </Route>
 
-        </Switch>
+            </Switch>
+          </Suspense>
+        </SnackbarProvider>
       </BrowserRouter>
     </div>
   );

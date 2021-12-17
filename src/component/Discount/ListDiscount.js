@@ -66,7 +66,6 @@ function ListDiscount() {
             }
         );       
       };
-      console.log(params._page);
       const getMa = (id) =>{
         setShow(true);
         setMa(id);
@@ -143,7 +142,7 @@ function ListDiscount() {
         <table className="table table-striped">
                 <tbody>
                     <tr>
-                        <td scope="col">Tên <i class={ params._known == 'up' && params._field =='name' ? "fa fa-angle-up searh-icon" : "fa fa-angle-down searh-icon"  } onClick={nameSort}></i></td>
+                        <td scope="col">Tên <i className={ params._known == 'up' && params._field =='name' ? "fa fa-angle-up searh-icon" : "fa fa-angle-down searh-icon"  } onClick={nameSort}></i></td>
                         <td scope="col">Giá giảm <i class={ params._known == 'up' && params._field =='valueDiscount' ? "fa fa-angle-up searh-icon" : "fa fa-angle-down searh-icon"  } onClick={valueDiscountSort}></i></td>
                         <td scope="col">Số lượng</td>
                         <td scope="col">Ngày bắt đầu</td>

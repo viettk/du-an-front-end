@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ModelBill from "./ModelBill";
 import StatusOrder from "./StatusOrder";
 import * as type from '../../redux/const/type';
+import { Typography } from "@mui/material";
 
 function Bill() {
     const initParams = {
@@ -11,11 +12,12 @@ function Bill() {
         _page: 0,
         _field: 'create_date',
         _known: 'up',
+        order: 0,
     };
     const dispatch = useDispatch();
     const response = useSelector((state) => state.bill.data);
     const data = response.content;
-    const s = useSelector((state) => state.bill.s);
+    const reload = useSelector((state) => state.bill.reload);
     const [params, setParams] = useState(initParams);
     const [filter, setFilter] = useState([]);
     useEffect(() => {
@@ -25,10 +27,11 @@ function Bill() {
         }
         dispatch({ type: type.FETCH_BILL_ACTION, payload: param });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [params, filter, s]);
+    }, [params, filter, reload]);
     return (
         <Fragment>
             <Box>
+                <Typography variant="h4" sx={{marginBottom: 3}}>Quản lý hóa đơn</Typography>
                 <StatusOrder
                     filter={filter}
                     setFilter={setFilter}

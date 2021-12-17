@@ -6,6 +6,7 @@ import axios from 'axios';
 import CookieService from '../cookie/CookieService';
 import { useHistory } from 'react-router-dom';
 import GoogleApi from '../api/GoogleApi';
+import AuthApi from '../api/AuthApi';
 import {
   BrowserRouter as Router,
   Switch,
@@ -66,13 +67,17 @@ function Head({ reload }) {
     fetchList();
   }, [reload]);
 
-  const logout = () => {
-    if (CookieService.getCookie('accessToken')) {
-      GoogleApi.logout(CookieService.getCookie("accessToken"))
-    }
-    CookieService.removeCookie();
-    alert('Logout !')
-    window.location.replace('/home')
+  const logout = async () => {
+    await AuthApi.logout(CookieService.getCookie('token')).then(() => {
+      if (CookieService.getCookie('accessToken')) {
+        GoogleApi.logout(CookieService.getCookie("accessToken"))
+      }
+      CookieService.removeCookie();
+      alert('Logout !')
+      window.location.replace('/home')
+    }).catch(e=>{
+      console.log(e)
+    })
   }
 
   const getValue = (e) => {
@@ -119,14 +124,14 @@ function Head({ reload }) {
   }
 
   return (
-    <header id="header" style={{zIndex: "9"}}>
+    <header id="header" style={{ zIndex: "9" }}>
       {/* <LinearProgress variant="determinate" value={progress} /> */}
       {/*header*/}
       <div className="header_top">
         {/*header_top*/}
         <h6> Mở cửa: 8h30 - 22h00, thứ 2 - CN hàng tuần</h6>
-        <span className='span-head-hover'><i class="fa fa-user-circle" style={{marginRight:"5px"}}></i>Tài khoản
-        <div className='head-tam-giac'></div>
+        <span className='span-head-hover'><i class="fa fa-user-circle" style={{ marginRight: "5px" }}></i>Tài khoản
+          <div className='head-tam-giac'></div>
           {username ? (<ul className="hover-login">
             <li className="login-item"><Link to="/tai-khoan-ca-nhan">Tài khoản</Link></li>
             <li className="login-item"><Link onClick={logout} >Đăng xuất</Link></li>

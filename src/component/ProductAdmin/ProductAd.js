@@ -131,7 +131,7 @@ function ProductAd() {
         setParams(
             {
                 ...params,
-                _limit: '5',
+                _limit: '10',
                 _page: value - 1,
             }
         );
@@ -348,7 +348,7 @@ const handleChangeRowsPerPage = (event) => {
                                 result.length > 0 ? result.map(
                                     (result, index) =>
                                         <TableRow className="sp" key={result.id} >
-                                            <TableCell>{(index + 1) + Number(page - 1) * 5}</TableCell>
+                                            <TableCell>{(index + 1) + Number(page - 1) * 10}</TableCell>
                                             <TableCell>{result.sku}</TableCell>
                                             <TableCell>{result.name}</TableCell>
                                             <TableCell><img src={'http://localhost:8080/images/' + result.photo} style={{ width: 100 }} /></TableCell>
