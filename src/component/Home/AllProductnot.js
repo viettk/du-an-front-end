@@ -7,108 +7,108 @@ import Head from "../../Layout/Head";
 import './css/list-product.css';
 import SyncLoader from "react-spinners/SyncLoader";
 
-function AllProduct() {
-    const { query, xpage, sort } = useParams();
-    let history = useHistory();
-    const [loading, setLoading] = useState(false);
-    const initValues = [];
-    const initParams = {
-        _limit: '15',
-        _page: (xpage - 1),
+
+function AllProductnot(){
+
+    const { xpage, sort } = useParams();
+let history = useHistory();
+const [loading, setLoading] = useState(false);
+console.log(xpage);
+const initValues = [];
+const initParams = {
+    _limit: '15',
+    _page: (xpage - 1),
+    _field: 'id',
+    _known: 'up',
+};
+
+const [params, setParams] = useState(initParams);
+const [result, setResult] = useState(initValues);
+const [page, setPage] = useState(initParams._page + 1);
+const [sele, setSele] = useState({
+    optionValue: sort
+});
+
+const [count, setCount] = useState(0);
+// lấy id danh mục
+const [ma, setMa] = useState(0);
+
+const handleChange = (event, value) => {     
+    setPage(value);
+    setParams({
+        ...params,
+        _page: value - 1,
         _field: 'id',
         _known: 'up',
-    };
+    });
+    // history.push('/all-product/' + query + '/page=' + value + '&sort=' + sort);
+};
+useEffect(() => {
+    const fetchList = async () => {
+        try {
+            const response = await HomeApi.getAllProductnot(params);
+            setResult(response.content);
+            setCount(response.totalPages);
+            setLoading(true);
+            setTimeout(() => {
+                setLoading(false);
+            }, 1000);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    fetchList();
+}, [params, sort, page]);
 
-    const [params, setParams] = useState(initParams);
-    const [result, setResult] = useState(initValues);
-    const [page, setPage] = useState(initParams._page + 1);
-    const [sele, setSele] = useState({
-        optionValue: sort
+const changeValueSelect = (e) => {
+    var index = e.nativeEvent.target.selectedIndex;
+    var ina = e.target.value;
+    setSele({
+        ...sele,
+        optionValue: index + 1
     });
 
-    const [count, setCount] = useState(0);
-    // lấy id danh mục
-    const [ma, setMa] = useState(0);
-
-    const handleChange = (event, value) => {     
-        setPage(value);
+    if (ina == '1') {
         setParams({
             ...params,
-            _page: value - 1,
             _field: 'id',
-            _known: 'up',
+            _known: 'up'
         });
-        history.push('/all-product/' + query + '/page=' + value + '&sort=' + sort);
-    };
-    useEffect(() => {
-        const fetchList = async () => {
-            try {
-                const response = await HomeApi.getAllProduct(params, query);
-                setResult(response.content);
-                setCount(response.totalPages);
-                setLoading(true);
-                setTimeout(() => {
-                    setLoading(false);
-                }, 1000);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        fetchList();
-    }, [params, query, sort, page]);
-
-    const changeValueSelect = (e) => {
-        var index = e.nativeEvent.target.selectedIndex;
-        var ina = e.target.value;
-        setSele({
-            ...sele,
-            optionValue: index + 1
+    } else if (ina == '2') {
+        setParams({
+            ...params,
+            _field: 'name',
+            _known: 'down'
         });
-
-        if (ina == '1') {
-            setParams({
-                ...params,
-                _field: 'id',
-                _known: 'up'
-            });
-        } else if (ina == '2') {
-            setParams({
-                ...params,
-                _field: 'name',
-                _known: 'down'
-            });
-        } else if (ina == 3) {
-            setParams({
-                ...params,
-                _field: 'name',
-                _known: 'up'
-            });
-        } else if (ina == 4) {
-            setParams({
-                ...params,
-                _field: 'price',
-                _known: 'up'
-            });
-        } else if (ina == 5) {
-            setParams({
-                ...params,
-                _field: 'price',
-                _known: 'down'
-            });
-        }
-        if (query === "" || query == undefined) {
-            history.push('/all-product/query=' + '/page=0' + '&sort=' + ina);
-        } else {
-            history.push('/all-product/query=' + query + '/page=' + xpage + '&sort=' + ina);
-        }
-
+    } else if (ina == 3) {
+        setParams({
+            ...params,
+            _field: 'name',
+            _known: 'up'
+        });
+    } else if (ina == 4) {
+        setParams({
+            ...params,
+            _field: 'price',
+            _known: 'up'
+        });
+    } else if (ina == 5) {
+        setParams({
+            ...params,
+            _field: 'price',
+            _known: 'down'
+        });
     }
+    // history.push('/demodung/page=1/sort=1/timkiem' + '/page=' + xpage + '/sort=' + ina);
 
-    const chuyentrang = (id) => {
-        history.push('/product/' + id);
-    }
-    const src_img = process.env.REACT_APP_URL_IMAGE;
-    return (
+}
+
+const chuyentrang = (id) => {
+    history.push('/product/' + id);
+}
+const src_img = process.env.REACT_APP_URL_IMAGE;
+
+    return(
         <section>
             {loading ?
                 <div className="screenn-load">
@@ -116,7 +116,7 @@ function AllProduct() {
                 </div> :
                 <div className="container">
                     <div className="titel-lst-pr">
-                        <h5>Danh sách toàn bộ Sản phẩm {query}</h5>
+                        <h5>Danh sách toàn bộ Sản phẩm </h5>
                         <select style={{ margin: "30px 0" }} value={sele.optionValue} onChange={(e) => changeValueSelect(e)}>
                             <option value="1">Mặc định</option>
                             <option value="2">A - Z</option>
@@ -147,4 +147,4 @@ function AllProduct() {
         </section>
     );
 }
-export default AllProduct;
+export default AllProductnot;

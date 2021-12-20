@@ -24,6 +24,18 @@ const CustomerApi = {
         const url = '/account/admin/hide?id=' + id;
         return axiosClient.delete(url);
     },
+    fillAllByBill:(params)=>{
+        const url = '/account/admin/bybill';
+        return axiosClient.get(url,{params});
+    },
+    fillAllID:(param)=>{
+        const url = '/account/admin/list-id?email='+param.email+'&status='+param.status+'&name='+param.name;
+        return axiosClient.get(url);
+    },
+    fillAllID_ByBill:(params)=>{
+        const url = '/account/admin/list-id-bybill';
+        return axiosClient.get(url,{params});
+    },
 
 }
 export default CustomerApi;

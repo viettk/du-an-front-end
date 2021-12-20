@@ -1,12 +1,9 @@
 import { Pagination } from "@mui/material";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import HomeApi from "../../api/HomeApi";
-import Head from "../../Layout/Head";
 import './css/list-product.css';
 import SyncLoader from "react-spinners/SyncLoader";
-import logoa from './b.jpg';
 
 function HomeCate() {
     const { sanpham, id, xpage, sort } = useParams();
@@ -39,7 +36,7 @@ function HomeCate() {
         setPage(value);
         setParams(
             {
-                _limit: '2',
+                _limit: '10',
                 _page: value - 1,
                 _field: 'id',
                 _known: 'up',

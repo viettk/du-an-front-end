@@ -16,8 +16,9 @@ function ProductDetail({reload, setReload}) {
   const emailc = CookieService.getCookie('email');
   const [loading, setLoading] = useState(false);
   const [imagep, setImagep] = useState([]);
+  
   let storage = localStorage.getItem('yeuthich');
-  const [notloginyt, setNotloginyt] = useState(JSON.parse(storage));
+  const [notloginyt, setNotloginyt] = useState();
   const token = localStorage.token;
   const idpage = useParams();
   const [result, setResult] = useState({});
@@ -50,7 +51,7 @@ function ProductDetail({reload, setReload}) {
         } else{
           let getLocalYeuThich = localStorage.getItem('yeuthich');
           if (getLocalYeuThich) {
-            let item = notloginyt.find(c => c.product_id == idpage.id);
+            let item = (JSON.parse(getLocalYeuThich)).find(c => c.product_id == idpage.id);
             if (item) {
               setY(true);
             }
@@ -289,11 +290,11 @@ function ProductDetail({reload, setReload}) {
           <div className="product-details">
             <div className="product-detail-body">
               <div className="pr-detail-img">
-                <img id="product-detail-image-main" src={src_img + result.photo} height="400px" />
+                <img id="product-detail-image-main" src={src_img + result.photo} height="500px" />
                 <div className="img-detail">
                   {
                     imagep.map((i, index) =>
-                      <img key={index} className="product-detail-image"  src={src_img + result.photo} onClick={() => changeimg(index)} />
+                      <img key={index} className="product-detail-image"  src={src_img + i.name} onClick={() => changeimg(index)} />
                     )
                   }
                   <img id="product-detail-image-main-b"  src={src_img + result.photo} onClick={() => changeimg(3)} />
@@ -353,7 +354,7 @@ function ProductDetail({reload, setReload}) {
               <span className="descriptio">
                 <p><i className="fa fa-angellist " /><span>{result.describe}</span></p>
                 <p><i className="fa fa-angellist " /><span>{result.trait}</span></p>
-                <p><i className="fa fa-angellist " /><span>Kích thước: (dài * rộng * cao * cân nặng): {result.width} * {result.height} * {result.length} * {result.weight} </span></p>
+                <p><i className="fa fa-angellist " /><span>Kích thước: (dài * rộng * cao * cân nặng):{result.length} cm * {result.width} cm * {result.height} cm * {result.weight} kg</span></p>
               </span>
             </ul>
           </div>

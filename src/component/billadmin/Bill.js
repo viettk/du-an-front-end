@@ -19,22 +19,20 @@ function Bill() {
     const reload = useSelector((state) => state.bill.reload);
     const success = useSelector((state) => state.bill.success);
     const [params, setParams] = useState(initParams);
-    const [filter, setFilter] = useState([]);
     useEffect(() => {
         const param = {
             ...params,
-            ...filter,
         }
         dispatch({ type: type.FETCH_BILL_ACTION, payload: param });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [params, filter, reload, success]);
+    }, [params, , reload, success]);
     return (
         <Fragment>
             <Box>
                 <Typography variant="h4" sx={{marginBottom: 3}}>Quản lý hóa đơn</Typography>
                 <StatusOrder
-                    filter={filter}
-                    setFilter={setFilter}
+                    params={params}
+                    setParams={setParams}
                 />
                 <ModelBill
                     bill={data}

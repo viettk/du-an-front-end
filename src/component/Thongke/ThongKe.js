@@ -16,7 +16,7 @@ import './thongke2.css';
 function PieChartComponent() {
   const initValues = [];
   const initParams = {
-    _limit: '1',
+    _limit: '10',
     _page: 0,
   };
 
@@ -60,7 +60,7 @@ function PieChartComponent() {
         let sp = 0;
         let dt = 0;
         for(let i = 0;  i < response.content.length; i++ ){
-          sum = sum + Number(response.content[0][1]);
+          sum = sum + Number(response.content[i][1]);
           sp = sp + Number(response.content[i][3]);
           dt = dt + Number(response.content[i][2]);
         }

@@ -5,7 +5,9 @@ import ProductAd from "../component/ProductAdmin/ProductAd";
 import ListCart from "../component/Cart/ListCart";
 import Home from "../component/Home/Home";
 import ProductDetail from "../component/Home/ProductDetail";
+import AllProduct from "../component/Home/AllProduct";
 import HomeCate from "../component/Home/HomeCate";
+
 import Head from "../Layout/Head";
 import Order from "../component/Order/Order";
 import Address from "../component/Adress/Adress";
@@ -24,7 +26,6 @@ import HomeCateParentName from "../component/Home/HomeCateParentName.";
 import PrivateRoute from "./PrivateRouter";
 import CookieService from '../cookie/CookieService';
 import CreatePdf from '../component/CreatePdf/CreatePdf'
-import AllProduct from "../component/Home/AllProduct";
 import Thanhcong from "../component/Order/Thanhcong";
 import ChangeStatus_pay from "../component/Order/ChangeStatus_pay";
 import Introduce from "../Layout/headchild/Introduce";
@@ -33,6 +34,7 @@ import Hddt from "../Layout/headchild/Hddt";
 import Hdtt from "../Layout/headchild/Hdtt";
 import VerticalTabs from "../component/BillCustomer/TaikhoanCaNhan";
 import ThongKe from "../component/Thongke/ThongKe";
+import AllProductnot from "../component/Home/AllProductnot";
 
 function ListRoute({reload, setReload}){
   const customerId = CookieService.getCookie('id');
@@ -51,11 +53,14 @@ function ListRoute({reload, setReload}){
 
         <Route path="/changepassword" component={ChangePassword} />
 
-        <Route path= "/:sanpham/:id/page=:xpage/sort=:sort" component={HomeCate } />
+        <Route path= "/demodung/page=:xpage/sort=:sort/query=:query" component={AllProduct } />
+
+        <Route path="/timkiem/page=:xpage/sort=:sort/timkiem" component={AllProductnot} />
+
+        <Route path= "/:sanpham/:id/page=:xpage/sort=:sort" component={HomeCate } />    
 
         <Route path="/:sanpham/page=:xpage/sort=:sort" component={HomeCateParentName } />
 
-        <Route path={["/all-product/query=:query/page=:xpage&sort=:sort", "/all-product"]} component={AllProduct} />
 
         <Route path= "/dia-chi" component={ customerId ? Address : PageNotFound } />
 

@@ -33,89 +33,104 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 
 function Khachhang() {
-    const initValues = [];
-    const initParams = {
-        field: 'id',
-        known: 'down',
-        page: 0,
-        email: '',
-        name: '',
-        status: ''
-    };
-    const [idCustom ,setIdCustom]=useState(0);
-    const [params, setParams] = useState(initParams);
-    const [result, setResult] = useState(initValues);
-    const [page, setPage] = useState(initParams.page + 1);
-    const [count, setCount] = useState(0);
-    const [log, setLog] = useState(false);
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setLog(false);
-    };
+    // const initValues = [];
+    // const initParams = {
+    //     field: 'id',
+    //     known: 'down',
+    //     page: 0,
+    //     email: '',
+    //     name: '',
+    //     status: ''
+    // };
+    // const [idCustom ,setIdCustom]=useState(0);
+    // const [params, setParams] = useState(initParams);
+    // const [result, setResult] = useState(initValues);
+    // const [page, setPage] = useState(initParams.page + 1);
+    // const [count, setCount] = useState(0);
+    // const [log, setLog] = useState(false);
+    // const handleClose = (event, reason) => {
+    //     if (reason === 'clickaway') {
+    //         return;
+    //     }
+    //     setLog(false);
+    // };
 
-    // lấy id danh mục
-    const [ma, setMa] = useState(0);
-    const [reload, setReload] = useState(true);
-    // Mở modal
-    const [show, setShow] = useState(false);
-    const onLoad = () => {
-        if (reload) {
-            setReload(false)
-        } else {
-            setReload(true)
-        }
-    }
+    // // lấy id danh mục
+    // const [ma, setMa] = useState(0);
+    // const [reload, setReload] = useState(true);
+    // // Mở modal
+    // const [show, setShow] = useState(false);
+    // const onLoad = () => {
+    //     if (reload) {
+    //         setReload(false)
+    //     } else {
+    //         setReload(true)
+    //     }
+    // }
 
-    useEffect(() => {
-        const fetchList = async () => {
-            try {
-                const response = await CustomerApi.fillAll(params);
-                setResult(response.content);
-                setCount(response.totalPages);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        fetchList();
-    }, [params, page, reload]);
+    // useEffect(() => {
+    //     const fetchList = async () => {
+    //         try {
+    //             const response = await CustomerApi.fillAll(params);
+    //             setResult(response.content);
+    //             setCount(response.totalPages);
+    //         } catch (error) {
+    //             console.log(error);
+    //         }
+    //     }
+    //     fetchList();
+    // }, [params, page, reload]);
 
-    const pageChange = (event, value) => {
-        setPage(value);
-        setParams({
-            ...params,
-            page: value - 1,
-        });
-    };
-    const paramsChange = (event) => {
-        const { name, value } = event.target;
-        setParams({
-            ...params,
-            [name]: value
-        });
-    };
-    const upDown = (field) => {
-        if (field === params.field) {
-            let ud = params.known === 'up' ? 'down' : 'up';
-            setParams({ ...params, known: ud })
-        } else {
-            setParams({ ...params, known: 'up', field: field })
-        }
-        onLoad();
-    }
+    // const pageChange = (event, value) => {
+    //     setPage(value);
+    //     setParams({
+    //         ...params,
+    //         page: value - 1,
+    //     });
+    // };
+    // const paramsChange = (event) => {
+    //     const { name, value } = event.target;
+    //     setParams({
+    //         ...params,
+    //         [name]: value
+    //     });
+    // };
+    // const upDown = (field) => {
+    //     if (field === params.field) {
+    //         let ud = params.known === 'up' ? 'down' : 'up';
+    //         setParams({ ...params, known: ud })
+    //     } else {
+    //         setParams({ ...params, known: 'up', field: field })
+    //     }
+    //     onLoad();
+    // }
 
-    const hide = async ()=>{
-       await CustomerApi.hideCustomer(idCustom.id).then(()=>{
-        onLoad();
-        setLog(false);
-       }
-       )
-    }
+    // const hide = async ()=>{
+    //    await CustomerApi.hideCustomer(idCustom.id).then(()=>{
+    //     onLoad();
+    //     setLog(false);
+    //    }
+    //    )
+    // }
+    //   // hàm add id sản phẩm vào mảng ids
+    //   const addID = (id) => {
+    //     let nhanID = ids;
+    //     // kiểm tra mảng tồn tại mã sp 
+    //     if (ids.includes(id)) {
+    //         // tìm vị trí 
+    //         let index = ids.indexOf(id);
+    //         // xóa khỏi mảng
+    //         nhanID.splice(index, 1);
+    //     } else {
+    //         nhanID.push(id);
+    //     }
+    //     setIds(nhanID);
+    //     console.log(ids);
+    // }
 
     return (
         <React.Fragment>
-             <Dialog
+             {/* <Dialog
                 open={log}
                 TransitionComponent={Transition}
                 keepMounted
@@ -128,6 +143,9 @@ function Khachhang() {
                     <Button onClick={hide}>Đồng ý</Button>
                 </DialogActions>
             </Dialog>
+            <Box sx={{ marginBottom: 2 }}>
+                <KhachhangModal show={show} setShow={setShow} setShowMail={setShowMail} setIds ={setIds}/>
+                </Box>
             <h3 style={{ marginTop: 10 }}>Danh sách Khách hàng</h3>
             <Box sx={{ marginBottom: 2 }}>
                 <Box mb={2}>
@@ -195,7 +213,7 @@ function Khachhang() {
                             <td scope="col">
                             <Button variant="text" onClick={() => upDown("name")} >Tên khách hàng{params.field === 'name' ? (params.known === 'up' ? <ArrowUpwardIcon color="primary" /> : <ArrowDownwardIcon color="primary" />) : ''}</Button></td>
                             <td scope="col">Email</td>
-                            <td scope="col">Logout gần đây</td>
+                            <td scope="col">Đăng nhập lần cuối</td>
                             <td scope="col">Sửa</td>
                         </tr>
                     </tbody>
@@ -206,7 +224,7 @@ function Khachhang() {
                                 (r, index) =>
 
                                     <tr>
-                                        <td>{(params.field === 'id' && params.known ==='down')? result.length+1 - ((index + 1) + Number(page - 1) * 10):( (index + 1) + Number(page - 1) * 10)}</td>
+                                        <td>{(params.field === 'id' && params.known ==='down')? (result.length+1) * page - ((index + 1) + Number(page - 1) * 10):( (index + 1) + Number(page - 1) * 10)}</td>
                                         <td>{r.name}</td>
                                         <td>{r.email}</td>
                                         <td>{(r.last_login.split('T')[0]).split('-').reverse().join('-')}</td>
@@ -224,7 +242,7 @@ function Khachhang() {
             </TableContainer>
             <Stack spacing={2}>
                 <Pagination className="d-flex justify-content-center" count={count} page={page} onChange={pageChange} color="secondary" />
-            </Stack>
+            </Stack> */}
         </React.Fragment>
     );
 }

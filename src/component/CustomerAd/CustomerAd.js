@@ -18,7 +18,7 @@ import { ChangeCircle } from "@mui/icons-material";
 function CustomerAd() {
     const initValues = [];
     const initParams = {
-        _limit: '5',
+        _limit: '10',
         _page: 0,
         name: '',
         email: '',
@@ -47,7 +47,7 @@ function CustomerAd() {
         setPage(value);
         setParams(
             {
-                _limit: '5',
+                _limit: '10',
                 _page: value - 1,
             }
         );

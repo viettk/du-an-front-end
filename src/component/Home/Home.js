@@ -71,7 +71,7 @@ function Home() {
                   <span className="pro-body">
                   <span style={result.price != result.price_extra ? { fontSize: "15px", marginRight: "15px" ,color: "red", fontWeight: "500"} :{ fontSize: "15px", marginRight: "15px", fontWeight: "500" } }>
                     {String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' VNĐ'}
-                    </span>
+                  </span>
                     <span style={result.price != result.price_extra ? { display: "inline-block" } : { display: "none" }}>
                       <strike> {String(Math.round(result.price_extra)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' VNĐ'} </strike>
                     </span>

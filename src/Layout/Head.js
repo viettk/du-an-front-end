@@ -117,11 +117,16 @@ function Head({ reload }) {
     setSearch({
       ...search,
       productname: e.target.value
-    })
+    });
   }
 
   const submitform = () => {
-    history.push("/all-product/query=" + search.productname + '/page=1&sort=1');
+    if(search.productname){
+      history.push('/demodung/page=1/sort=1/query='+search.productname);
+    } else{
+      history.push('/timkiem/page=1/sort=1/timkiem');
+    }
+    
   }
 
 
