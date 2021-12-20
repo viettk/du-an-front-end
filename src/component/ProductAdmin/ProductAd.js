@@ -278,7 +278,7 @@ const handleChangeRowsPerPage = (event) => {
                                     <MenuItem value=''>Tất cả</MenuItem>
                                     {
                                         danhMuc.map(parent => (
-                                            <MenuItem value={parent.id}>{parent.name}</MenuItem>
+                                            <MenuItem value={parent.id}>{parent.name}-{parent.parent_name}</MenuItem>
                                         ))
                                     }
                                 </Select>
