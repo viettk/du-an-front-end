@@ -75,7 +75,11 @@ function Thongkedonhang() {
         setResult(data);
         setTopsp(num);
         setDoanhthu(doanhThuData);
-        setChoxacnhan(choxacnhan);
+        if(choxacnhan.data == 0){
+          setChoxacnhan(0);
+        } else{
+          setChoxacnhan(choxacnhan);
+        }
 
         if(chuanbi.data == 0){
           setDangchuanbi(0);
