@@ -16,7 +16,7 @@ const [loading, setLoading] = useState(false);
 console.log(xpage);
 const initValues = [];
 const initParams = {
-    _limit: '15',
+    _limit: '20',
     _page: (xpage - 1),
     _field: 'id',
     _known: 'up',
@@ -41,7 +41,7 @@ const handleChange = (event, value) => {
         _field: 'id',
         _known: 'up',
     });
-    // history.push('/all-product/' + query + '/page=' + value + '&sort=' + sort);
+    history.push('/timkiem/page='+value+'/sort='+ sort+'/timkiem');
 };
 useEffect(() => {
     const fetchList = async () => {
@@ -99,7 +99,7 @@ const changeValueSelect = (e) => {
             _known: 'down'
         });
     }
-    // history.push('/demodung/page=1/sort=1/timkiem' + '/page=' + xpage + '/sort=' + ina);
+    history.push('/timkiem/page=' + xpage +'/sort='+ ina+'/timkiem');
 
 }
 

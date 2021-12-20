@@ -13,7 +13,7 @@ function AllProduct() {
     const [loading, setLoading] = useState(false);
     const initValues = [];
     const initParams = {
-        _limit: '15',
+        _limit: '20',
         _page: (xpage - 1),
         _field: 'id',
         _known: 'up',
@@ -31,6 +31,7 @@ function AllProduct() {
     const [ma, setMa] = useState(0);
 
     const handleChange = (event, value) => {     
+        history.push('/all-product/page='+value+ '/sort='+ sort+'/query='+query);
         setPage(value);
         setParams({
             ...params,
@@ -38,7 +39,7 @@ function AllProduct() {
             _field: 'id',
             _known: 'up',
         });
-        history.push('/all-product/' + query + '/page=' + value + '&sort=' + sort);
+        
     };
     useEffect(() => {
         const fetchList = async () => {
@@ -96,11 +97,8 @@ function AllProduct() {
                 _known: 'down'
             });
         }
-        if (query === "" || query == undefined) {
-            history.push('/all-product/query=' + '/page=0' + '&sort=' + ina);
-        } else {
-            history.push('/all-product/query=' + query + '/page=' + xpage + '&sort=' + ina);
-        }
+        
+        history.push('/all-product/page='+xpage+ '/sort='+ ina+'/query='+query);
 
     }
 

@@ -53,7 +53,7 @@ function ListRoute({reload, setReload}){
 
         <Route path="/changepassword" component={ChangePassword} />
 
-        <Route path= "/demodung/page=:xpage/sort=:sort/query=:query" component={AllProduct } />
+        <Route path= "/all-product/page=:xpage/sort=:sort/query=:query" component={AllProduct } />
 
         <Route path="/timkiem/page=:xpage/sort=:sort/timkiem" component={AllProductnot} />
 

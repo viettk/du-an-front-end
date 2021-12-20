@@ -15,7 +15,7 @@ function HomeCateParentName() {
 
     const initValues = [];
     const initParams = {
-        _limit: '10',
+        _limit: '2',
         _page: (xpage - 1),
         _field: 'id',
         _known: 'up',
@@ -41,13 +41,13 @@ function HomeCateParentName() {
         setParams(
             {
                 ...params,
-                _limit: '10',
+                _limit: '2',
                 _page: value - 1,
                 _field: 'id',
                 _known: 'up',
             }
         );
-        history.push('/' + sanpham + '/page=' + value + '/sort=' + sort);
+        history.push('/' + sanpham + '/page=' + xpage + '/sort=' + sort);
     };
 
     useEffect(() => {

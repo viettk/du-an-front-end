@@ -122,7 +122,7 @@ function Head({ reload }) {
 
   const submitform = () => {
     if(search.productname){
-      history.push('/demodung/page=1/sort=1/query='+search.productname);
+      history.push('/all-product/page=1/sort=1/query='+search.productname);
     } else{
       history.push('/timkiem/page=1/sort=1/timkiem');
     }
