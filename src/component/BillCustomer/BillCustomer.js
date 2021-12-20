@@ -10,7 +10,7 @@ import './history.css';
 function BillCustomer() {
     const [ma, setMa] = useState(0);
     const emailc = CookieService.getCookie('email');
-    const [st, setSt] = useState(2);
+    const [st, setSt] = useState(0);
 
     // Mở modal
     const [show, setShow] = useState(false);
