@@ -151,6 +151,20 @@
       font-weight: 500;
   }
 
+  #apdung-giam-m{
+    margin: 0;
+    padding: 10px 15px;
+    border: 1px solid lightgray;
+    background-color: #84b0d5;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .order-detail{
+    height: 250px;
+    overflow-y:scroll;
+  }
+
   #btn-order{
       border: 1px solid lightgray;
       background-color: #357ebd;

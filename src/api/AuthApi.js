@@ -9,10 +9,6 @@ const AuthApi = {
         const url = "/api/sendmail";
         return axiosClient.post(url,data);
     },
-    logout:(data)=>{
-        const url = "/api/logout";
-        return axiosClient.put(url,data);
-    }
 
 }
 export default AuthApi

@@ -1,13 +1,4 @@
 import * as React from 'react';
-import {
-  Chart,
-  BarSeries,
-  Title,
-  ArgumentAxis,
-  ValueAxis,
-  PieSeries
-} from '@devexpress/dx-react-chart-material-ui';
-import { Animation } from "@devexpress/dx-react-chart";
 import { useState, useEffect } from 'react';
 import ThongkeApi from '../../api/ThongkeApj';
 import './thongke.css';
@@ -16,6 +7,7 @@ import AddAlertIcon from '@mui/icons-material/AddAlert';
 import AirlineSeatReclineNormalIcon from '@mui/icons-material/AirlineSeatReclineNormal';
 import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
+import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import {
   PieChart,
   Pie,
@@ -52,40 +44,68 @@ function Thongkedonhang() {
         const top5 = await ThongkeApi.getTop5Admin(month, year);
         const sltop5 = await ThongkeApi.getSLTop5Admin(month, year);
         const respdoanhthu = await ThongkeApi.getDoanhthu(year);
-        const thongke_typay = await ThongkeApi.getThongke_typepay();
+        const thongke_typay = await ThongkeApi.getThongke_typepay(month, year);
 
         const choxacnhan = await ThongkeApi.getChoXacNhan();
         const chuanbi = await ThongkeApi.getDangchuanbi();
         const giao = await ThongkeApi.getDanggiao();
-
+        const ht = await ThongkeApi.getthanhcong(); 
+        const tb = await ThongkeApi.getThatbai();
+        const tc = await ThongkeApi.gettuchoi();
         const type_pay = [
           { name: 'COD', value: thongke_typay[0] },
           { name: 'VNPAY', value: thongke_typay[1] }
         ]
 
         const data = [
-          { name: 'Thành công', value: respone[2] },
+          { name: 'Hoàn thành', value: respone[2] },
           { name: 'Từ chối', value: respone[0] },
           { name: 'Thất bại', value: respone[1] },
         ]
         const num = [];
         for (var i = 0; i < top5.length; i++) {
-          num.push({ year: top5[i].name + top5[i].id, population: sltop5[i] });
+          num.push({ year: top5[i].name + top5[i].id, sl: sltop5[i] });
         }
 
         const doanhThuData = [];
         for (var x = 1; x < respdoanhthu.length; x++) {
-          doanhThuData.push({ ketqua: x, value: respdoanhthu[x] });
+          doanhThuData.push({ ketqua: x, doanhThu: respdoanhthu[x]} );
         }
-
         setTktp(type_pay);
         setResult(data);
         setTopsp(num);
         setDoanhthu(doanhThuData);
         setChoxacnhan(choxacnhan);
-        setDangchuanbi(chuanbi);
-        setDanggiao(giao);
 
+        if(chuanbi.data == 0){
+          setDangchuanbi(0);
+        } else{
+          setDangchuanbi(chuanbi);
+        }
+        
+        if(giao.data == 0){
+          setDanggiao(0);
+        } else{
+          setDanggiao(giao);
+        }
+
+        if(ht.data == 0){
+          setThanhcong(0);
+        } else{
+          setThanhcong(ht);
+        }
+
+        if(tc.data == 0){
+          setTuchoi(0);
+        } else{
+          setTuchoi(tc);
+        }
+
+        if(tb.data == 0){
+          setThatbai(0);
+        } else{
+          setThatbai(tc);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -140,7 +160,7 @@ function Thongkedonhang() {
             </span>
             <div className='thong-ke-dv'>
               <p className='tk-sdh'>{thanhcong}</p>
-              <p>Thành công</p>
+              <p>Hoàn thành</p>
             </div>
           </div>
 
@@ -156,7 +176,7 @@ function Thongkedonhang() {
 
           <div className='thong-ke-head'>
             <span>
-              <AddAlertIcon />
+              <ReportProblemIcon />
             </span>
             <div className='thong-ke-dv'>
               <p className='tk-sdh'>{tuchoi}</p>
@@ -192,12 +212,6 @@ function Thongkedonhang() {
         </div>
         <div className="thong-ke">
           <div className="don-hang-thong-ke">
-            {/* <Chart data={result} >
-              {result.length == 0 || (result[0].value == 0 && result[1].value == 0 && result[2].value == 0) ?
-                <span className="don-hang-span">Không có dữ liệu</span>
-                : <PieSeries valueField="value" argumentField="status_order" />}
-              <Title text="Thống kê đơn hàng" />
-            </Chart> */}
             <h4>Đơn hàng</h4>
             {result.length === 0 || (result[0].value == 0 && result[1].value == 0 && result[2].value == 0) ? <p>Không có dữ liệu</p> :
               <PieChart width={500} height={500}>
@@ -213,22 +227,7 @@ function Thongkedonhang() {
                 />
                 <Tooltip />
               </PieChart>}
-
           </div>
-
-          <div style={{ position: "relative" }}>
-            <Chart data={topsp}>
-              <ArgumentAxis />
-              <ValueAxis max={5} />
-              {
-                topsp.length == 0 ? <span className="don-hang-span">Không có dữ liệu</span> :
-                  <BarSeries valueField="population" argumentField="year" />
-              }
-              <Title text="Top sản phẩm bán chạy" />
-              <Animation />
-            </Chart>
-          </div>
-
 
           <div className="don-hang-thong-ke">
             {/* <Chart data={tktp} >
@@ -239,23 +238,51 @@ function Thongkedonhang() {
             </Chart> */}
 
             <h4>Phương thức thánh toán</h4>
-            <PieChart width={500} height={500}>
-              <Pie
-                dataKey="value"
-                isAnimationActive={false}
-                data={tktp}
-                cx={200}
-                cy={200}
-                outerRadius={80}
-                fill="#8884d8"
-                label
-              />
-              <Tooltip />
-            </PieChart>
+            {tktp.length == 0 || (tktp[0].value == 0 && tktp[1].value == 0) ? 
+            <p>Không có dữ liệu</p> : <PieChart width={500} height={500}>
+            <Pie
+              dataKey="value"
+              isAnimationActive={false}
+              data={tktp}
+              cx={200}
+              cy={200}
+              outerRadius={80}
+              fill="#8884d8"
+              label
+            />
+            <Tooltip />
+          </PieChart> }
           </div>
 
+          <div style={{ position: "relative", textAlign: "center" }}>
+            <h4>Top sản phẩm bán chạy</h4>
+            {topsp.length > 0 ?
+              <BarChart
+                width={500}
+                height={300}
+                data={topsp}
+                margin={{
+                  top: 5,
+                  right: 30,
+                  left: 80,
+                  bottom: 5,
+                }}
+                barSize={20}
+              >
+                <XAxis
+                  dataKey="year"
+                  scale="point"
+                  padding={{ left: 10, right: 10 }}
+                />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <CartesianGrid strokeDasharray="3 3" />
+                <Bar dataKey="sl" fill="#8884d8" background={{ fill: "#eee" }} />
+              </BarChart> : <p>Chưa có dữ liệu</p>}
+          </div>
 
-          <div style={{ position: "relative" }}>
+          {/* <div style={{ position: "relative" }}>
             <Chart data={doanhthu}>
               <ArgumentAxis />
               <ValueAxis max={12} />
@@ -266,7 +293,36 @@ function Thongkedonhang() {
               <Title text="Doanh thu bán hàng" />
               <Animation />
             </Chart>
+          </div> */}
+
+<div style={{ position: "relative", textAlign: "center" }}>
+            <h4>Doanh thu bán hàng</h4>
+            {doanhthu.length > 0 ?
+              <BarChart
+                width={500}
+                height={300}
+                data={doanhthu}
+                margin={{
+                  top: 5,
+                  right: 30,
+                  left: 80,
+                  bottom: 5,
+                }}
+                barSize={20}
+              >
+                <XAxis
+                  dataKey="ketqua"
+                  scale="point"
+                  padding={{ left: 10, right: 10 }}
+                />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <CartesianGrid strokeDasharray="3 3" />
+                <Bar dataKey="doanhThu" fill="#8884d8" background={{ fill: "#eee" }} />
+              </BarChart> : <p>Chưa có dữ liệu</p>}
           </div>
+
         </div>
       </div>
     </React.Fragment>

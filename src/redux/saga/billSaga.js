@@ -13,6 +13,16 @@ function* fetchBill(action) {
         yield put({ type: type.FETCH_BILL_ACTION_FAIL, message: e.message });
     }
 }
+function* fetchFormBill(action) {
+    try {
+        const data = yield call(BillAdminApi.getById, action.payload);
+        if (data) {
+            yield put({ type: type.FETCH_FORM_BILL_ACTION_SUCCESS, payload: data });
+        }
+    } catch (e) {
+        yield put({ type: type.FETCH_FORM_BILL_ACTION_FAIL, message: e.message });
+    }
+}
 //fetch hoa don chi tiet
 function* fetchBillDetail(action) {
     try {
@@ -43,7 +53,7 @@ function* updateBillPay(action) {
             yield put({ type: type.UPDATE_BILL_STATUS_ORDER_ACTION_SUCCESS, payload: data });
         }
     } catch (e) {
-        yield put({ type: type.UPDATE_BILL_STATUS_ORDER_ACTION_FAIL, message: e.message });
+        yield put({ type: type.UPDATE_BILL_STATUS_ORDER_ACTION_FAIL, message: e.response });
     }
 }
 
@@ -54,7 +64,7 @@ function* updateBillDetail(action) {
             yield put({ type: type.UPDATE_BILL_DETAIL_ACTION_SUCCESS, payload: data });
         }
     } catch (e) {
-        yield put({ type: type.UPDATE_BILL_DETAIL_ACTION_FAIL, message: e.message });
+        yield put({ type: type.UPDATE_BILL_DETAIL_ACTION_FAIL, message: e.errorMessage });
     }
 }
 
@@ -64,5 +74,6 @@ function* billSaga() {
     yield takeEvery(type.UPDATE_BILL_STATUS_ORDER_ACTION, updateBillOrder);
     yield takeEvery(type.UPDATE_BILL_STATUS_PAY_ACTION, updateBillPay);
     yield takeEvery(type.UPDATE_BILL_DETAIL_ACTION, updateBillDetail);
+    yield takeEvery(type.FETCH_FORM_BILL_ACTION, fetchFormBill);
 }
 export default billSaga;

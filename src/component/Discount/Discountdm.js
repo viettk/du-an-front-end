@@ -185,7 +185,7 @@ function Discountdm({ show, setShow, ma, setMa , reload , setReload}) {
                         <div className="form-group">
                             <label>Ngày bắt đầu</label>
                             <input className="form-control" type="date" onChange={(e) => updateopen_day(e)} value={detail.open_day} />
-<span style={{ color: "red", fontSize: "13px" }}>{loi.open_day}</span>
+                            <span style={{ color: "red", fontSize: "13px" }}>{loi.open_day}</span>
                         </div>
                         <div className="form-group">
                             <label>Ngày kết thúc</label>

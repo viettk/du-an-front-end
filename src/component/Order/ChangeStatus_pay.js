@@ -62,6 +62,8 @@ function ChangeStatus_pay() {
         BillApi.changeStatus_pay(mahoadon, statusp.status_pay);
     }
 
+    const src_img = process.env.REACT_APP_URL_IMAGE;
+
     return (
         <div className="changeStatus_pay">
             <div className="container">
@@ -98,7 +100,7 @@ function ChangeStatus_pay() {
                                 {
                                     bdt.map((result, index) =>
                                         <div className='thanhcong-product' key={index}>
-                                            <img className='thanhcong-product-img' src={'https://tranhoangmaianh.herokuapp.com/images/' + result.product.photo} />
+                                            <img className='thanhcong-product-img' src={src_img + result.product.photo} />
                                             <div className='thanhcong-product-infor'>
                                                 <span>{result.product.name}</span>
                                                 <span>{result.number}</span>

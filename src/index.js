@@ -4,15 +4,11 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'font-awesome/css/font-awesome.min.css';
-import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import store from './redux/store/store';
+
 
 ReactDOM.render(
-  <React.StrictMode>
-     <Provider store= {store}>
+  <React.StrictMode> 
         <App/>
-    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

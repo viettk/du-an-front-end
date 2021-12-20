@@ -172,7 +172,7 @@ function ListCart({reload, setReload}) {
         }
     }
     const returnAll = () => {
-        history.push('/all-product');
+        history.push('/home');
     }
 
     const thanhtoan =() =>{
@@ -191,17 +191,12 @@ function ListCart({reload, setReload}) {
         
     }
 
+    const src_img = process.env.REACT_APP_URL_IMAGE;
+
     return(
         <React.Fragment>
-        <h5 style={{marginTop: 10}}>Giỏ hàng của bạn</h5>
         <div className="container">
-                    <nav aria-label="breadcrumb">
-                        <ol className="breadcrumb">
-                            <Link style={{ textDecoration: 'none' }} to='/home'>Home</Link>
-                            <span className="span-link"><i class="fa fa-angle-right"></i></span>
-                            <span>Giỏ hàng</span>
-                        </ol>
-                    </nav>
+        <h5 style={{marginTop: 10}}>Giỏ hàng của bạn</h5>
         <TableContainer component={Paper}>
         <table className="table table-striped">
                 <tbody>
@@ -221,7 +216,7 @@ function ListCart({reload, setReload}) {
                             (result, index) =>
                                 <tr key={index} >
                                     <td>{index + 1}</td>
-                                    <td><img style={{width: "120px", height: "120px"}} src={'/images/'+ result.product.photo} /></td>
+                                    <td><img style={{width: "120px", height: "120px"}} src={src_img+ result.product.photo} /></td>
                                     <td>{result.product.name}</td>
                                     <td>{String(Math.round(result.product.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.') }</td>
                                     <td>

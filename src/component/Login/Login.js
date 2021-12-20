@@ -79,12 +79,12 @@ function SignInSide() {
       CookieService.setCookie('id', resp.data.id, 7);
       CookieService.setCookie('email', resp.data.email, 7);
     if (location.state) {
-      window.location.replace('http://localhost:3000' + location.state.from)
+      window.location.replace(location.state.from)
     } else {
       if(resp.data.role==='ADMIN'){
-        window.location.replace('http://localhost:3000/admin')
+        window.location.replace('/admin')
       }else{
-        window.location.replace('http://localhost:3000/home')
+        window.location.replace('/home')
       }
      
     }
@@ -108,18 +108,16 @@ CookieService.setCookie('role', resp.role, 7);
     CookieService.setCookie('id', resp.id, 7);
     CookieService.setCookie('email', resp.email, 7);
     CookieService.setCookie('accessToken', response.accessToken, 7);
-    alert(resp.role)
     if (location.state) {
-      window.location.replace('http://localhost:3000' + location.state.from)
+      window.location.replace(location.state.from)
     } else {
       if(resp.role==='ADMIN'){
-        window.location.replace('http://localhost:3000/admin')
+        window.location.replace('/admin')
       }else{
-        window.location.replace('http://localhost:3000/home')
+        window.location.replace('/home')
       }
      
     }
-    // setAccess(response.accessToken)
   }
 
   return (
@@ -195,8 +193,8 @@ CookieService.setCookie('role', resp.role, 7);
               </Button>
               <Grid container sx={{ display: 'block', textAlign: 'center', mb: 2, marginTop: "15px" }} >
                 <GoogleLogin
-                  // clientId="382955501052-7jfv4o89irqn0e4pvi842p1vhs5mrevu.apps.googleusercontent.com"
-                  clientId = "382955501052-omhippp71e5qmdicns0dei9vt75f39u0.apps.googleusercontent.com"
+                  clientId="382955501052-7jfv4o89irqn0e4pvi842p1vhs5mrevu.apps.googleusercontent.com"
+                  // clientId = "382955501052-omhippp71e5qmdicns0dei9vt75f39u0.apps.googleusercontent.com"
                   buttonText="Login"
                   onSuccess={responseGoogle}
                   onFailure={responseGoogle}

@@ -26,14 +26,6 @@ function ListCartNone({reload, setReload}) {
         parent_name: ''
     });
 
-    const onReload =()=>{
-        if(reload){
-            setReload(false);
-        } else{
-            setReload(true);
-        }
-    }
-
     useEffect(() => {
         const fetchList = async () => {
             try {
@@ -91,6 +83,14 @@ function ListCartNone({reload, setReload}) {
         setTotalf((result.reduce((a, v) => a = a + v.total, 0)))
     }
 
+    const onLoad = () =>{
+        if(reload === true){
+          setReload(false);
+        } else{
+          setReload(true);
+        }
+      }
+
     let cart = [];
     const xoa = (e, idsp) => {
         let storage = localStorage.getItem('cart');
@@ -101,9 +101,10 @@ function ListCartNone({reload, setReload}) {
         cart.total = cart.price * cart.number;
         localStorage.setItem('cart', JSON.stringify(cart));
         let reCart = localStorage.getItem('cart');
+        
         setResult(JSON.parse(reCart));
         setTotalf((cart.reduce((a, v) => a = a + v.total, 0)));
-        onReload();
+        onLoad();
     }
 
     const checkCart = () => {
@@ -123,9 +124,9 @@ function ListCartNone({reload, setReload}) {
     }
 
     const returnAll = () => {
-        history.push('/all-product');
+        history.push('/home');
     }
-
+    const src_img = process.env.REACT_APP_URL_IMAGE;
     return (
         <React.Fragment>
             {loading
@@ -134,13 +135,7 @@ function ListCartNone({reload, setReload}) {
                     <SyncLoader loading={loading} color={'#8DD344'} />
                 </div> :
                 <div className="container">
-                    <nav aria-label="breadcrumb">
-                        <ol className="breadcrumb">
-                            <Link style={{ textDecoration: 'none' }} to='/home'>Home</Link>
-                            <span className="span-link"><i class="fa fa-angle-right"></i></span>
-                            <span>Giỏ hàng</span>
-                        </ol>
-                    </nav>
+                    <h5 style={{marginTop: 10}}>Giỏ hàng của bạn</h5>
                     <TableContainer component={Paper}>
                         <table className="table table-hover">
                             <tbody>
@@ -160,7 +155,7 @@ function ListCartNone({reload, setReload}) {
                                         (result) =>
                                             <tr key={result.product_id}>
                                                 <td>{result.product_id}</td>
-                                                <td><img style={{width: "120px", height:" 120px"}} src={'/images/'+ result.photo} /></td>
+                                                <td><img style={{width: "120px", height:" 120px"}} src={src_img + result.photo} /></td>
                                                 <td>{result.name}</td>
                                                 <td>{String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.') }</td>
                                                 <td key={result.number}>

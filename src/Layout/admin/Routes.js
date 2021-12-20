@@ -27,7 +27,7 @@ const Routes = () => {
                 <Route path="/admin/category" component={ListCategory} />
                 <Route path="/admin/product" component={ProductAd} />
                 <Route path="/admin/thk" component={PieChartComponent} />
-                <Route path="/admin/chart/discount" component={Discount} />
+                <Route path="/admin/discount" component={Discount} />
                 <Route path="/admin/giam-gia" component={Giamgia} />
                 <Route path="/admin/staff" component={Staff} />
                 <Route path="/admin/demo" component={Product} />

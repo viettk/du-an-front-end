@@ -3,6 +3,7 @@ import HomeApi from "../../api/HomeApi";
 import { useHistory } from "react-router-dom";
 import './css/home.css';
 import logoa from './b.jpg';
+import logob from './a.jpeg';
 import { border } from "@mui/system";
 import Carousel from 'react-grid-carousel';
 import axios from "axios";
@@ -53,8 +54,7 @@ function Home() {
     history.push('/product/' + id );
   }
 
-  const src_img = process.env.URL_IMAGE;
-  console.log(src_img)
+  const src_img = process.env.REACT_APP_URL_IMAGE;
 
   return (
     <section style={{marginTop: "30px"}}>
@@ -94,7 +94,7 @@ function Home() {
             gundam.map(result =>
               <Carousel.Item >
                 <div className="body-new-pro" key={result.id} onClick={() => chuyentrang(result.id)}>
-                  <img className="body-new-img-pro" src={'/images/' + result.photo} alt="" />
+                  <img className="body-new-img-pro" src={src_img + result.photo} alt="" />
                   <p className="fix-line-css">{result.name}</p>
                   <p>Mã SP: {result.sku}</p>
                   <span className="pro-body">
@@ -119,7 +119,7 @@ function Home() {
             resultShf.map(result =>
               <Carousel.Item >
                 <div className="body-new-pro" key={result.id} onClick={() => chuyentrang(result.id)}>
-                  <img className="body-new-img-pro" src={'/images/' + result.photo} alt="" />
+                  <img className="body-new-img-pro" src={src_img + result.photo} alt="" />
                   <p className="fix-line-css">{result.name}</p>
                   <p>Mã SP: {result.sku}</p>
                   <span className="pro-body">
@@ -131,7 +131,7 @@ function Home() {
           }
           </Carousel>
             </div>   
-            <img className="body-img-main" src={logoa} width="300px" height="380px" style={{ marginRight: "30px",border: "1px solid black" }} alt="" />     
+            <img className="body-img-main" src={logob} width="300px" height="380px" style={{ marginRight: "30px",border: "1px solid black" }} alt="" />     
           </div>
         </div>
 
@@ -145,7 +145,7 @@ function Home() {
             favorite.map(result =>
               <Carousel.Item >
                 <div className="body-new-pro" key={result.id} onClick={() => chuyentrang(result.id)}>
-                  <img className="body-new-img-pro" src={'/images/' + result.photo} alt="" />
+                  <img className="body-new-img-pro" src={src_img + result.photo} alt="" />
                   <p className="fix-line-css">{result.name}</p>
                   <p>Mã SP: {result.sku}</p>
                   <span className="pro-body">

@@ -87,7 +87,7 @@ function RePassword() {
                             <input name="password"
                                 type="password"
                                 id="password"
-                                value={result.password}
+                                
                                 onChange={onChangeHandler} />
                             <span></span>
                             <span>
@@ -100,7 +100,7 @@ function RePassword() {
                             <input name="newPassword"
                                 type="password"
                                 id="newPassword"
-                                value={result.newPassword}
+                               
                                 onChange={onChangeHandler} />
                             <span></span>
                             <span>
@@ -113,7 +113,7 @@ function RePassword() {
                             <input name="repeatNewPassword"
                                 type="password"
                                 id="repeatNewPassword"
-                                value={result.repeatNewPassword}
+                              
                                 onChange={onChangeHandler} />
                             <span></span>
                             <span>

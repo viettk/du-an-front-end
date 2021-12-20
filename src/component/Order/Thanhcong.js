@@ -57,6 +57,8 @@ function Thanhcong() {
         }
     });
 
+    const src_img = process.env.REACT_APP_URL_IMAGE;
+
     return (
         <div className="dat-hang-thanh-cong">
             <div className="container">
@@ -108,7 +110,7 @@ function Thanhcong() {
                             {
                                 bdt.map(result =>
                                     <div className='thanhcong-product'>
-                                        <img className='thanhcong-product-img' src={'/images/' + result.product.photo} />
+                                        <img className='thanhcong-product-img' src={src_img + result.product.photo} />
                                         <div className='thanhcong-product-infor'>
                                             <span>{result.product.name}</span>
                                             <span>{result.number}</span>

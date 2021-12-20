@@ -108,6 +108,8 @@ function HomeCate() {
     const chuyentrang = (id) =>{
         history.push('/product/' + id );
       }
+
+      const src_img = process.env.REACT_APP_URL_IMAGE;
     return (
         <section>
             {loading ?
@@ -129,7 +131,7 @@ function HomeCate() {
                         {
                             result.length > 0 ? result.map(result =>
                                 <div key={result.id} className="productinfo lst-pro-infor" onClick={() => chuyentrang(result.id)}>
-                                    <img src={'/images/' + result.photo} alt="" className="pr-img" width="206px" height="206px" />
+                                    <img src={src_img + result.photo} alt="" className="pr-img" width="206px" height="206px" />
                                     <p className="fix-line-css">{result.name}</p>
                                     <p style={{ margin: "0 0 5px 0", justifySelf: "start" }}>Mã SP: {result.sku}</p>
                                     <span className="pro-body">

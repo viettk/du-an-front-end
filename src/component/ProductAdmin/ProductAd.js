@@ -226,6 +226,8 @@ function ProductAd() {
 const handleChangeRowsPerPage = (event) => {
     setParams({...params,_limit: event.target.value})
   };
+
+  const src_img = process.env.REACT_APP_URL_IMAGE;
     return (
 
         <React.Fragment>
@@ -351,7 +353,7 @@ const handleChangeRowsPerPage = (event) => {
                                             <TableCell>{(index + 1) + Number(page - 1) * 10}</TableCell>
                                             <TableCell>{result.sku}</TableCell>
                                             <TableCell>{result.name}</TableCell>
-                                            <TableCell><img src={'http://localhost:8080/images/' + result.photo} style={{ width: 100 }} /></TableCell>
+                                            <TableCell><img src={src_img + result.photo} style={{ width: 100 }} /></TableCell>
                                             <TableCell>{result.category.name}</TableCell>
                                             <TableCell>{String(Math.round(result.price/1000)*1000).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' VNĐ'}</TableCell>
                                             <TableCell>{(result.value_extra) ? result.value_extra : '0'}%</TableCell>

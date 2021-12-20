@@ -1,21 +1,14 @@
 
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, useLocation, useHistory } from "react-router-dom";
 import HomeApi from "../../api/HomeApi";
 import '../../css/bootstrap.min.css';
-import { connect } from 'react-redux';
-import Checkbox from '@mui/material/Checkbox';
-import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
-import Favorite from '@mui/icons-material/Favorite';
 import CookieService from "../../cookie/CookieService";
 import './css/product-detail.css'
 import FavoriteApi from "../../api/FavoritApi";
 import SyncLoader from "react-spinners/SyncLoader";
-import Carousel from 'react-grid-carousel';
 import CartApi from '../../api/CartApi';
 import { Alert, Snackbar } from "@mui/material";
-import logoa from './b.jpg';
 
 function ProductDetail({reload, setReload}) {
   const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
@@ -101,11 +94,11 @@ function ProductDetail({reload, setReload}) {
 
   const updateCount = (e) => {
     if (e.target.value < 1) {
-      e.target.value = 1;
+      e.target.value = Number(1);
   }
     setCount({
       ...count,
-      num: e.target.value
+      num: Number(e.target.value)
     })
   }
   // localStorage.clear();
@@ -179,10 +172,10 @@ function ProductDetail({reload, setReload}) {
       CartApi.addToCartByUserLogin(customerId, emailc, detail).then(r=>{
         onLoad();
         handleClose();
+        setOpen(true);
       }).catch((error) => {
         if (error.response) {
           setMess(error.response.data);
-          console.log(mess.errorMessage);
         } else if (error.request) {
           console.log(error.request);
         } else {
@@ -205,6 +198,7 @@ function ProductDetail({reload, setReload}) {
       localStorage.setItem('cart', JSON.stringify(cart));
       onLoad();
       handleClose();
+      setOpen(true);
     }
   }
 
@@ -276,6 +270,8 @@ function ProductDetail({reload, setReload}) {
     }
   }
 
+  const src_img = process.env.REACT_APP_URL_IMAGE;
+
   return (
     <section>
       {loading ?
@@ -293,21 +289,21 @@ function ProductDetail({reload, setReload}) {
           <div className="product-details">
             <div className="product-detail-body">
               <div className="pr-detail-img">
-                <img id="product-detail-image-main"  src={'/images/' + result.photo} height="400px" />
+                <img id="product-detail-image-main" src={src_img + result.photo} height="400px" />
                 <div className="img-detail">
                   {
                     imagep.map((i, index) =>
-                      <img key={index} className="product-detail-image"  src={'/images/' + result.photo} onClick={() => changeimg(index)} />
+                      <img key={index} className="product-detail-image"  src={src_img + result.photo} onClick={() => changeimg(index)} />
                     )
                   }
-                  <img id="product-detail-image-main-b"  src={'/images/' + result.photo} onClick={() => changeimg(3)} />
+                  <img id="product-detail-image-main-b"  src={src_img + result.photo} onClick={() => changeimg(3)} />
                 </div>
               </div>
               <div className="pr-detail-infor">
                 <div className="product-information">
 
                   <h4 className="fix-line-css">{result.name}</h4>
-                  <span>Tình trạng : {result.number > 0 ? 'Còn hàng' : 'Hết hàng'}</span>
+                  <span>Tình trạng : {(result.number > 0 && result.status == true)  ? 'Còn hàng' : 'Hết hàng'}</span>
                   <span style={{ margin: "0 5px" }}> | </span>
                   <span>Mã SP: {result.sku}</span>
 
@@ -381,7 +377,7 @@ function ProductDetail({reload, setReload}) {
                 {
                   goiysp.map((goiysp, index) =>
                     <div className="product-body-live" key={index}>
-                      <img src={'/images/'+goiysp.photo} className="rounded-like mx-auto d-block goiysp" />
+                      <img src={src_img+goiysp.photo} className="rounded-like mx-auto d-block goiysp" />
                       <div className="body-pro-buy">
                         <p className="fix-line-css"><b>{goiysp.name}</b></p>
                         <p>Mã SP: {goiysp.sku}</p>

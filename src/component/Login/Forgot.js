@@ -61,13 +61,12 @@ function Forgot(){
     const [loi, setLoi] = useState({
     });
     const handleSubmit = (event) => {
-        event.preventDefault();
         setSuccess(false);
         setLoading(true);
         axios({
-            url: `http://localhost:8080/forgot?email=`+result.email,
-            method: 'get',
-            data: result,
+            url: 'http://localhost:8080/forgot',
+            method: 'post',
+            data: result.email,
             headers:{
               'Content-Type':'application/json',
             }
@@ -91,6 +90,7 @@ function Forgot(){
               console.log('Error', error.message);
           }
           });
+
       };
 
     return(

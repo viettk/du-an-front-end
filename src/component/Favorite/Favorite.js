@@ -80,7 +80,7 @@ function Favorite(){
             number: 1,
           }
       }
-
+      const src_img = process.env.REACT_APP_URL_IMAGE;
     return(
         <div className="yeu-thich-product">
             <h3 style={{ marginTop: 10 }}>Danh sách Sản phẩm yêu thích</h3>
@@ -91,7 +91,7 @@ function Favorite(){
                         <div className="yeuthich-pro-body" key={index}>
                             
                             <div className="yeuthich-infor-product">
-                            <img src={'https://tranhoangmaianh.herokuapp.com/images/' + result.photo} className="f-img" />
+                            <img src={src_img + result.photo} className="f-img" />
                                 <div className="yeuthich-first">
                                     <p>{result.name}</p>
                                     <p>Giá <span>{String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.')} VNĐ</span></p>

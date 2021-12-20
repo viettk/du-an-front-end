@@ -1,13 +1,19 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Typography } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { Fragment, memo, useState } from "react";
+import React, { Fragment, memo, useCallback, useState } from "react";
 import { lazy } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as type from '../../redux/const/type';
 import { useSnackbar } from 'notistack';
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 //lazy gọi đến mới load componet
 const BillDetail = lazy(() => import("./BillDetail"));
 
+const validation = yup.object().shape({
+    describe: yup.string().required("Nhập lý do hủy đơn!"),
+});
 function ModelBill(
     {
         bill,
@@ -16,31 +22,19 @@ function ModelBill(
         count,
     }
 ) {
-    const initBill = {
-        id: null,
-        email: '',
-        create_date: '',
-        update_date: '',
-        name: '',
-        phone: '',
-        total: '',
-        status_pay: null,
-        address: '',
-        city: '',
-        district: '',
-        status_order: null,
-        thema: '',
-        themb: '',
-        themc: '',
-        staff_id: '',
-        discount_id: '',
-        id_code: '',
-    }
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        reset,
+    } = useForm({
+        resolver: yupResolver(validation)
+    });
     const { enqueueSnackbar } = useSnackbar();
     const dispatch = useDispatch();
-    const [formDataBill, setFormDataBill] = useState(initBill);
     const [clicked, setClicked] = useState(-1);
     const success = useSelector((state) => state.bill.success);
+    const form = useSelector((state) => state.bill.form);
     //phan trang
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -59,13 +53,25 @@ function ModelBill(
             _page: '0',
             _limit: parseInt(event.target.value, 10),
         })
-        console.log(parseInt(event.target.value, 10));
     };
     //handler
+    const fetchData = useCallback((id, param) => {
+        dispatch({ type: type.FETCH_FORM_BILL_ACTION, payload: id });
+        dispatch({ type: type.FETCH_BILL_DETAIL_ACTION, payload: { id, param } });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
     const onClickHandler = (event, value, index) => {
         setClicked(index);
-        setFormDataBill(value);
+        const id = value.id;
+        const param = {
+            _field: 'id',
+            _known: 'up',
+        };
+        if (id && id !== form.id) {
+            fetchData(id, param);
+        }
     }
+
     //update
     const onClickUpdateHandler = (id, data) => {
         id = bill[clicked].id;
@@ -87,7 +93,7 @@ function ModelBill(
                 break;
         }
         data = {
-            ...formDataBill,
+            ...form,
             status_order: order,
             status_pay: pay,
         }
@@ -105,9 +111,9 @@ function ModelBill(
         }
         handleClose();
     }
-    // hủy giao hàng chờ giao lại
-    const onCanceBill = async (id, data) => {
-        id = bill[clicked].id;
+    // hủy
+    const onSubmit = (param) => {
+        const id = bill[clicked].id;
         const value = bill[clicked].status_order;
         let order = null;
         switch (value) {
@@ -120,12 +126,13 @@ function ModelBill(
             default:
                 break;
         }
-        data = {
-            ...formDataBill,
+        const data = {
+            ...form,
             status_order: order,
+            describe: param.describe,
         }
         dispatch({ type: type.UPDATE_BILL_STATUS_ORDER_ACTION, payload: { id, data } });
-        if (success) {
+        if (success === true) {
             const message = 'Cập nhật thành công!';
             enqueueSnackbar(message, {
                 variant: 'success',
@@ -137,7 +144,10 @@ function ModelBill(
             });
         }
         handleCloseCB();
-    }
+        reset({
+            describe: '',
+        });
+    };
     const onSwitchFunction = ((value) => {
         switch (value) {
             case 0:
@@ -204,7 +214,8 @@ function ModelBill(
 
     function format(n, currency) {
         if (n) {
-            return n.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') + ' ' + currency;
+            return String(Math.round(n)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' đ';
+            // return n.toFixed(0).replace(/(\d)(?=(\d{3}))/g, '$1,') + ' ' + currency;
         } else {
             return ("null");
         }
@@ -218,12 +229,12 @@ function ModelBill(
                             <TableHead style={{ background: "#ccc" }}>
                                 <TableRow>
                                     <TableCell>STT</TableCell>
+                                    <TableCell>Mã hóa đơn</TableCell>
                                     <TableCell>Họ và tên</TableCell>
                                     <TableCell>Số điện thoại</TableCell>
                                     <TableCell>Địa chỉ</TableCell>
                                     <TableCell>Trạng thái hóa đơn</TableCell>
                                     <TableCell>Trạng thái thanh toán</TableCell>
-                                    <TableCell>Mã hóa đơn</TableCell>
                                     <TableCell>Tổng tiền</TableCell>
                                     <TableCell>Hoạt động</TableCell>
                                     <TableCell></TableCell>
@@ -241,6 +252,7 @@ function ModelBill(
                                         }
                                     >
                                         <TableCell>{index + 1}</TableCell>
+                                        <TableCell>{row.id_code}</TableCell>
                                         <TableCell component="th" scope="row">
                                             {row.name}
                                         </TableCell>
@@ -248,10 +260,9 @@ function ModelBill(
                                         <TableCell>{row.address}</TableCell>
                                         <TableCell>{onSwitchOrder(row.status_order)}</TableCell>
                                         <TableCell>{row.status_pay === 0 ? 'Chưa thanh toán' : 'Đã thanh toán'}</TableCell>
-                                        <TableCell>{row.id_code}</TableCell>
                                         <TableCell>{format(row.total, 'VNĐ')}</TableCell>
                                         <TableCell>{onSwitchFunction(row.status_order)}</TableCell>
-                                        <TableCell><BillDetail id={row.id} formDataBill={formDataBill} /></TableCell>
+                                        <TableCell><BillDetail fetchData={fetchData} /></TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>
@@ -305,13 +316,22 @@ function ModelBill(
                     <DialogContentText>
                         Lưu ý sau khi thay đổi trạng thái sẽ không quay lại được trạng thái trước đó.
                         Bạn chắc chắn muốn thay đổi trậng thái đơn hàng!
+                        <TextField multiline
+                            rows={4}
+                            sx={{ marginTop: 2 }}
+                            label='Lý do hủy đơn hàng'
+                            variant='filled' fullWidth
+                            required
+                            {...register("describe")}
+                            error={errors.describe ? true : false}
+                            helperText={errors.describe ? errors.describe.message : false} />
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button autoFocus onClick={handleCloseCB}>
                         Hủy bỏ
                     </Button>
-                    <Button onClick={onCanceBill}>Xác nhận</Button>
+                    <Button onClick={handleSubmit(onSubmit)}>Xác nhận</Button>
                 </DialogActions>
             </Dialog>
         </Fragment >

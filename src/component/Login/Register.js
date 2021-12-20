@@ -5,9 +5,9 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Alert from '@mui/material/Alert';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
+import { Link} from "react-router-dom";
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -71,8 +71,7 @@ function SignUp() {
         CookieService.setCookie('role',resp.data.role,7);
         CookieService.setCookie('id',resp.data.id,7);
         CookieService.setCookie('email',resp.data.email,7);
-        alert("Đăng ký thành công!")
-        window.location.replace('http://localhost:3000/home')
+        window.location.replace('/home')
       }).catch(error=>{
         if (error.response) {
           setLoi(error.response.data);
@@ -176,8 +175,9 @@ function SignUp() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
+              Bạn đã có tài khoản?
                 <Link to="/login" variant="body2">
-                  Bạn đã có tài khoản? Đăng nhập ngay
+                   Đăng nhập ngay
                 </Link>
               </Grid>
             </Grid>

@@ -6,6 +6,7 @@ const initState = {
         totalElements: 0,
     },
     detail: {},
+    form: {},
     loading: false,
     message: '',
     reload: true,
@@ -33,6 +34,29 @@ export const billReducer = (state = initState, action) => {
                 ...state,
                 loading: false,
                 message: action.message,
+            }
+        //fetch form hoa đơn
+        case type.FETCH_FORM_BILL_ACTION:
+            return {
+                ...state,
+                loading: true,
+                message: '',
+                reload: false,
+            }
+        case type.FETCH_FORM_BILL_ACTION_SUCCESS:
+            return {
+                ...state,
+                form: action.payload,
+                loading: false,
+                message: '',
+                reload: true,
+            }
+        case type.FETCH_FORM_BILL_ACTION_FAIL:
+            return {
+                ...state,
+                loading: false,
+                message: action.message,
+                reload: true,
             }
         // fetch hoa don chi tiet
         case type.FETCH_BILL_DETAIL_ACTION:
@@ -122,7 +146,7 @@ export const billReducer = (state = initState, action) => {
             return {
                 ...state,
                 loading: false,
-                message: action.message,
+                message: action.errorMessage,
                 reload: false,
                 success: false,
             }

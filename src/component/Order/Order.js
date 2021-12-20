@@ -48,10 +48,13 @@ function Order() {
   const [tinh, setTinh] = useState([]);
   const [quan, setQuan] = useState([]);
   const [xa, setXa] = useState([]);
-  const [activeIndex, setActiveIndex] = useState(false);
   const history = useHistory();
   const [selectTinh, setSelectTinh] = useState({
     tinh: '',
+    code: ''
+  });
+  const [selectXa, setSelectXa] = useState({
+    xa: '',
     code: ''
   });
 
@@ -66,11 +69,6 @@ function Order() {
 
   const [open, setOpen] = useState(false);
 
-  const [selectXa, setSelectXa] = useState({
-    xa: '',
-    code: ''
-  });
-
   const [diachi, setDiachi] = useState([]);
   const [phiship, setPhiship] = useState(0);
   let getStorage = localStorage.getItem('cart');
@@ -80,7 +78,7 @@ function Order() {
     errorMessage: ''
   });
   const [dis, setDis] = useState(false);
-
+  const [thanhtien, setThanhtien] = useState(0);
   const [loi, setLoi] = useState({
     email: '',
     name: '',
@@ -129,12 +127,14 @@ function Order() {
           });
           setCart(response);
           setTongtien(resp.total);
+          setThanhtien(resp.total);
         } else {
           let storage = localStorage.getItem('cart');
           setCart(JSON.parse(storage));
           setSlsp(demo.length);
          
           setTongtien(demo.reduce((a, v) => a = a + v.total, 0));
+          setThanhtien(demo.reduce((a, v) => a = a + v.total, 0))
           setBill({
             ...bill,
             total: (demo.reduce((a, v) => a = a + v.total , 0))
@@ -147,7 +147,7 @@ function Order() {
     }
 
     fetchList();
-  }, [demo.reduce((a, v) => a = a + v.total + phiship, 0), customerId]);
+  }, [ customerId]);
 
   //lấy dữ liệu thành phố---------------------------------------------------------------------------------------------------
   const tt = () => {
@@ -311,37 +311,45 @@ function Order() {
 
   //lấy input giảm giá----------------------------------------------------------------------------------------------------------
   const getDiscount = (e) => {
+    let index = e.target.value;
     setDiscountName({
       ...discountName,
-      name: e.target.value
-    })
-
+      name: index
+    });
+    if(index == ""){
+      setDis(true);
+      setThanhtien(tongtien);
+    } else {
+      setDis(false);
+    }
   }
 
 
   //lấy mã giảm giá-------------------------------------------------------------------------------------------------------------
   const laymagiam = () => {
+    console.log('ok')
     BillApi.getMAGiamGia(discountName.name).then(resp => {
-      let finaltt = tongtien - resp;
+      let finaltt = thanhtien - resp;
       setDis(true);
       setLoidiscount({
         ...loidiscount,
         loi:''
-      })
+      });
+      
       if (finaltt <= 0) {
-        setTongtien(0);
-        setBill({
-          ...bill,
-          discountName: discountName.name,
-          total: 0
-        });
+        // setBill({
+        //   ...bill,
+        //   discountName: discountName.name,
+        //   total: 0
+        // });
+        setThanhtien(0)
       } else {
-        setTongtien(finaltt);
-        setBill({
-          ...bill,
-          discountName: discountName.name,
-          total: finaltt
-        })
+        // setBill({
+        //   ...bill,
+        //   discountName: discountName.name,
+        //   total: finaltt
+        // })
+        setThanhtien(finaltt);
       }
     }).catch((error) => {
       if (error.response) {
@@ -370,7 +378,7 @@ function Order() {
     setOpen(false);
   }
 
-  console.log(dis)
+  const src_img = process.env.REACT_APP_URL_IMAGE;
 
   return (
     <section>
@@ -490,7 +498,7 @@ function Order() {
                                 <tr key={cart.id}>
                                   <td>
                                     <div className="img-order">
-                                      <img style={{width: "120px", height:" 120px"}} src={'/images/' + cart.product.photo } className="rounded mx-auto d-block" alt="" />
+                                      <img style={{width: "120px", height:" 120px"}} src={src_img + cart.product.photo } className="rounded mx-auto d-block" alt="" />
                                     </div>
                                   </td>
                                   <td>
@@ -515,7 +523,7 @@ function Order() {
                               <tr key={cart.id}>
                                 <td>
                                   <div className="img-order">
-                                    <img style={{width: "120px", height:" 120px"}} src={'/images/' + cart.photo } className="rounded mx-auto d-block" alt="" />
+                                    <img style={{width: "120px", height:" 120px"}} src={src_img + cart.photo } className="rounded mx-auto d-block" alt="" />
                                   </div>
                                 </td>
                                 <td>
@@ -545,14 +553,16 @@ function Order() {
               <div className="discount">
                 <div className="user-box">
                   <input type="text" defaultValue={discountName.name} onChange={getDiscount} required placeholder="Nhập Mã giảm giá" />
-                  { dis  ? <span></span> : <button type="button" id="apdung-giamgia" onClick={laymagiam}>Áp dụng</button> }
+                  {
+                    dis ? <button type="button" id="apdung-giam-m" >Áp dụng</button> : <button type="button" id="apdung-giamgia" onClick={laymagiam}>Áp dụng</button> 
+                  }
                   <span style={{ color: "red", fontSize: "13px" }}>{loidiscount.loi}</span>
                 </div>
                 <span style={{ color: "red", fontSize: "13px" }}>{mess.errorMessage}</span>
               </div>
               <span className="total-amount">
                 <h2>Tổng cộng :</h2>
-                <p>{String(Math.round(tongtien)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' VNĐ'}</p>
+                <p>{String(Math.round(thanhtien)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' VNĐ'}</p>
               </span>
               <span style={{ display: "grid", gridTemplateColumns: "1fr 1fr", alignItems: "center" }}>
                 <Link to='/cart' id="viet-back-cart"><i class="fa fa-angle-left viet-order-arrow"></i>Quay lại giỏ hàng</Link>

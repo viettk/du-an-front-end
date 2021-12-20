@@ -126,7 +126,7 @@ function BillCustomer() {
                                         <tr key={result.id}>
                                             <td>{result.id_code}</td>
                                             <td>{(result.create_date.split('T')[0]).split('-').reverse().join('-')}</td>
-                                            <td>{result.district}-{result.city}  </td>
+                                            <td>{result.address}-{result.district}-{result.city}  </td>
                                             <td>{String(Math.round(result.total)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' đ'}</td>
                                             <td>{onSwithStatusOrder(result.status_pay)}</td>
                                             <td>{onSwitchOrder(result.status_order)}</td>

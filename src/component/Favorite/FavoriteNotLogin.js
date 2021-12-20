@@ -179,6 +179,7 @@ function FavoriteNotLogin({reload, setReload}){
     const chuyentrang = (id) =>{
       history.push('/product/' + id );
     }
+    const src_img = process.env.REACT_APP_URL_IMAGE;
 
     return (
         customerId ? 
@@ -188,15 +189,16 @@ function FavoriteNotLogin({reload, setReload}){
                     Cảm ơn Bạn đã đặt hàng !
                 </Alert>
             </Snackbar>
-            <h3 style={{ marginTop: 10 }}>Danh sách Sản phẩm yêu thích</h3>
+            
             <div className="container">
+            <h3 style={{ marginTop: 10 }}>Danh sách Sản phẩm yêu thích</h3>
                 <div className="yeuthich-table">
                 {
                     result.length > 0 ? result.map((result, index) =>
                         <div className="yeuthich-pro-body" key={index}>
                             
                             <div className="yeuthich-infor-product">
-                            <img src={'/images/' + result.product.photo} className="f-img" />
+                            <img src={src_img + result.product.photo} className="f-img" />
                                 <div className="yeuthich-first">
                                     <p onClick={() => chuyentrang(result.product.id)} style={{cursor: "pointer"}} >{result.product.name}</p>
                                     <p>Giá <span>{String(Math.round(result.product.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.')} VNĐ</span></p>
@@ -218,7 +220,6 @@ function FavoriteNotLogin({reload, setReload}){
                             <div className="yeuthich-second">
                             
                                     <p>{String(Math.round(result.product.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.')} VNĐ</p>
-                                    <p>{result.number > 0 && result.staus == true ? "Còn hàng" : "Hết hàng" }</p>
                                     <button type="button" onClick={() => addToCart(index, result.product.id, result.product.price, result.product.photo, result.product.name, result.product.weight)} ><i class="fa fa-shopping-cart"></i></button>
                                     {/* disabled={result.number <= 0 && result.staus == false ? false : true } */}
                                     <br/>
@@ -243,7 +244,7 @@ function FavoriteNotLogin({reload, setReload}){
                 result.length > 0 ? result.map((result, index) =>
                     <div className="yeuthich-pro-body" key={index}>                      
                         <div className="yeuthich-infor-product">
-                        <img src={'/images/' + result.photo} className="f-img" />
+                        <img src={src_img + result.photo} className="f-img" />
                             <div className="yeuthich-first">
                                 <p><Link to={'/product/'+result.product_id} >{result.name}</Link></p>
                                 <p>Giá <span>{String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.')} VNĐ</span></p>
@@ -261,7 +262,6 @@ function FavoriteNotLogin({reload, setReload}){
                         {/* <span style={{ color: "red", fontSize: "13px" }}>{loi.newPassword}</span> */}
                         <div className="yeuthich-second">
                                 <p>{String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.')} VNĐ</p>
-                                <p>{result.number > 0 && result.staus == true ? "Còn hàng" : "Hết hàng" }</p>
                                 <button type="button" onClick={() => addToCart(index, result.product_id, result.price, result.photo, result.name, result.weight)} ><i class="fa fa-shopping-cart"></i></button>
                                 <br/>
                                 <button onClick={(e) => xoa(e, result.product_id)} type="button"><i class="fa fa-trash"></i></button>

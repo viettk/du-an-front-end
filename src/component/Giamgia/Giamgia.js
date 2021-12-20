@@ -222,7 +222,7 @@ function Giamgia() {
         );
         onLoad();
     };
-
+    const src_img = process.env.REACT_APP_URL_IMAGE;
     return (
         <div className="giam-gia-discount" onClick={onBlur}>
             {/* Giảm giá toàn bộ sản phẩm */}
@@ -290,7 +290,7 @@ function Giamgia() {
                                     <TableRow className="sp" key={result.id}>
                                         <TableCell onClick={(e) => layId(e, index, result.id)}>{(index + 1) + Number(page - 1) * 5}</TableCell>
                                         <TableCell onClick={(e) => layId(e, index, result.id)}><span className='namesp'>{result.name}</span></TableCell>
-                                        <TableCell onClick={(e) => layId(e, index, result.id)}><img src={'http://localhost:8080/images/' + result.photo} style={{ width: 100 }} /></TableCell>
+                                        <TableCell onClick={(e) => layId(e, index, result.id)}><img src={src_img + result.photo} style={{ width: 100 }} /></TableCell>
                                         <TableCell onClick={(e) => layId(e, index, result.id)}>{String(Math.round(result.price / 1000) * 1000).replace(/(.)(?=(\d{3})+$)/g, '$1.')}</TableCell>
                                         <TableCell onClick={(e) => layId(e, index, result.id)}>{result.value_extra}%</TableCell>
                                         <TableCell onClick={(e) => layId(e, index, result.id)}>{String(Math.round(result.price_extra / 1000) * 1000).replace(/(.)(?=(\d{3})+$)/g, '$1.')}</TableCell>

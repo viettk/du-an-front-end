@@ -76,7 +76,7 @@ function ListRoute({reload, setReload}){
         </Route>
 
         <Route path="/cart">
-            {customerId ? <ListCart reload={reload} setReload={setReload} /> : <ListCartNone /> }
+            {customerId ? <ListCart reload={reload} setReload={setReload} /> : <ListCartNone reload={reload} setReload={setReload} /> }
         </Route>
 
         <Route path="/dia-chi" component={Address} />

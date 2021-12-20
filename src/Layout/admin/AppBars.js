@@ -43,25 +43,17 @@ function AppBars() {
 
   const name = CookieService.getCookie('name');
   const logout = async () => {
-    await AuthApi.logout(CookieService.getCookie('token')).then(() => {
-      if (CookieService.getCookie('accessToken')) {
-        GoogleApi.logout(CookieService.getCookie("accessToken"))
-      }
-      CookieService.removeCookie();
-      const message = 'Đã đăng xuất!';
-      enqueueSnackbar(message, {
-        variant: 'success',
-      });
-      window.location.replace('/home')
-    }).catch(e => {
-      const message = 'Lỗi đăng xuất!';
-      enqueueSnackbar(message, {
-        variant: 'error',
-      });
-      console.log(e)
-    })
-    handleMenuClose();
-  }
+    if (CookieService.getCookie('accessToken')) {
+      GoogleApi.logout(CookieService.getCookie("accessToken"))
+    }
+    CookieService.removeCookie();
+    const message = 'Đã đăng xuất!';
+    enqueueSnackbar(message, {
+      variant: 'success',
+    });
+  setTimeout(window.location.replace('/home'),3000)
+  handleMenuClose();
+}
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (

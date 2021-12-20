@@ -26,8 +26,8 @@ const ThongkeApi = {
         return axiosClient.get(url);
     },
 
-    getThongke_typepay: ()=>{
-        const url = '/api/thong-ke/thongkeTypepay';
+    getThongke_typepay: (month, year)=>{
+        const url = '/api/thong-ke/thongkeTypepay?month='+month+ '&year=' + year;
         return axiosClient.get(url);
     },
 
@@ -60,6 +60,18 @@ const ThongkeApi = {
         const url = '/api/thong-ke/thatbai';
         return axiosClient.get(url);
     },
+
+
+    // getAllThongke:(param, month, year, pp, field, known)=>{
+    //     const url  = '/api/thong-ke/gettongadmin?month='+month+'&year='+year+'&known='+known+'&page=' +pp+'&field='+field;
+    //     return axiosClient.get(url, {param});
+    // }
+
+    getAllThongke:(param, openday, endday, pp, field, known)=>{
+        const url  = '/api/thong-ke/gettongadmin?known='+known+'&page=' +pp+'&field='+field+'&opena='+openday+'&enda='+endday;
+        return axiosClient.get(url, {param});
+    }
+    
 
 }
 export default ThongkeApi;

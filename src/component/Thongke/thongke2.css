@@ -1,0 +1,31 @@
+.thong-ke-ngay-input{
+    display: grid;
+    grid-template-columns: 300px 350px;
+    grid-column-gap: 30px;
+}
+
+.thong-ke-ngay-input button{
+    border: none;
+    padding: 2px 25px;
+    margin-left: 5px;
+}
+
+.thong-ke-ngay-input button:hover{
+    background-color: lightgreen;
+}
+
+.table-striped-k-dm td{
+    text-align: center;
+}
+
+@media (max-width: 991px){
+    .thong-ke-ngay-input{
+        grid-template-columns: 200px 250px;
+    }
+}
+
+@media (max-width: 767px){
+    .thong-ke-ngay-input{
+        grid-template-columns: 1fr 1fr;
+    }
+}

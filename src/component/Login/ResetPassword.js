@@ -50,7 +50,7 @@ function ResetPassword(){
       
       useEffect(() => {
         const fetchList = () => {axios({
-            url: 'https://tranhoangmaianh.herokuapp.com/forgot/check/'+token,
+            url: 'http://localhost:8080/forgot/check/'+token,
             method: 'get',
             headers:{
               'Content-Type':'application/json',
@@ -67,7 +67,7 @@ function ResetPassword(){
 const handleSubmit = (event) => {
     event.preventDefault();
         axios({
-          url: 'https://tranhoangmaianh.herokuapp.com/forgot/changepassword',
+          url: 'http://localhost:8080/forgot/changepassword',
           method: 'post',
           data: result,
           headers:{

@@ -46,8 +46,9 @@ function App() {
               {/* Khách hàng */}
               <Route path='/' >
                 <Head reload={reload} />
+                <div style={{marginBottom:" 50px"}}></div>
                 <ListRoute reload={reload} setReload={setReload} />
-                <Bodyfooter />
+                <div style={{marginTop:" 70px"}}></div>
                 <Footer />
               </Route>
 

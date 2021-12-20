@@ -56,8 +56,8 @@ function HomeCate() {
             }
         }
         fetchList();
-    }, [params, query ,page]);
-
+    }, [params, xpage, sort, page]);
+    
     const changeValueSelect = (e) => {
         var index = e.nativeEvent.target.selectedIndex;
         var ina = e.target.value;
@@ -108,7 +108,7 @@ function HomeCate() {
     const chuyentrang = (id) =>{
       history.push('/product/' + id );
     }
-  
+    const src_img = process.env.REACT_APP_URL_IMAGE;
     return (
         <section>
             {loading ?
@@ -130,9 +130,9 @@ function HomeCate() {
                         {
                             result.length > 0 ? result.map(result =>
                                 <div key={result.id} className="productinfo lst-pro-infor" onClick={() => chuyentrang(result.id)}>
-                                    <img src={'/images/' + result.photo} alt="" className="pr-img" width="206px" height="206px" />
+                                    <img src={src_img + result.photo} alt="" className="pr-img" width="206px" height="206px" />
                                     <p className="fix-line-css">{result.name}</p>
-                                    <p style={{ margin: "0 0 5px 0", justifySelf: "start" }}>SKU: {result.sku}</p>
+                                    <p style={{ margin: "0 0 5px 0", justifySelf: "start" }}>Mã SP: {result.sku}</p>
                                     <p style={{ fontSize: "16px", fontWeight: '550', color: result.price < result.price_extra ? "red" : "#080000" }}>{result.price} đ</p>
                                     <span>{result.price_extra}đ</span>
                                 </div>

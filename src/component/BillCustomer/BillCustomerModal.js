@@ -33,6 +33,8 @@ function BillCustomerModal({show, setShow, ma, setMa}){
       const chuyentrang = (id) =>{
         history.push('/product/' + id );
       }
+
+      const src_img = process.env.REACT_APP_URL_IMAGE;
     return(
         <div>
         <Modal show={show} onHide={() => dong()} size="lg" >
@@ -57,7 +59,7 @@ function BillCustomerModal({show, setShow, ma, setMa}){
                         result.map(
                             (result) =>
                                 <tr key={result.id} onClick={() => chuyentrang(result.product.id)} style={{cursor: "pointer"}}>
-                                    <td><img style={{width: "120px", height: "120px"}} src={'/images/' + result.product.photo} className="body-new-img-pro"  alt="" /></td>
+                                    <td><img style={{width: "120px", height: "120px"}} src={src_img + result.product.photo} className="body-new-img-pro"  alt="" /></td>
                                     <td>{result.product.name}</td>
                                     <td>{String(Math.round(result.price)).replace(/(.)(?=(\d{3})+$)/g, '$1.') + ' đ'}</td>
                                     <td>{result.number}</td>

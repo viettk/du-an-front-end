@@ -17,6 +17,7 @@ import {
 import { LinearProgress } from '@mui/material';
 import CartApi from '../api/CartApi';
 import logo from './Team_7_Logo.png';
+import { useSnackbar } from 'notistack';
 
 function Head({ reload }) {
   const history = useHistory();
@@ -66,18 +67,18 @@ function Head({ reload }) {
     }
     fetchList();
   }, [reload]);
+  const { enqueueSnackbar } = useSnackbar();
 
   const logout = async () => {
-    await AuthApi.logout(CookieService.getCookie('token')).then(() => {
-      if (CookieService.getCookie('accessToken')) {
-        GoogleApi.logout(CookieService.getCookie("accessToken"))
-      }
-      CookieService.removeCookie();
-      alert('Logout !')
-      window.location.replace('/home')
-    }).catch(e=>{
-      console.log(e)
-    })
+    if (CookieService.getCookie('accessToken')) {
+      GoogleApi.logout(CookieService.getCookie("accessToken"))
+    }
+    CookieService.removeCookie();
+    const message = 'Đã đăng xuất!';
+    enqueueSnackbar(message, {
+      variant: 'success',
+    });
+    setTimeout(window.location.replace('/home'),3000)
   }
 
   const getValue = (e) => {
@@ -122,6 +123,7 @@ function Head({ reload }) {
   const submitform = () => {
     history.push("/all-product/query=" + search.productname + '/page=1&sort=1');
   }
+
 
   return (
     <header id="header" style={{ zIndex: "9" }}>
@@ -195,7 +197,6 @@ function Head({ reload }) {
               <ul className="sub-menu">
                 <li className="menu-item"><Link to="/huong-dan-mua-hang"><span className='an-di'>Hướng dẫn </span> mua hàng</Link></li>
                 <li className="menu-item"><Link><span className='an-di'>Hướng dẫn </span> thanh toán</Link></li>
-                <li className="menu-item"><Link to="/huong-dan-doi-tra"><span className='an-di'>Hướng dẫn </span> đổi trả</Link></li>
               </ul>
             </li>
           </ul>

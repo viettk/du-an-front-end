@@ -11,13 +11,13 @@ function Bill() {
         _limit: 10,
         _page: 0,
         _field: 'create_date',
-        _known: 'up',
-        order: 0,
+        _known: null,
     };
     const dispatch = useDispatch();
     const response = useSelector((state) => state.bill.data);
     const data = response.content;
     const reload = useSelector((state) => state.bill.reload);
+    const success = useSelector((state) => state.bill.success);
     const [params, setParams] = useState(initParams);
     const [filter, setFilter] = useState([]);
     useEffect(() => {
@@ -27,7 +27,7 @@ function Bill() {
         }
         dispatch({ type: type.FETCH_BILL_ACTION, payload: param });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [params, filter, reload]);
+    }, [params, filter, reload, success]);
     return (
         <Fragment>
             <Box>
